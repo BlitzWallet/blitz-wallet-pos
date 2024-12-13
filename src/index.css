@@ -172,3 +172,12 @@ body {
 .popup-overlay {
   background-color: var(--opaicityGray);
 }
+/* For modern browsers */
+::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar in Chrome, Edge, and Safari */
+}
+
+body {
+  scrollbar-width: none; /* Hides the scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hides the scrollbar in Internet Explorer 10+ */
+}
