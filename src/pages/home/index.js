@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo from "../../logo.png";
 import "./style.css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { saveAccount } from "../../functions/localStorage";
 
 function HomePage() {
@@ -16,7 +16,7 @@ function HomePage() {
       <main className="Home-main">
         <h1 className="Home-title">Blitz</h1>
         <p className="Home-subtitle">
-          A point-of-sale online platform giving your business the ability to
+          An online point-of-sale platform giving your business the ability to
           receive Bitcoin.
         </p>
 

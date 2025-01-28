@@ -25,3 +25,5 @@ yarn-error.log*
 
 .env
 src/functions/getUserFromFirebase.js
+# Local Netlify folder
+.netlify

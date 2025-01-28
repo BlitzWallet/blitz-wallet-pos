@@ -69,12 +69,6 @@ export default function PaymentPage({
             <div className="PaymentPage-QRPadding">
               <QRCode
                 size={220}
-                imageSettings={{
-                  src: icons.Logo,
-                  height: 50,
-                  width: 50,
-                  excavate: true,
-                }}
                 value={
                   selectedPaymentOption === "lightning"
                     ? boltzAddress

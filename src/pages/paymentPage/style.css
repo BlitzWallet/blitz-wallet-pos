@@ -7,8 +7,6 @@
 }
 
 .PaymentPage-QRcontainer {
-  /* width: 275px; */
-  /* height: 275px; */
   overflow: hidden;
   border-radius: 15px;
   display: flex;
@@ -50,11 +48,11 @@
 
 .QR-OptionNoFill {
   width: max-content;
-  max-width: 200px;
+  max-width: 250px;
   background-color: unset;
   border-width: 1px;
   margin-top: 10px;
-  padding: 0 10px;
+  padding: 8px 10px;
   color: var(--lightModeText);
   border-color: var(--lightModeText);
 }

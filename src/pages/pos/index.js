@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import "./style.css";
-
 import { useNavigate, useParams } from "react-router-dom";
 import icons from "../../constants/icons";
 import { getSignleContact } from "../../functions/getUserFromFirebase";
@@ -110,7 +108,7 @@ function POSPage() {
           className="POS-back"
           src={icons.leftArrow}
         />
-        {hasAccount ? <h1 className="POS-name">{username}</h1> : <p />}
+        {hasAccount ? <h2 className="POS-name">{username}</h2> : <p />}
       </div>
       <div className="POS-ContentContainer">
         {boltzLoadingAnimation ? (
@@ -143,7 +141,9 @@ function POSPage() {
               <p className="POS-chargeItems">
                 {addedItems
                   .map((value) => {
-                    return `$${(value.amount / 100).toLocaleString()}`;
+                    return `${(value.amount / 100).toLocaleString()} ${
+                      hasAccount.storeCurrency || "USD"
+                    }`;
                   })
                   .join(" + ")}
               </p>

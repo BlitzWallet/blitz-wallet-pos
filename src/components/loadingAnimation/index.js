@@ -4,7 +4,7 @@ import spinnerAnimation from "../../assets/spinnerloading.json";
 export default function LoadingAnimation() {
   return (
     <div>
-      <Lottie animationData={spinnerAnimation} loop />
+      <Lottie autoPlay animationData={spinnerAnimation} loop />
     </div>
   );
 }

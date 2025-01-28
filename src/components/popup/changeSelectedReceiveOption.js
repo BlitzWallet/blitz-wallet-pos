@@ -22,15 +22,20 @@ export default function ChangeSelectedReceiveOptionPopup({
               selectedPaymentOption === "liquid"
                 ? "var(--primary)"
                 : "(--lightModeBackgroundOffset)",
-            color:
-              selectedPaymentOption === "liquid"
-                ? "var(--darkModeText)"
-                : "var(--lightModeText)",
           }}
           className="ChangePaymentContainer-OptionContainer"
         >
           <img className="ChangePaymentContainer-Img" src={icons.LiquidIcon} />
-          <p>Liquid Network</p>
+          <p
+            style={{
+              color:
+                selectedPaymentOption === "liquid"
+                  ? "var(--darkModeText)"
+                  : "var(--lightModeText)",
+            }}
+          >
+            Liquid Network
+          </p>
         </div>
         <div
           onClick={() => {
@@ -42,10 +47,6 @@ export default function ChangeSelectedReceiveOptionPopup({
               selectedPaymentOption === "lightning"
                 ? "var(--primary)"
                 : "var(--lightModeBackgroundOffset)",
-            color:
-              selectedPaymentOption === "lightning"
-                ? "var(--darkModeText)"
-                : "var(--lightModeText)",
           }}
           className="ChangePaymentContainer-OptionContainer"
         >
@@ -57,7 +58,16 @@ export default function ChangeSelectedReceiveOptionPopup({
                 : icons.LightningIconDark
             }
           />
-          <p>Lightning Network</p>
+          <p
+            style={{
+              color:
+                selectedPaymentOption === "lightning"
+                  ? "var(--darkModeText)"
+                  : "var(--lightModeText)",
+            }}
+          >
+            Lightning Network
+          </p>
         </div>
       </div>
     </div>

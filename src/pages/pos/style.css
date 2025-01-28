@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 10px auto;
+  margin: 15px auto 10px;
   position: relative;
 }
 .POS-back {
@@ -30,11 +30,12 @@
   left: 0;
 }
 .POS-Container .POS-name {
-  margin-top: 15px;
+  text-align: center;
+  width: 100%;
   text-transform: capitalize;
   font-weight: normal;
-  margin: 0;
   font-size: 18px;
+  margin: 0;
 }
 .POS-Container .POS-chargeItems {
   margin-bottom: 0;
@@ -45,7 +46,9 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-bottom: auto;
 }
+
 .POS-Container .POS-totalBalance {
   text-transform: capitalize;
   font-weight: normal;
@@ -127,7 +130,7 @@
 
 .POS-keypad {
   width: 100%;
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
 .POS-keypad .POS-keypadRow {
@@ -167,6 +170,6 @@
 }
 
 .POS-denominationDisclaimer {
-  margin: 0 auto 20px;
+  margin: 5px auto 20px;
   font-size: 12px;
 }
