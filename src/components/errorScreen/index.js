@@ -1,7 +1,11 @@
 import { clearAccount } from "../../functions/localStorage";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-export default function ErrorPopup({ errorMessage, navigatePath }) {
+export default function ErrorPopup({
+  errorMessage,
+  navigatePath,
+  customFunction,
+}) {
   const navigate = useNavigate();
   return (
     <div className="ErrorMessage-Container">
@@ -10,9 +14,11 @@ export default function ErrorPopup({ errorMessage, navigatePath }) {
 
         <button
           onClick={() => {
-            console.log("TEST");
-            clearAccount();
-            navigate(navigatePath, { replace: true });
+            if (customFunction) {
+              customFunction();
+              return;
+            }
+            navigate(navigatePath);
           }}
         >
           Go back

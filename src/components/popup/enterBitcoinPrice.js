@@ -20,7 +20,9 @@ export default function EnterBitcoinPrice({ setOpenPopup, setBitcoinPrice }) {
           onClick={() => {
             console.log(enteredBitcoinPrice);
             if (!enteredBitcoinPrice) return;
-            setBitcoinPrice(enteredBitcoinPrice);
+            setBitcoinPrice((prev) => {
+              return { ...prev, bitcoinPrice: enteredBitcoinPrice };
+            });
             setOpenPopup(false);
           }}
         >
