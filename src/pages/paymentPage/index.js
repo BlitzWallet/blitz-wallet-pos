@@ -1,6 +1,4 @@
-// import QRCode from "react-qr-code";
 import QRCode from "qrcode.react";
-import icons from "../../constants/icons";
 import "./style.css";
 import Popup from "reactjs-popup";
 import CopyToCliboardPopup from "../../components/popup";
