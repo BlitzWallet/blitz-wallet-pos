@@ -250,7 +250,7 @@ function POSPage() {
         >
           <img className="POS-btnIcon" src={icons.LNicon} />
 
-          {`Charge $${totalAmount.toLocaleString()}`}
+          {`Charge $${totalAmount.toFixed(2).toLocaleString()}`}
         </button>
         <p className="POS-denominationDisclaimer">{`Priced in ${
           currentUserSession?.account?.storeCurrency || "USD"
