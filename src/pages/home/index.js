@@ -26,7 +26,7 @@ function HomePage() {
           <p>Enter point-of-sale name</p>
           <input
             onInput={(e) => setPosName(e.currentTarget.value)}
-            placeholder="Point-of-sale name"
+            placeholder="Name..."
             className="Home-input"
             type="text"
           />

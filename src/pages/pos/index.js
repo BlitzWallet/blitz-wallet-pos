@@ -39,7 +39,7 @@ function POSPage() {
     async function initPage() {
       const data = await getSignleContact(User.toLowerCase());
 
-      console.log("did retrive point-of-sale data", !!Object.keys(data).length);
+      console.log("did retrive point-of-sale data", !!data);
 
       if (!data) {
         setHasError("Unable to find point-of-sale");

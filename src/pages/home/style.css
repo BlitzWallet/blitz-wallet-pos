@@ -45,13 +45,16 @@
   justify-content: center;
   margin: 50px auto 0;
 }
-
+.Home-main .Home-inputContainer p {
+  margin-bottom: 5px;
+}
 .Home-main .Home-inputContainer .Home-input {
   padding: 10px;
   border-radius: 8px;
   background-color: var(--lightModeBackgroundOffset);
   border-width: 0;
   color: var(--lightModeText);
+  font-size: 16px;
 }
 
 .Home-main .Home-button {
