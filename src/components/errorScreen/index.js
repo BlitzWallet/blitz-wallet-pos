@@ -1,4 +1,3 @@
-import { clearAccount } from "../../functions/localStorage";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
 export default function ErrorPopup({

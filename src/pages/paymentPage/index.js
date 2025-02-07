@@ -34,6 +34,7 @@ export default function PaymentPage() {
     convertedSatAmount
   );
   const intervalRef = useRef(null);
+  const didRunInvoiceLoad = useRef(false);
   const [selectedPaymentOption, setSelectedPaymentOption] =
     useState("lightning");
 
@@ -81,6 +82,8 @@ export default function PaymentPage() {
     }
 
     if (!liquidAdress) return;
+    if (didRunInvoiceLoad.current) return;
+    didRunInvoiceLoad.current = true;
 
     handleInvoice();
   }, [liquidAdress]);

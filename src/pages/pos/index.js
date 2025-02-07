@@ -20,6 +20,7 @@ function POSPage() {
   const [openPopup, setOpenPopup] = useState(false);
   const [hasError, setHasError] = useState("");
   const [addedItems, setAddedItems] = useState([]);
+  const didInitialRender = useRef(true);
 
   const navigate = useNavigate();
 
@@ -34,13 +35,11 @@ function POSPage() {
 
   const canReceivePayment = totalAmount != 0 && convertedSatAmount >= 1000;
 
-  console.log(currentUserSession, dollarSatValue, convertedSatAmount);
-
   useEffect(() => {
     async function initPage() {
       const data = await getSignleContact(User.toLowerCase());
 
-      console.log(data, "retrived point-of-sale data");
+      console.log("did retrive point-of-sale data", !!Object.keys(data).length);
 
       if (!data) {
         setHasError("Unable to find point-of-sale");
@@ -57,12 +56,17 @@ function POSPage() {
         bitcoinPrice: retrivedBitcoinPrice,
       });
     }
-
     if (currentUserSession.account && currentUserSession.bitcoinPrice) return;
+    if (!didInitialRender.current) return;
+    didInitialRender.current = false;
     initPage();
   }, [currentUserSession]);
 
-  if (!currentUserSession.account && !currentUserSession.bitcoinPrice) {
+  if (
+    !currentUserSession.account &&
+    !currentUserSession.bitcoinPrice &&
+    !hasError
+  ) {
     return <FullLoadingScreen text="Setting up the point-of-sale system" />;
   }
 
@@ -95,7 +99,7 @@ function POSPage() {
             {addedItems
               .map((value) => {
                 return `${(value.amount / 100).toFixed(2).toLocaleString()} ${
-                  currentUserSession.account.storeCurrency || "USD"
+                  currentUserSession?.account?.storeCurrency || "USD"
                 }`;
               })
               .join(" + ")}
@@ -119,9 +123,9 @@ function POSPage() {
             }}
             className="POS-totalBalance"
           >
-            {currentUserSession.account
-              ? currentUserSession.account.storeCurrency.toUpperCase()
-              : ""}
+            {currentUserSession?.account
+              ? currentUserSession?.account?.storeCurrency?.toUpperCase()
+              : "USD"}
           </h1>
         </div>
 
@@ -130,7 +134,7 @@ function POSPage() {
             ? "\u00A0"
             : `Minimum invoice amount is ${(1000 / dollarSatValue).toFixed(
                 2
-              )} ${currentUserSession.account?.storeCurrency || "USD"}`}
+              )} ${currentUserSession?.account?.storeCurrency || "USD"}`}
         </p>
 
         <div className="POS-keypad">
@@ -249,7 +253,7 @@ function POSPage() {
           {`Charge $${totalAmount.toLocaleString()}`}
         </button>
         <p className="POS-denominationDisclaimer">{`Priced in ${
-          currentUserSession.account.storeCurrency || "USD"
+          currentUserSession?.account?.storeCurrency || "USD"
         }`}</p>
       </div>
     </div>
