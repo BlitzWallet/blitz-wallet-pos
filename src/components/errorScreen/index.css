@@ -1,0 +1,26 @@
+.ErrorMessage-Container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  background-color: var(--opaicityGray);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ErrorMessage {
+  max-width: 275px;
+  width: 95%;
+  height: fit-content;
+  background-color: var(--darkModeText);
+  text-align: center;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.ErrorMessage-Desc {
+  padding: 10px;
+}
