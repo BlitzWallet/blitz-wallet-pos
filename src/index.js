@@ -19,14 +19,17 @@ root.render(
       <BrowserRouter>
         <Routes>
           {/* Check if username exists in local storage */}
-          {getAccount() ? (
-            <Route
-              path="*"
-              element={<Navigate to={`/${getAccount()}`} replace />}
-            />
-          ) : (
-            <Route path="/" element={<HomePage />} />
-          )}
+          <Route
+            path="/"
+            element={
+              getAccount() ? (
+                <Navigate to={`/${getAccount()}`} replace />
+              ) : (
+                <HomePage />
+              )
+            }
+          />
+
           {/* POS Page Route */}
           <Route path="/:username" element={<POSPage />} />
           <Route path="/:username/checkout" element={<PaymentPage />} />

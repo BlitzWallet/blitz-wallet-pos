@@ -1,11 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import icons from "../../constants/icons";
 import { getSignleContact } from "../../functions/getUserFromFirebase";
-import LoadingAnimation from "../../components/loadingAnimation";
 import getBitcoinPrice from "../../functions/getBitcoinPrice";
-import { clearAccount } from "../../functions/localStorage";
 import EnterBitcoinPrice from "../../components/popup/enterBitcoinPrice";
 import ErrorPopup from "../../components/errorScreen";
 import getCurrentUser from "../../hooks/getCurrnetUser";
@@ -254,8 +251,6 @@ function POSPage() {
           style={{ opacity: !canReceivePayment ? 0.5 : 1 }}
           className="POS-btn"
         >
-          <img className="POS-btnIcon" src={icons.LNicon} />
-
           {`Charge $${totalAmount.toFixed(2).toLocaleString()}`}
         </button>
         <p className="POS-denominationDisclaimer">{`Priced in ${

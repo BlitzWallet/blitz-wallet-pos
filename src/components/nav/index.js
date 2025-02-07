@@ -1,4 +1,3 @@
-import icons from "../../constants/icons";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import "./style.css";
 
@@ -13,7 +12,7 @@ export default function PosNavbar({ backFunction }) {
         }}
         alt="Back arrow"
         className="POS-back"
-        src={icons.leftArrow}
+        src="/assets/icons/arrowLeft.png"
       />
       <h2 className="POS-name">{User}</h2>
     </div>

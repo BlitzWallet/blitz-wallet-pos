@@ -1,7 +1,7 @@
 import "./style.css";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
-import checkAnimation from "../../assets/checkmark.json";
+import checkAnimation from "../../../public/assets/checkmark.json";
 
 export default function ConfirmPaymentScreen({ clearSettings }) {
   const [showButton, setShowButton] = useState(false);

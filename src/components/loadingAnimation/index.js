@@ -1,10 +1,10 @@
 import Lottie from "lottie-react";
-import spinnerAnimation from "../../assets/spinnerloading.json";
+import spinner from "../../../public/assets/spinnerloading.json";
 
 export default function LoadingAnimation() {
   return (
     <div>
-      <Lottie autoPlay animationData={spinnerAnimation} loop />
+      <Lottie autoPlay animationData={spinner} loop />
     </div>
   );
 }
