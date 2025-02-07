@@ -8,26 +8,31 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import POSPage from "./pages/pos";
 import HomePage from "./pages/home";
 import { getAccount } from "./functions/localStorage";
+import { GlobalPOSContext } from "./contexts/posContext";
+import PaymentPage from "./pages/paymentPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        {/* Check if username exists in local storage */}
-        {getAccount() ? (
-          <Route
-            path="*"
-            element={<Navigate to={`/${getAccount()}`} replace />}
-          />
-        ) : (
-          <Route path="/" element={<HomePage />} />
-        )}
-        {/* POS Page Route */}
-        <Route path="/:username" element={<POSPage />} />
-      </Routes>
-    </BrowserRouter>
+    <GlobalPOSContext>
+      <BrowserRouter>
+        <Routes>
+          {/* Check if username exists in local storage */}
+          {getAccount() ? (
+            <Route
+              path="*"
+              element={<Navigate to={`/${getAccount()}`} replace />}
+            />
+          ) : (
+            <Route path="/" element={<HomePage />} />
+          )}
+          {/* POS Page Route */}
+          <Route path="/:username" element={<POSPage />} />
+          <Route path="/:username/checkout" element={<PaymentPage />} />
+        </Routes>
+      </BrowserRouter>
+    </GlobalPOSContext>
   </React.StrictMode>
 );
 
