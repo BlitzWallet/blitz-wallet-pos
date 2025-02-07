@@ -37,8 +37,14 @@ function POSPage() {
 
   useEffect(() => {
     async function initPage() {
-      const data = await getSignleContact(User.toLowerCase());
-
+      let data;
+      try {
+        data = await getSignleContact(User.toLowerCase());
+      } catch (err) {
+        console.log(err);
+        setHasError("Unable to authenticate request");
+        return;
+      }
       console.log("did retrive point-of-sale data", !!data);
 
       if (!data) {
