@@ -15,6 +15,7 @@ import { useGlobalContext } from "../../contexts/posContext";
 import { reverseSwap } from "../../functions/handleClaim";
 import { getSendAmount } from "../../hooks/getSendAmount";
 import formatLiquidAddress from "./formatLiquidAddress";
+import FullLoadingScreen from "../../components/loadingScreen.js";
 
 export default function PaymentPage() {
   const user = getCurrentUser();
@@ -85,12 +86,7 @@ export default function PaymentPage() {
   }, [liquidAdress]);
 
   if (!Object.keys(boltzSwapClaimInfo).length) {
-    return (
-      <div className="POS-LoadingScreen">
-        <LoadingAnimation />
-        <p className="POS-LoadingScreenDescription">Loading Invoice</p>
-      </div>
-    );
+    return <FullLoadingScreen text="Generating Invoice" />;
   }
   return (
     <div className="POS-Container">

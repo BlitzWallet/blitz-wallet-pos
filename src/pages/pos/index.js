@@ -12,6 +12,7 @@ import getCurrentUser from "../../hooks/getCurrnetUser";
 import { useGlobalContext } from "../../contexts/posContext";
 import PosNavbar from "../../components/nav";
 import logout from "../../functions/logout";
+import FullLoadingScreen from "../../components/loadingScreen.js";
 function POSPage() {
   const User = getCurrentUser();
   const { setCurrentUserSession, currentUserSession } = useGlobalContext();
@@ -61,34 +62,8 @@ function POSPage() {
     initPage();
   }, [currentUserSession]);
 
-  if (openPopup) {
-    return (
-      <EnterBitcoinPrice
-        setOpenPopup={setOpenPopup}
-        setBitcoinPrice={setCurrentUserSession}
-      />
-    );
-  }
-
-  if (hasError) {
-    return (
-      <ErrorPopup
-        customFunction={logout}
-        navigatePath="../"
-        errorMessage={hasError}
-      />
-    );
-  }
-
   if (!currentUserSession.account && !currentUserSession.bitcoinPrice) {
-    return (
-      <div className="POS-LoadingScreen">
-        <LoadingAnimation />
-        <p className="POS-LoadingScreenDescription">
-          Setting up the point-of-sale system
-        </p>
-      </div>
-    );
+    return <FullLoadingScreen text="Setting up the point-of-sale system" />;
   }
 
   return (
@@ -98,6 +73,20 @@ function POSPage() {
           logout();
         }}
       />
+      {openPopup ? (
+        <EnterBitcoinPrice
+          setOpenPopup={setOpenPopup}
+          setBitcoinPrice={setCurrentUserSession}
+        />
+      ) : hasError ? (
+        <ErrorPopup
+          customFunction={logout}
+          navigatePath="../"
+          errorMessage={hasError}
+        />
+      ) : (
+        <div />
+      )}
       <div className="POS-ContentContainer">
         {addedItems.length === 0 ? (
           <p className="POS-chargeItems">No charged items</p>
@@ -135,15 +124,14 @@ function POSPage() {
               : ""}
           </h1>
         </div>
-        {convertedSatAmount < 1000 ? (
-          <p className="POS-AmountError">{`Minimum invoice amount is ${(
-            1000 / dollarSatValue
-          ).toFixed(2)} ${
-            currentUserSession.account?.storeCurrency || "USD"
-          }`}</p>
-        ) : (
-          <p className="POS-AmountError"> </p>
-        )}
+
+        <p className="POS-AmountError">
+          {convertedSatAmount > 1000
+            ? "\u00A0"
+            : `Minimum invoice amount is ${(1000 / dollarSatValue).toFixed(
+                2
+              )} ${currentUserSession.account?.storeCurrency || "USD"}`}
+        </p>
 
         <div className="POS-keypad">
           <div className="POS-keypadRow">
