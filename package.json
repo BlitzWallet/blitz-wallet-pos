@@ -63,7 +63,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "lint": "eslint --ext .ts,.tsx src",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "eject": "craco eject"
   },
   "eslintConfig": {

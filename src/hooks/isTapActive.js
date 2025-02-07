@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const useIsTabActive = () => {
   const [isTabActive, setIsTabActive] = useState(true);
 
-  const handleVisibilityChange = useCallback((e) => {
+  const handleVisibilityChange = useCallback(() => {
     setIsTabActive(document.visibilityState === "hidden");
   }, []);
 

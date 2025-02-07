@@ -1,4 +1,4 @@
-import { ECPairFactory, ECPairInterface } from "ecpair";
+import { ECPairFactory } from "ecpair";
 import { readClaimsFromStorage, saveClaimsToStorage } from "./storage";
 import * as ecc from "@bitcoinerlab/secp256k1";
 

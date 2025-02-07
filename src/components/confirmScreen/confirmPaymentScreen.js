@@ -13,7 +13,7 @@ export default function ConfirmPaymentScreen({ clearSettings }) {
   }, []);
   return (
     <div className="ConfirmPayment-container">
-      <div className="ConfirmPayment-BackgroundAnimation"></div>
+      <div className="ConfirmPayment-BackgroundAnimation" />
       <div className="ConfirmPayment-ContentContainer">
         <Lottie
           loop={false}
@@ -25,7 +25,7 @@ export default function ConfirmPaymentScreen({ clearSettings }) {
             Continue
           </button>
         ) : (
-          <p> </p>
+          <p />
         )}
       </div>
     </div>
