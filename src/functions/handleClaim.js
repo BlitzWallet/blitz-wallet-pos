@@ -22,6 +22,7 @@ import { getBoltzApiUrl, getBoltzWsUrl } from "./boltz";
 // import { ClaimInfo, removeClaim, saveClaim } from "./claims";
 import getBoltzFeeRates from "./boltzFeeRate";
 import fetchFunction from "./fetchFunction";
+import { PAYMENT_DESCRIPTION } from "../constants";
 
 /**
  * Reverse swap flow:
@@ -240,8 +241,8 @@ export const reverseSwap = async (
   recvInfo,
   destinationAddress,
   onFinish,
-  onInvoice,
-  buisnessName,
+  // onInvoice,
+  // buisnessName,
   setBoltzLoadingAnimation
 ) => {
   // Create a random preimage for the swap; has to have a length of 32 bytes
@@ -251,7 +252,7 @@ export const reverseSwap = async (
     crypto.sha256(Buffer.from(destinationAddress, "utf-8"))
   );
   const invoiceAmount = Math.round(Number(recvInfo.amount));
-  const description = `Payment blitz wallet point-of-sale`;
+  const description = PAYMENT_DESCRIPTION;
 
   const createdResponse = await fetchFunction(
     `${getBoltzApiUrl(process.env.REACT_APP_ENVIRONMENT)}/v2/swap/reverse`,
@@ -271,7 +272,7 @@ export const reverseSwap = async (
 
   // Show invoice on wallet UI
   setBoltzLoadingAnimation("");
-  onInvoice(createdResponse.invoice);
+  // onInvoice(createdResponse.invoice);
 
   const claimInfo = {
     claimed: false,
