@@ -1,3 +1,18 @@
+.POS-Container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+.POS-ContentContainer {
+  width: 90%;
+  max-width: 500px;
+  min-height: calc(100dvh - 50px);
+  margin: auto auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+}
 .PaymentPage-Container {
   margin: auto;
   align-items: center;
@@ -55,4 +70,20 @@
   padding: 8px 10px;
   color: var(--lightModeText);
   border-color: var(--lightModeText);
+}
+
+.POS-LoadingScreen {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.POS-LoadingScreen .POS-LoadingScreenDescription {
+  width: 80%;
+  text-align: center;
+  margin: 20px auto 0;
 }

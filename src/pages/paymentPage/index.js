@@ -1,34 +1,37 @@
-// import QRCode from "react-qr-code";
 import QRCode from "qrcode.react";
-import icons from "../../constants/icons";
 import "./style.css";
 import Popup from "reactjs-popup";
 import CopyToCliboardPopup from "../../components/popup";
 import { useEffect, useRef, useState } from "react";
 import ChangeSelectedReceiveOptionPopup from "../../components/popup/changeSelectedReceiveOption";
 import getLiquidAddressInfo from "../../functions/lookForLiquidPayment";
+import NoAccountRedirect from "../../hooks/redirectWhenNoAccount";
+import getCurrentUser from "../../hooks/getCurrnetUser";
+import PosNavbar from "../../components/nav";
+import { useNavigate } from "react-router-dom";
+import ConfirmPaymentScreen from "../../components/confirmScreen/confirmPaymentScreen";
+import LoadingAnimation from "../../components/loadingAnimation";
+import { useGlobalContext } from "../../contexts/posContext";
+import { reverseSwap } from "../../functions/handleClaim";
+import { getSendAmount } from "../../hooks/getSendAmount";
+import formatLiquidAddress from "./formatLiquidAddress";
 
-export default function PaymentPage({
-  liquidAdress,
-  boltzAddress,
-  setBoltzInvoice,
-  setBoltzLoadingAnimation,
-  setDidReceiveBoltzPayment,
-  convertedSatAmount,
-}) {
-  const formatedLiquidAddress = `${
-    process.env.REACT_APP_ENVIRONMENT === "testnet"
-      ? "liquidtestnet:"
-      : "liquidnetwork:"
-  }${
-    process.env.REACT_APP_ENVIRONMENT === "testnet"
-      ? process.env.REACT_APP_LIQUID_TESTNET_ADDRESS
-      : liquidAdress
-  }?amount=${(convertedSatAmount / 100000000).toFixed(8)}&assetid=${
-    process.env.REACT_APP_ENVIRONMENT === "testnet"
-      ? "144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49"
-      : "6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d"
-  }`;
+export default function PaymentPage() {
+  const user = getCurrentUser();
+  NoAccountRedirect(`../../${user}`);
+  const navigate = useNavigate();
+  const convertedSatAmount = getSendAmount() || 1000;
+  const { currentUserSession } = useGlobalContext();
+  console.log(convertedSatAmount, "PARMS TEST");
+  const liquidAdress = currentUserSession?.account?.receiveAddress;
+  const [boltzLoadingAnimation, setBoltzLoadingAnimation] = useState("");
+  const [didReceiveBoltzPayment, setDidReceiveBoltzPayment] = useState(null);
+  const [boltzSwapClaimInfo, setBoltzSwapClaimInfo] = useState({});
+  const boltzInvoice = boltzSwapClaimInfo?.createdResponse?.invoice || "";
+  const formatedLiquidAddress = formatLiquidAddress(
+    liquidAdress,
+    convertedSatAmount
+  );
   const intervalRef = useRef(null);
   const [selectedPaymentOption, setSelectedPaymentOption] =
     useState("lightning");
@@ -36,7 +39,6 @@ export default function PaymentPage({
   useEffect(() => {
     if (selectedPaymentOption != "liquid") {
       clearInterval(intervalRef.current);
-
       return;
     }
     async function handleLiquidClaim() {
@@ -47,6 +49,7 @@ export default function PaymentPage({
               ? process.env.REACT_APP_LIQUID_TESTNET_ADDRESS
               : liquidAdress,
         });
+        console.log(liquidAddressInfo, "liquid address interval information");
 
         if (liquidAddressInfo.mempool_stats.tx_count != 0) {
           setBoltzLoadingAnimation("Receiving payment");
@@ -60,70 +63,138 @@ export default function PaymentPage({
       clearInterval(intervalRef.current);
     };
   }, [selectedPaymentOption]);
-  return (
-    <div className="PaymentPage-Container">
-      <p>{selectedPaymentOption}</p>
-      <Popup
-        trigger={
-          <button className="PaymentPage-QRcontainer">
-            <div className="PaymentPage-QRPadding">
-              <QRCode
-                size={220}
-                value={
-                  selectedPaymentOption === "lightning"
-                    ? boltzAddress
-                    : formatedLiquidAddress
-                }
-                renderAs="canvas"
-              />
-            </div>
-          </button>
-        }
-        modal
-      >
-        {(close) => (
-          <CopyToCliboardPopup
-            content={
-              selectedPaymentOption === "lightning"
-                ? boltzAddress
-                : formatedLiquidAddress
-            }
-            close={close}
-          />
-        )}
-      </Popup>
 
-      <div className="QR-OptionsContainer">
-        <button onClick={() => setBoltzInvoice("")} className="QR-Option">
-          Edit
-        </button>
-        <Popup trigger={<button className="QR-Option">Copy</button>} modal>
-          {(close) => (
-            <CopyToCliboardPopup
-              content={
-                selectedPaymentOption === "lightning"
-                  ? boltzAddress
-                  : formatedLiquidAddress
-              }
-              close={close}
-            />
-          )}
-        </Popup>
+  useEffect(() => {
+    async function handleInvoice() {
+      const claimInfo = await reverseSwap(
+        { amount: convertedSatAmount },
+        process.env.REACT_APP_ENVIRONMENT === "testnet"
+          ? process.env.REACT_APP_LIQUID_TESTNET_ADDRESS
+          : liquidAdress,
+        setDidReceiveBoltzPayment,
+        // setBoltzInvoice,
+        // user,
+        setBoltzLoadingAnimation
+      );
+      setBoltzSwapClaimInfo(claimInfo);
+    }
+
+    if (!liquidAdress) return;
+
+    handleInvoice();
+  }, [liquidAdress]);
+
+  if (!Object.keys(boltzSwapClaimInfo).length) {
+    return (
+      <div className="POS-LoadingScreen">
+        <LoadingAnimation />
+        <p className="POS-LoadingScreenDescription">Loading Invoice</p>
       </div>
-      <Popup
-        trigger={
-          <button className="QR-OptionNoFill QR-Option">Choose format</button>
-        }
-        modal
-      >
-        {(close) => (
-          <ChangeSelectedReceiveOptionPopup
-            close={close}
-            setSelectedPaymentOption={setSelectedPaymentOption}
-            selectedPaymentOption={selectedPaymentOption}
-          />
+    );
+  }
+  return (
+    <div className="POS-Container">
+      <PosNavbar
+        backFunction={() => {
+          navigate(`../${user}`);
+        }}
+      />
+      <div className="POS-ContentContainer">
+        {boltzLoadingAnimation ? (
+          <>
+            {didReceiveBoltzPayment ? (
+              <ConfirmPaymentScreen clearSettings={clearSettings} />
+            ) : (
+              <div className="POS-LoadingScreen">
+                <LoadingAnimation />
+                <p className="POS-LoadingScreenDescription">
+                  {boltzLoadingAnimation}
+                </p>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="PaymentPage-Container">
+            <p style={{ textTransform: "capitalize" }}>
+              {selectedPaymentOption}
+            </p>
+            <Popup
+              trigger={
+                <button className="PaymentPage-QRcontainer">
+                  <div className="PaymentPage-QRPadding">
+                    <QRCode
+                      size={220}
+                      value={
+                        selectedPaymentOption === "lightning"
+                          ? boltzSwapClaimInfo.createdResponse.invoice
+                          : formatedLiquidAddress
+                      }
+                      renderAs="canvas"
+                    />
+                  </div>
+                </button>
+              }
+              modal
+            >
+              {(close) => (
+                <CopyToCliboardPopup
+                  content={
+                    selectedPaymentOption === "lightning"
+                      ? boltzInvoice
+                      : formatedLiquidAddress
+                  }
+                  close={close}
+                />
+              )}
+            </Popup>
+
+            <div className="QR-OptionsContainer">
+              <button
+                onClick={() => {
+                  navigate(`../${user}`);
+                }}
+                className="QR-Option"
+              >
+                Edit
+              </button>
+              <Popup
+                trigger={<button className="QR-Option">Copy</button>}
+                modal
+              >
+                {(close) => (
+                  <CopyToCliboardPopup
+                    content={
+                      selectedPaymentOption === "lightning"
+                        ? boltzInvoice
+                        : formatedLiquidAddress
+                    }
+                    close={close}
+                  />
+                )}
+              </Popup>
+            </div>
+            {/* <Popup
+              trigger={
+                <button className="QR-OptionNoFill QR-Option">
+                  Choose format
+                </button>
+              }
+              modal
+            >
+              {(close) => (
+                <ChangeSelectedReceiveOptionPopup
+                  close={close}
+                  setSelectedPaymentOption={setSelectedPaymentOption}
+                  selectedPaymentOption={selectedPaymentOption}
+                />
+              )}
+            </Popup> */}
+          </div>
         )}
-      </Popup>
+      </div>
     </div>
   );
+  function clearSettings() {
+    navigate(`../${user}`);
+  }
 }
