@@ -3,8 +3,10 @@ import logo from "../../logo.png";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { saveAccount } from "../../functions/localStorage";
+import { useGlobalContext } from "../../contexts/posContext";
 
 function HomePage() {
+  const { setUser } = useGlobalContext();
   const [posName, setPosName] = useState("");
   const navigate = useNavigate();
 
@@ -33,6 +35,7 @@ function HomePage() {
         <button
           onClick={() => {
             saveAccount(posName);
+            setUser(posName);
             navigate(`./${posName}`);
           }}
           className="Home-button"
