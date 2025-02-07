@@ -7,6 +7,12 @@ const getAccount = () => {
 };
 
 const clearAccount = () => {
-  return localStorage.removeItem("Account");
+  try {
+    localStorage.removeItem("Account");
+    return true;
+  } catch (err) {
+    console.log("remove local storage error", err);
+    return false;
+  }
 };
 export { saveAccount, getAccount, clearAccount };
