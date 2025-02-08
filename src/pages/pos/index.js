@@ -50,7 +50,7 @@ function POSPage() {
       }
 
       const retrivedBitcoinPrice = await getBitcoinPrice({
-        denomination: data?.storeCurrency.toLowerCase() || "usd",
+        denomination: data?.storeCurrency?.toLowerCase() || "usd",
       });
 
       if (!retrivedBitcoinPrice) setOpenPopup(true);
