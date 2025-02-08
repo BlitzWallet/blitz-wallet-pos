@@ -7,7 +7,10 @@ const NoAccountRedirect = (posPageRoute) => {
   const { currentUserSession } = useGlobalContext();
 
   useEffect(() => {
-    console.log(currentUserSession, "CURRENT USER SESSION IN REDIRECT");
+    console.log(`Has current session account ${!!currentUserSession?.account}`);
+    console.log(
+      `Has current session bitcoin price ${!!currentUserSession?.bitcoinPrice}`
+    );
     if (!currentUserSession.account && !currentUserSession.bitcoinPrice) {
       navigate(posPageRoute, { replace: true });
     }

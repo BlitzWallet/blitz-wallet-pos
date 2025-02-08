@@ -23,7 +23,6 @@ export default function PaymentPage() {
   const navigate = useNavigate();
   const convertedSatAmount = getSendAmount() || 1000;
   const { currentUserSession } = useGlobalContext();
-  console.log(convertedSatAmount, "PARMS TEST");
   const liquidAdress = currentUserSession?.account?.receiveAddress;
   const [boltzLoadingAnimation, setBoltzLoadingAnimation] = useState("");
   const [didReceiveBoltzPayment, setDidReceiveBoltzPayment] = useState(null);

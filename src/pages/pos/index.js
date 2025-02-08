@@ -38,7 +38,7 @@ function POSPage() {
       try {
         data = await getSignleContact(User.toLowerCase());
       } catch (err) {
-        console.log(err);
+        console.log("init page get single contact error", err);
         setHasError("Unable to authenticate request");
         return;
       }

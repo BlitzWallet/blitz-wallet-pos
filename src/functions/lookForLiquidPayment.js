@@ -13,7 +13,7 @@ export default async function getLiquidAddressInfo({ address }) {
 
     return await response.json();
   } catch (err) {
-    console.log(err);
+    console.log("fetch liquid address info error:", err);
     return false;
   }
 }
