@@ -1,30 +1,27 @@
-export async function getSignleContact(wantedName) {
-  const url = `${getBackendURL()}`;
-  const response = await fetch(url, {
+export async function setupSession(wantedName) {
+  const response = await fetch(`${getBackendURL()}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      apiKey: process.env.REACT_APP_POS_API_KEY,
       storeName: wantedName,
     }),
   });
 
   const data = await response.json();
 
-  if (data.status !== "SUCCESS") throw new Error(data?.error || "BAD REQUEST");
-  return data.data.posSettings;
+  if (response.status !== 200) throw new Error(data?.error || "BAD REQUEST");
+  return { posData: data.posData, bitcoinPrice: data.bitcoinData };
 }
-
 function getBackendURL() {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.REACT_APP_ENVIRONMENT === "testnet") {
     console.log("Running in development mode");
-    return process.env.REACT_APP_BACKEND_LOCAL_URL;
-  } else if (process.env.NODE_ENV === "production") {
+    return process.env.REACT_APP_NETLIFY_BACKEND_DEV;
+  } else if (process.env.REACT_APP_ENVIRONMENT === "liquid") {
     console.log("Running in production mode");
-    return process.env.REACT_APP_BACKEND_URL;
+    return process.env.REACT_APP_NETLIFY_BACKEND_PROD;
   } else {
-    console.log("Unknown environment:", process.env.NODE_ENV);
+    console.log("Unknown environment:", process.env.REACT_APP_ENVIRONMENT);
   }
 }

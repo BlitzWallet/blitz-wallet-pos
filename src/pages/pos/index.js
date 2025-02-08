@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { getSignleContact } from "../../functions/getUserFromFirebase";
+import { setupSession } from "../../functions/getUserFromFirebase";
 import getBitcoinPrice from "../../functions/getBitcoinPrice";
 import EnterBitcoinPrice from "../../components/popup/enterBitcoinPrice";
 import ErrorPopup from "../../components/errorScreen";
@@ -36,7 +36,7 @@ function POSPage() {
     async function initPage() {
       let data;
       try {
-        data = await getSignleContact(User.toLowerCase());
+        data = await setupSession(User.toLowerCase());
       } catch (err) {
         console.log("init page get single contact error", err);
         setHasError("Unable to authenticate request");
@@ -49,14 +49,10 @@ function POSPage() {
         return;
       }
 
-      const retrivedBitcoinPrice = await getBitcoinPrice({
-        denomination: data?.storeCurrency?.toLowerCase() || "usd",
-      });
-
-      if (!retrivedBitcoinPrice) setOpenPopup(true);
+      if (!data.bitcoinPrice) setOpenPopup(true);
       setCurrentUserSession({
-        account: data,
-        bitcoinPrice: retrivedBitcoinPrice,
+        account: data.posData,
+        bitcoinPrice: data.bitcoinPrice,
       });
     }
     if (currentUserSession.account && currentUserSession.bitcoinPrice) return;
