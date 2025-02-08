@@ -9,7 +9,7 @@ export default async function getBoltzFeeRates() {
     ).json();
     return response["L-BTC"];
   } catch (err) {
-    console.log(err);
+    console.log("boltz fee rate fetch error", err);
     return false;
   }
 }

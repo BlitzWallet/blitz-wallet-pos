@@ -1,4 +1,4 @@
 import { SATSPERBITCOIN } from "./math";
+const PAYMENT_DESCRIPTION = "Blitz Point-of-sale";
 
-import { ICONS } from "./icons";
-export { SATSPERBITCOIN, ICONS };
+export { SATSPERBITCOIN, PAYMENT_DESCRIPTION };

@@ -181,12 +181,13 @@ body {
 .popup-overlay {
   background-color: var(--opaicityGray);
 }
-/* For modern browsers */
 ::-webkit-scrollbar {
-  display: none; /* Hides the scrollbar in Chrome, Edge, and Safari */
+  display: none;
 }
 
+html,
 body {
-  scrollbar-width: none; /* Hides the scrollbar in Firefox */
-  -ms-overflow-style: none; /* Hides the scrollbar in Internet Explorer 10+ */
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
