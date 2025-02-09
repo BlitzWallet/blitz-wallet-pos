@@ -5,6 +5,9 @@ const saveAccount = (Account) => {
 const getAccount = () => {
   return localStorage.getItem("Account");
 };
+const removeLocalStorageItem = (item) => {
+  return localStorage.removeItem(item);
+};
 
 const clearAccount = () => {
   try {
@@ -15,4 +18,4 @@ const clearAccount = () => {
     return false;
   }
 };
-export { saveAccount, getAccount, clearAccount };
+export { saveAccount, getAccount, clearAccount, removeLocalStorageItem };

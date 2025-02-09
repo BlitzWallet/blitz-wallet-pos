@@ -10,6 +10,7 @@ import { useGlobalContext } from "../../contexts/posContext";
 import PosNavbar from "../../components/nav";
 import logout from "../../functions/logout";
 import FullLoadingScreen from "../../components/loadingScreen.js";
+import { removeLocalStorageItem } from "../../functions/localStorage.js";
 function POSPage() {
   const User = getCurrentUser();
   const { setCurrentUserSession, currentUserSession } = useGlobalContext();
@@ -50,6 +51,7 @@ function POSPage() {
       }
 
       if (!data.bitcoinPrice) setOpenPopup(true);
+      removeLocalStorageItem("claims");
       setCurrentUserSession({
         account: data.posData,
         bitcoinPrice: data.bitcoinPrice,

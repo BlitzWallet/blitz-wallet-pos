@@ -79,8 +79,9 @@ export default function PaymentPage() {
       );
       setBoltzSwapClaimInfo(claimInfo);
     }
-
-    if (!liquidAdress) return;
+    console.log("RUNNING HERE");
+    if (!liquidAdress && process.env.REACT_APP_ENVIRONMENT !== "testnet")
+      return;
     if (didRunInvoiceLoad.current) return;
     didRunInvoiceLoad.current = true;
 
