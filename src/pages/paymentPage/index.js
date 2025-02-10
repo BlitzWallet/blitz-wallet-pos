@@ -1,5 +1,5 @@
 import QRCode from "qrcode.react";
-import "./style.css";
+
 import Popup from "reactjs-popup";
 import CopyToCliboardPopup from "../../components/popup";
 import { useEffect, useRef, useState } from "react";
@@ -16,7 +16,7 @@ import { reverseSwap } from "../../functions/handleClaim";
 import { getSendAmount } from "../../hooks/getSendAmount";
 import formatLiquidAddress from "./formatLiquidAddress";
 import FullLoadingScreen from "../../components/loadingScreen.js";
-
+import "./style.css";
 export default function PaymentPage() {
   const user = getCurrentUser();
   NoAccountRedirect(`../../${user}`);
@@ -25,7 +25,6 @@ export default function PaymentPage() {
   const { currentUserSession } = useGlobalContext();
   const liquidAdress = currentUserSession?.account?.receiveAddress;
   const [boltzLoadingAnimation, setBoltzLoadingAnimation] = useState("");
-  const [didReceiveBoltzPayment, setDidReceiveBoltzPayment] = useState(null);
   const [boltzSwapClaimInfo, setBoltzSwapClaimInfo] = useState({});
   const boltzInvoice = boltzSwapClaimInfo?.createdResponse?.invoice || "";
   const formatedLiquidAddress = formatLiquidAddress(
@@ -55,7 +54,7 @@ export default function PaymentPage() {
         if (liquidAddressInfo.mempool_stats.tx_count != 0) {
           setBoltzLoadingAnimation("Receiving payment");
           clearInterval(intervalRef.current);
-          setDidReceiveBoltzPayment(true);
+          navigate(`../${user}/confirmed`, { replace: true });
         }
       }, 2500);
     }
@@ -72,7 +71,7 @@ export default function PaymentPage() {
         process.env.REACT_APP_ENVIRONMENT === "testnet"
           ? process.env.REACT_APP_LIQUID_TESTNET_ADDRESS
           : liquidAdress,
-        setDidReceiveBoltzPayment,
+        handleConfirmation,
         // setBoltzInvoice,
         // user,
         setBoltzLoadingAnimation
@@ -100,18 +99,7 @@ export default function PaymentPage() {
       />
       <div className="POS-ContentContainer">
         {boltzLoadingAnimation ? (
-          <>
-            {didReceiveBoltzPayment ? (
-              <ConfirmPaymentScreen clearSettings={clearSettings} />
-            ) : (
-              <div className="POS-LoadingScreen">
-                <LoadingAnimation />
-                <p className="POS-LoadingScreenDescription">
-                  {boltzLoadingAnimation}
-                </p>
-              </div>
-            )}
-          </>
+          <FullLoadingScreen text={boltzLoadingAnimation} />
         ) : (
           <div className="PaymentPage-Container">
             <p style={{ textTransform: "capitalize" }}>
@@ -193,7 +181,8 @@ export default function PaymentPage() {
       </div>
     </div>
   );
-  function clearSettings() {
-    navigate(`../${user}`);
+  function handleConfirmation(result) {
+    if (result) navigate(`/${user}/confirmed`, { replace: true });
+    else setBoltzLoadingAnimation("Error receiving payment");
   }
 }

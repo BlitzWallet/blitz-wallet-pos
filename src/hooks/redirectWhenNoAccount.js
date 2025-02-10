@@ -12,7 +12,9 @@ const NoAccountRedirect = (posPageRoute) => {
       `Has current session bitcoin price ${!!currentUserSession?.bitcoinPrice}`
     );
     if (!currentUserSession.account && !currentUserSession.bitcoinPrice) {
-      navigate(posPageRoute, { replace: true });
+      setTimeout(() => {
+        navigate(posPageRoute, { replace: true });
+      }, 150);
     }
   }, []);
 };

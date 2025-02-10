@@ -1,0 +1,65 @@
+.ConfirmPayment-container {
+  height: 100dvh;
+  width: 100dvw;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  overflow: hidden;
+}
+.ConfirmPayment-ContentContainer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+  width: 95%;
+  max-width: 500px;
+  height: 100%;
+  transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ConfirmPayment-Icon {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 100%;
+  height: auto;
+
+  transform: translate(-50%, -40%);
+}
+.ConfirmPayment-BackgroundAnimation {
+  background-color: var(--primary);
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  width: 20px;
+  height: 20px;
+  border-radius: 10000px;
+  z-index: 1;
+
+  animation: expandCircle 2s forwards ease-in-out;
+}
+
+.ConfirmScreen-BTN {
+  margin: auto 0 50px;
+  color: var(--primary);
+  background-color: var(--darkModeText);
+  font-weight: 600;
+}
+@keyframes expandCircle {
+  0% {
+    width: 20px;
+    height: 20px;
+  }
+  100% {
+    width: 10000px;
+    height: 10000px;
+  }
+}

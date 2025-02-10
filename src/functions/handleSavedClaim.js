@@ -1,6 +1,6 @@
 import zkpInit from "@vulpemventures/secp256k1-zkp";
 // import axios from "axios";
-import { Transaction, address, crypto } from "liquidjs-lib";
+import { Transaction, address } from "liquidjs-lib";
 import {
   Musig,
   OutputType,
@@ -14,14 +14,10 @@ import {
   init,
 } from "boltz-core/dist/lib/liquid";
 import { randomBytes } from "crypto";
-import { ECPairFactory } from "ecpair";
-import * as ecc from "@bitcoinerlab/secp256k1";
 import { getNetwork } from "./network";
-import { getBoltzApiUrl, getBoltzWsUrl } from "./boltz";
-
+import { getBoltzApiUrl } from "./boltz";
 import getBoltzFeeRates from "./boltzFeeRate";
 import fetchFunction from "./fetchFunction";
-import { PAYMENT_DESCRIPTION } from "../constants";
 import { removeClaim, saveClaim } from "./claims";
 import { getSwapStatus } from "./swapStatus";
 
@@ -154,7 +150,9 @@ export async function claimUnclaimedSwaps(claimInfo) {
 
     claimInfo.claimed = true;
     removeClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
+    return true;
   } catch (err) {
     console.log(`Error when constructing claim tx: ${err}`);
+    return false;
   }
 }

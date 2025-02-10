@@ -12,7 +12,8 @@ export const GlobalRescanLiquidSwaps = ({ children }) => {
   const isWindowFocused = useWindowFocus();
   const isTabFocues = usePageVisibility();
   const [lastRun, setLastRun] = useState(0);
-  const debounceTime = 20000; // 20 seconds
+  const [shouldNavigate, setShouldNavigate] = useState(null);
+  const debounceTime = 5000; // 5 seconds
 
   useEffect(() => {
     if (!isWindowFocused || !isTabFocues) return;
@@ -38,18 +39,27 @@ export const GlobalRescanLiquidSwaps = ({ children }) => {
     const claims = getRetriableClaims(process.env.REACT_APP_ENVIRONMENT);
     console.log("RESCAN SWAPS");
     console.log(claims);
-
+    let didClaim = false;
+    // if any complete I need to add a confirm screen on UI
     for (let index = 0; index < claims.length; index++) {
       const element = claims[index];
-      await claimUnclaimedSwaps(element);
+      const response = await claimUnclaimedSwaps(element);
+
+      if (!response) continue;
+
+      didClaim = true;
+      console.log("claim error", err);
     }
+    console.log("did claim response", didClaim);
+    if (!didClaim) return;
+    setShouldNavigate(true);
 
     console.log(isWindowFocused, "isWindowFocused");
     console.log(isTabFocues, "isTabFocused");
   }
 
   return (
-    <RescanLiquidSwaps.Provider value={{}}>
+    <RescanLiquidSwaps.Provider value={{ shouldNavigate, setShouldNavigate }}>
       {children}
     </RescanLiquidSwaps.Provider>
   );

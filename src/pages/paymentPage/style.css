@@ -71,3 +71,8 @@
   color: var(--lightModeText);
   border-color: var(--lightModeText);
 }
+/* Changing global styles */
+.FullLoadingScreen {
+  width: 100%;
+  height: calc(100dvh - 55px);
+}
