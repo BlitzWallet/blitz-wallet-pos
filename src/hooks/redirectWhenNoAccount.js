@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useGlobalContext } from "../contexts/posContext";
 import { useNavigate, useParams } from "react-router-dom";
 
-const NoAccountRedirect = (posPageRoute) => {
+const NoAccountRedirect = () => {
   const navigate = useNavigate();
   const { currentUserSession } = useGlobalContext();
 
@@ -13,7 +13,7 @@ const NoAccountRedirect = (posPageRoute) => {
     );
     if (!currentUserSession.account && !currentUserSession.bitcoinPrice) {
       setTimeout(() => {
-        navigate(posPageRoute, { replace: true });
+        navigate("/", { replace: true });
       }, 150);
     }
   }, []);

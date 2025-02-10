@@ -19,7 +19,7 @@ import FullLoadingScreen from "../../components/loadingScreen.js";
 import "./style.css";
 export default function PaymentPage() {
   const user = getCurrentUser();
-  NoAccountRedirect(`../../${user}`);
+  NoAccountRedirect();
   const navigate = useNavigate();
   const convertedSatAmount = getSendAmount() || 1000;
   const { currentUserSession } = useGlobalContext();

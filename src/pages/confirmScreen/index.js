@@ -8,7 +8,7 @@ import NoAccountRedirect from "../../hooks/redirectWhenNoAccount";
 
 export default function ConfirmPaymentScreen({ clearSettings }) {
   const user = getCurrentUser();
-  NoAccountRedirect(`../../${user}`);
+  NoAccountRedirect();
   const navigate = useNavigate();
   const [showButton, setShowButton] = useState(false);
 
