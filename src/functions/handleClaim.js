@@ -19,9 +19,10 @@ import * as ecc from "@bitcoinerlab/secp256k1";
 import { getNetwork } from "./network";
 import { getBoltzApiUrl, getBoltzWsUrl } from "./boltz";
 
-// import { ClaimInfo, removeClaim, saveClaim } from "./claims";
 import getBoltzFeeRates from "./boltzFeeRate";
 import fetchFunction from "./fetchFunction";
+import { PAYMENT_DESCRIPTION } from "../constants";
+import { removeClaim, saveClaim } from "./claims";
 
 /**
  * Reverse swap flow:
@@ -73,6 +74,7 @@ export const waitAndClaim = async (
       // "swap.created" means Boltz is waiting for the invoice to be paid
       case "swap.created": {
         console.log("Waiting for invoice to be paid");
+        saveClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
         break;
       }
 
@@ -84,7 +86,7 @@ export const waitAndClaim = async (
         try {
           // save claim to be able to retry if something fails
           claimInfo.lastStatus = msg.args[0].status;
-          // saveClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
+          saveClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
 
           const boltzPublicKey = Buffer.from(
             createdResponse.refundPublicKey,
@@ -187,7 +189,7 @@ export const waitAndClaim = async (
 
           // save claimtx hex on claimInfo
           claimInfo.claimTx = claimTx.toHex();
-          // saveClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
+          saveClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
 
           console.log("Broadcasting claim transaction");
 
@@ -204,7 +206,7 @@ export const waitAndClaim = async (
           if (!didBroadcast) throw Error("did not broadcast");
 
           claimInfo.claimed = true;
-          // removeClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
+          removeClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
           onFinish(true);
           break;
         } catch (err) {
@@ -240,8 +242,8 @@ export const reverseSwap = async (
   recvInfo,
   destinationAddress,
   onFinish,
-  onInvoice,
-  buisnessName,
+  // onInvoice,
+  // buisnessName,
   setBoltzLoadingAnimation
 ) => {
   // Create a random preimage for the swap; has to have a length of 32 bytes
@@ -251,8 +253,8 @@ export const reverseSwap = async (
     crypto.sha256(Buffer.from(destinationAddress, "utf-8"))
   );
   const invoiceAmount = Math.round(Number(recvInfo.amount));
-  const description = `Payment blitz wallet point-of-sale`;
-
+  const description = PAYMENT_DESCRIPTION;
+  console.log("RUNNING IN FUNC");
   const createdResponse = await fetchFunction(
     `${getBoltzApiUrl(process.env.REACT_APP_ENVIRONMENT)}/v2/swap/reverse`,
     {
@@ -271,7 +273,7 @@ export const reverseSwap = async (
 
   // Show invoice on wallet UI
   setBoltzLoadingAnimation("");
-  onInvoice(createdResponse.invoice);
+  // onInvoice(createdResponse.invoice);
 
   const claimInfo = {
     claimed: false,

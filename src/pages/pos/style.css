@@ -13,30 +13,7 @@
   flex-direction: column;
   align-items: baseline;
 }
-.POS-navbar {
-  width: 90%;
-  max-width: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 15px auto 10px;
-  position: relative;
-}
-.POS-back {
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  position: absolute;
-  left: 0;
-}
-.POS-Container .POS-name {
-  text-align: center;
-  width: 100%;
-  text-transform: capitalize;
-  font-weight: normal;
-  font-size: 18px;
-  margin: 0;
-}
+
 .POS-Container .POS-chargeItems {
   margin-bottom: 0;
   margin: auto auto 0;
@@ -151,22 +128,6 @@
 }
 .POS-keypad .POS-keypadRow .key span {
   font-size: 20px;
-}
-
-.POS-LoadingScreen {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: auto;
-}
-
-.POS-LoadingScreen .POS-LoadingScreenDescription {
-  width: 80%;
-  text-align: center;
-  margin: 20px auto 0;
 }
 
 .POS-denominationDisclaimer {

@@ -2,8 +2,14 @@ import "./style.css";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import checkAnimation from "../../../public/assets/checkmark.json";
+import getCurrentUser from "../../hooks/getCurrnetUser";
+import { useNavigate } from "react-router-dom";
+import NoAccountRedirect from "../../hooks/redirectWhenNoAccount";
 
 export default function ConfirmPaymentScreen({ clearSettings }) {
+  const user = getCurrentUser();
+  NoAccountRedirect();
+  const navigate = useNavigate();
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
@@ -30,4 +36,7 @@ export default function ConfirmPaymentScreen({ clearSettings }) {
       </div>
     </div>
   );
+  function clearSettings() {
+    navigate(`../../${user}`);
+  }
 }

@@ -1,6 +1,7 @@
 import { ECPairFactory } from "ecpair";
 import { readClaimsFromStorage, saveClaimsToStorage } from "./storage";
 import * as ecc from "@bitcoinerlab/secp256k1";
+import { lessThanTenMin } from "./date";
 
 const infoToStored = (claim) => ({
   ...claim,
@@ -34,7 +35,9 @@ const getClaims = (network) => {
 };
 
 export const getRetriableClaims = (network) => {
-  return getClaims(network).filter((claim) => !claim.claimed);
+  return getClaims(network).filter(
+    (claim) => !claim.claimed && lessThanTenMin(claim.createdAt || 0)
+  );
 };
 
 export const removeClaim = (claim, network) => {
@@ -48,6 +51,7 @@ export const removeClaim = (claim, network) => {
 
 export const saveClaim = (claim, network) => {
   console.log("saving claim", claim);
+  claim.createdAt = new Date().getTime();
   const claims = readClaimsFromStorage();
   if (!claims[network]) claims[network] = [];
   const claimStored = infoToStored(claim);

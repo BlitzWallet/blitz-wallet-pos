@@ -1,0 +1,24 @@
+.POS-navbar {
+  width: 90%;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px auto 10px;
+  position: relative;
+}
+.POS-back {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+}
+.POS-Container .POS-name {
+  text-align: center;
+  width: 100%;
+  text-transform: capitalize;
+  font-weight: normal;
+  font-size: 18px;
+  margin: 0;
+}

@@ -1,41 +1,30 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
+export async function setupSession(wantedName) {
+  const response = await fetch(`${getBackendURL()}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      storeName: wantedName,
+    }),
+  });
 
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { initializeAuth, signInAnonymously } from "firebase/auth";
+  const data = await response.json();
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: "blitz-wallet-82b39.firebaseapp.com",
-  projectId: "blitz-wallet-82b39",
-  storageBucket: "blitz-wallet-82b39.appspot.com",
-  messagingSenderId: "129198472150",
-  appId: "1:129198472150:web:86511e5250364ee1764277",
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = initializeAuth(app);
-
-export async function getSignleContact(wantedName) {
-  await signInAnonymously(auth);
-  const userProfilesRef = collection(db, "blitzWalletUsers");
-
-  const q = query(
-    userProfilesRef,
-    where("posSettings.storeNameLower", "==", wantedName.toLowerCase())
-  );
-  const querySnapshot = await getDocs(q);
-  const [data] = querySnapshot.docs.map((doc) => doc.data());
-
-  return new Promise((resolve) => resolve(data?.posSettings));
+  if (response.status !== 200) throw new Error(data?.error || "BAD REQUEST");
+  return { posData: data.posData, bitcoinPrice: data.bitcoinData };
+}
+function getBackendURL() {
+  if (process.env.REACT_APP_FUNCTIONS_ENVIRONMENT === "testnet") {
+    console.log("Running in development mode");
+    return process.env.REACT_APP_NETLIFY_BACKEND_DEV;
+  } else if (process.env.REACT_APP_FUNCTIONS_ENVIRONMENT === "liquid") {
+    console.log("Running in production mode");
+    return process.env.REACT_APP_NETLIFY_BACKEND_PROD;
+  } else {
+    console.log(
+      "Unknown environment:",
+      process.env.REACT_APP_FUNCTIONS_ENVIRONMENT
+    );
+  }
 }
