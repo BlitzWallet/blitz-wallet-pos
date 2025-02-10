@@ -1,2 +1,16 @@
 [build]
   functions = ".netlify/functions"
+
+[[redirects]]
+  from = "/getUser"
+  to = "https://getcontact-6krimtymjq-uc.a.run.app"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+  signed = "API_SIGNATURE_TOKEN"
+
+# Catch-all redirect for SPA (React)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
