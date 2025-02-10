@@ -11,6 +11,8 @@ import { getAccount } from "./functions/localStorage";
 import { GlobalPOSContext } from "./contexts/posContext";
 import PaymentPage from "./pages/paymentPage";
 import { GlobalRescanLiquidSwaps } from "./contexts/rescanSwaps";
+import ConfirmPaymentScreen from "./pages/confirmScreen";
+import NavigateScreen from "./pages/navigateScreen";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -19,6 +21,7 @@ root.render(
     <GlobalPOSContext>
       <GlobalRescanLiquidSwaps>
         <BrowserRouter>
+          <NavigateScreen />
           <Routes>
             {/* Check if username exists in local storage */}
             <Route
@@ -35,6 +38,10 @@ root.render(
             {/* POS Page Route */}
             <Route path="/:username" element={<POSPage />} />
             <Route path="/:username/checkout" element={<PaymentPage />} />
+            <Route
+              path="/:username/confirmed"
+              element={<ConfirmPaymentScreen />}
+            />
           </Routes>
         </BrowserRouter>
       </GlobalRescanLiquidSwaps>
