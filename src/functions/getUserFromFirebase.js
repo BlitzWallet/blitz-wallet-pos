@@ -9,11 +9,10 @@ export async function setupSession(wantedName) {
     }),
   });
   const data = await response.json();
-
   if (response.status !== 200) throw new Error(data?.error || "BAD REQUEST");
 
   return {
-    posData: data?.data?.posData?.posSettings,
+    posData: data?.data?.posData,
     bitcoinPrice: data?.data?.bitcoinData,
   };
 }
