@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { setupSession } from "../../functions/getUserFromFirebase";
-import getBitcoinPrice from "../../functions/getBitcoinPrice";
 import EnterBitcoinPrice from "../../components/popup/enterBitcoinPrice";
 import ErrorPopup from "../../components/errorScreen";
 import getCurrentUser from "../../hooks/getCurrnetUser";

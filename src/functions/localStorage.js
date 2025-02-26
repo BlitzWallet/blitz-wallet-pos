@@ -1,21 +1,22 @@
-const saveAccount = (Account) => {
-  localStorage.setItem("Account", Account);
-};
-
-const getAccount = () => {
-  return localStorage.getItem("Account");
-};
-const removeLocalStorageItem = (item) => {
-  return localStorage.removeItem(item);
-};
-
-const clearAccount = () => {
+const saveToLocalStorage = (data, localStorageName) => {
   try {
-    localStorage.removeItem("Account");
-    return true;
+    return localStorage.setItem(localStorageName, data);
   } catch (err) {
-    console.log("remove local storage error", err);
-    return false;
+    console.log("saving to local storage error", err);
+    return null;
   }
 };
-export { saveAccount, getAccount, clearAccount, removeLocalStorageItem };
+const getLocalStorageItem = (localStorageName) => {
+  try {
+    return localStorage.getItem(localStorageName);
+  } catch (err) {
+    console.log("saving to local storage error", err);
+    return null;
+  }
+};
+
+const removeLocalStorageItem = (localStorageName) => {
+  return localStorage.removeItem(localStorageName);
+};
+
+export { removeLocalStorageItem, saveToLocalStorage, getLocalStorageItem };

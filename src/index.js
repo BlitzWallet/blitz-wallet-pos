@@ -7,12 +7,13 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import POSPage from "./pages/pos";
 import HomePage from "./pages/home";
-import { getAccount } from "./functions/localStorage";
+import { getLocalStorageItem } from "./functions/localStorage";
 import { GlobalPOSContext } from "./contexts/posContext";
 import PaymentPage from "./pages/paymentPage";
 import { GlobalRescanLiquidSwaps } from "./contexts/rescanSwaps";
 import ConfirmPaymentScreen from "./pages/confirmScreen";
 import NavigateScreen from "./pages/navigateScreen";
+import { ACCOUNT_LOCAL_STORAGE } from "./constants";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -27,8 +28,11 @@ root.render(
             <Route
               path="/"
               element={
-                getAccount() ? (
-                  <Navigate to={`/${getAccount()}`} replace />
+                getLocalStorageItem(ACCOUNT_LOCAL_STORAGE) ? (
+                  <Navigate
+                    to={`/${getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)}`}
+                    replace
+                  />
                 ) : (
                   <HomePage />
                 )

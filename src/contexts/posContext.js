@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
-import { getAccount } from "../functions/localStorage";
+import { getLocalStorageItem } from "../functions/localStorage";
+import { ACCOUNT_LOCAL_STORAGE } from "../constants";
 
 // Create Context
 const POSContext = createContext();
 
 // Create Provider Component
 export const GlobalPOSContext = ({ children }) => {
-  const [user, setUser] = useState(getAccount()); // Example state
+  const [user, setUser] = useState(getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)); // Example state
   const [currentUserSession, setCurrentUserSession] = useState({
     account: null,
     bitcoinPrice: 0,

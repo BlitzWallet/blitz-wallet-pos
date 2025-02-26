@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import logo from "../../logo.png";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { saveAccount } from "../../functions/localStorage";
+import { saveToLocalStorage } from "../../functions/localStorage";
 import { useGlobalContext } from "../../contexts/posContext";
+import { ACCOUNT_LOCAL_STORAGE } from "../../constants";
 
 function HomePage() {
   const { setUser } = useGlobalContext();
@@ -34,7 +35,7 @@ function HomePage() {
 
         <button
           onClick={() => {
-            saveAccount(posName);
+            saveToLocalStorage(posName, ACCOUNT_LOCAL_STORAGE);
             setUser(posName);
             navigate(`./${posName}`);
           }}
