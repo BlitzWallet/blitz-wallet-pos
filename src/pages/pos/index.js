@@ -10,11 +10,18 @@ import PosNavbar from "../../components/nav";
 import logout from "../../functions/logout";
 import FullLoadingScreen from "../../components/loadingScreen.js";
 import { removeLocalStorageItem } from "../../functions/localStorage.js";
+import EnterServerName from "../../components/popup/enterServerName.js";
 function POSPage() {
   const User = getCurrentUser();
-  const { setCurrentUserSession, currentUserSession } = useGlobalContext();
+  const { setCurrentUserSession, currentUserSession, serverName } =
+    useGlobalContext();
   const [chargeAmount, setChargeAmount] = useState(""); // in cents
-  const [openPopup, setOpenPopup] = useState(false);
+  const [popupType, setPopupType] = useState({
+    openPopup: false,
+    bitcoinPrice: false,
+    errorScreen: false,
+    serverName: false,
+  });
   const [hasError, setHasError] = useState("");
   const [addedItems, setAddedItems] = useState([]);
   const didInitialRender = useRef(true);
@@ -40,16 +47,41 @@ function POSPage() {
       } catch (err) {
         console.log("init page get single contact error", err);
         setHasError("Unable to authenticate request");
+        setPopupType((prev) => {
+          let newObject = {};
+          Object.entries(prev).forEach((entry) => {
+            newObject[entry[0]] =
+              entry[0] === "errorScreen" || entry[0] === "openPopup";
+          });
+          return newObject;
+        });
         return;
       }
       console.log("did retrive point-of-sale data", !!data);
 
       if (!data) {
+        setPopupType((prev) => {
+          let newObject = {};
+          Object.entries(prev).forEach((entry) => {
+            newObject[entry[0]] =
+              entry[0] === "errorScreen" || entry[0] === "openPopup";
+          });
+          return newObject;
+        });
         setHasError("Unable to find point-of-sale");
         return;
       }
 
-      if (!data.bitcoinPrice) setOpenPopup(true);
+      if (!data.bitcoinPrice) {
+        setPopupType((prev) => {
+          let newObject = {};
+          Object.entries(prev).forEach((entry) => {
+            newObject[entry[0]] =
+              entry[0] === "bitcoinPrice" || entry[0] === "openPopup";
+          });
+          return newObject;
+        });
+      }
       removeLocalStorageItem("claims");
       setCurrentUserSession({
         account: data.posData,
@@ -60,6 +92,19 @@ function POSPage() {
     if (!didInitialRender.current) return;
     didInitialRender.current = false;
     initPage();
+  }, [currentUserSession, serverName]);
+
+  useEffect(() => {
+    if (!currentUserSession.account || !currentUserSession.bitcoinPrice) return;
+
+    setPopupType((prev) => {
+      let newObject = {};
+      Object.entries(prev).forEach((entry) => {
+        newObject[entry[0]] =
+          entry[0] === "serverName" || entry[0] === "openPopup";
+      });
+      return newObject;
+    });
   }, [currentUserSession]);
 
   if (
@@ -77,17 +122,28 @@ function POSPage() {
           logout();
         }}
       />
-      {openPopup ? (
-        <EnterBitcoinPrice
-          setOpenPopup={setOpenPopup}
-          setBitcoinPrice={setCurrentUserSession}
-        />
-      ) : hasError ? (
-        <ErrorPopup
-          customFunction={logout}
-          navigatePath="../"
-          errorMessage={hasError}
-        />
+      {popupType.openPopup ? (
+        <>
+          {popupType.bitcoinPrice ? (
+            <EnterBitcoinPrice setPopupType={setPopupType} />
+          ) : (
+            <div />
+          )}
+          {popupType.errorScreen ? (
+            <ErrorPopup
+              customFunction={logout}
+              navigatePath="../"
+              errorMessage={hasError}
+            />
+          ) : (
+            <div />
+          )}
+          {popupType.serverName ? (
+            <EnterServerName setPopupType={setPopupType} />
+          ) : (
+            <div />
+          )}
+        </>
       ) : (
         <div />
       )}
