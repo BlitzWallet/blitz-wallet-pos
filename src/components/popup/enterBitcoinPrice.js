@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./enterBitcoinPrice.css";
-export default function EnterBitcoinPrice({ setOpenPopup, setBitcoinPrice }) {
+import { useGlobalContext } from "../../contexts/posContext";
+export default function EnterBitcoinPrice({ setPopupType }) {
+  const { setCurrentUserSession } = useGlobalContext();
   const [enteredBitcoinPrice, setEnteredBitcoinPrice] = useState(0);
   return (
     <div className="EnterBitconPrice-Container">
@@ -19,10 +21,17 @@ export default function EnterBitcoinPrice({ setOpenPopup, setBitcoinPrice }) {
         <button
           onClick={() => {
             if (!enteredBitcoinPrice) return;
-            setBitcoinPrice((prev) => {
-              return { ...prev, bitcoinPrice: enteredBitcoinPrice };
+            setCurrentUserSession((prev) => {
+              return { ...prev, bitcoinPrice: Number(enteredBitcoinPrice) };
             });
-            setOpenPopup(false);
+            setPopupType((prev) => {
+              let newObject = {};
+              Object.entries(prev).forEach((entry) => {
+                newObject[entry[0]] = false;
+              });
+              console.log(newObject);
+              return newObject;
+            });
           }}
         >
           Save
