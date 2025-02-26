@@ -16,7 +16,13 @@ const getLocalStorageItem = (localStorageName) => {
 };
 
 const removeLocalStorageItem = (localStorageName) => {
-  return localStorage.removeItem(localStorageName);
+  try {
+    localStorage.removeItem(localStorageName);
+    return true;
+  } catch (err) {
+    console.log("saving to local storage error", err);
+    return null;
+  }
 };
 
 export { removeLocalStorageItem, saveToLocalStorage, getLocalStorageItem };

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { getLocalStorageItem } from "../functions/localStorage";
-import { ACCOUNT_LOCAL_STORAGE } from "../constants";
+import { ACCOUNT_LOCAL_STORAGE, SERVER_LOCAL_STORAGE } from "../constants";
 
 // Create Context
 const POSContext = createContext();
@@ -8,6 +8,9 @@ const POSContext = createContext();
 // Create Provider Component
 export const GlobalPOSContext = ({ children }) => {
   const [user, setUser] = useState(getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)); // Example state
+  const [serverName, setServerName] = useState(
+    getLocalStorageItem(SERVER_LOCAL_STORAGE)
+  ); // Example state
   const [currentUserSession, setCurrentUserSession] = useState({
     account: null,
     bitcoinPrice: 0,
@@ -20,6 +23,8 @@ export const GlobalPOSContext = ({ children }) => {
         setUser,
         currentUserSession,
         setCurrentUserSession,
+        serverName,
+        setServerName,
       }}
     >
       {children}
