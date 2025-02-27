@@ -11,6 +11,8 @@ import logout from "../../functions/logout";
 import FullLoadingScreen from "../../components/loadingScreen.js";
 import { removeLocalStorageItem } from "../../functions/localStorage.js";
 import EnterServerName from "../../components/popup/enterServerName.js";
+import CustomKeyboard from "../../components/keypad/index.js";
+import BalanceView from "../../components/balanceView/index.js";
 function POSPage() {
   const User = getCurrentUser();
   const { setCurrentUserSession, currentUserSession, serverName } =
@@ -165,29 +167,7 @@ function POSPage() {
               .join(" + ")}
           </p>
         )}
-        <div className="POS-BalanceView">
-          <div className="POS-BalanceScrollView">
-            <h1 className="POS-totalBalance">{`${
-              !chargeAmount
-                ? "0.00"
-                : Number(chargeAmount / 100)
-                    .toFixed(2)
-                    .toLocaleString()
-            }`}</h1>
-          </div>
-          <h1
-            style={{
-              margin: "0 0 0 5px",
-              fontSize: 30,
-              alignSelf: "center",
-            }}
-            className="POS-totalBalance"
-          >
-            {currentUserSession?.account
-              ? currentUserSession?.account?.storeCurrency?.toUpperCase()
-              : "USD"}
-          </h1>
-        </div>
+        <BalanceView balance={chargeAmount} />
 
         <p className="POS-AmountError">
           {convertedSatAmount > 1000
@@ -197,112 +177,8 @@ function POSPage() {
               )} ${currentUserSession?.account?.storeCurrency || "USD"}`}
         </p>
 
-        <div className="POS-keypad">
-          <div className="POS-keypadRow">
-            <div
-              onClick={() => {
-                addNumToBalance(1);
-              }}
-              className="key"
-            >
-              <span>1</span>
-            </div>
-            <div
-              onClick={() => {
-                addNumToBalance(2);
-              }}
-              className="key"
-            >
-              <span>2</span>
-            </div>
-            <div
-              onClick={() => {
-                addNumToBalance(3);
-              }}
-              className="key"
-            >
-              <span>3</span>
-            </div>
-          </div>
-          <div className="POS-keypadRow">
-            <div
-              onClick={() => {
-                addNumToBalance(4);
-              }}
-              className="key"
-            >
-              <span>4</span>
-            </div>
-            <div
-              onClick={() => {
-                addNumToBalance(5);
-              }}
-              className="key"
-            >
-              <span>5</span>
-            </div>
-            <div
-              onClick={() => {
-                addNumToBalance(6);
-              }}
-              className="key"
-            >
-              <span>6</span>
-            </div>
-          </div>
-          <div className="POS-keypadRow">
-            <div
-              onClick={() => {
-                addNumToBalance(7);
-              }}
-              className="key"
-            >
-              <span>7</span>
-            </div>
-            <div
-              onClick={() => {
-                addNumToBalance(8);
-              }}
-              className="key"
-            >
-              <span>8</span>
-            </div>
-            <div
-              onClick={() => {
-                addNumToBalance(9);
-              }}
-              className="key"
-            >
-              <span>9</span>
-            </div>
-          </div>
-          <div className="POS-keypadRow">
-            <div
-              onClick={() => {
-                addNumToBalance("C");
-              }}
-              className="key"
-            >
-              <span>C</span>
-            </div>
-            <div
-              onClick={() => {
-                addNumToBalance(0);
-              }}
-              className="key"
-            >
-              <span>0</span>
-            </div>
-            <div
-              onClick={() => {
-                addNumToBalance("+");
-              }}
-              className="key"
-            >
-              <span style={{ color: "var(--primary)" }}>+</span>
-            </div>
-          </div>
-        </div>
+        <CustomKeyboard customFunction={addNumToBalance} />
+
         <button
           onClick={handleInvoice}
           style={{ opacity: !canReceivePayment ? 0.5 : 1 }}
