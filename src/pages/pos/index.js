@@ -221,7 +221,6 @@ function POSPage() {
 
   async function handleInvoice() {
     if (!canReceivePayment) return;
-
     navigate(`./tip`, {
       state: {
         satAmount: Math.round(convertedSatAmount),

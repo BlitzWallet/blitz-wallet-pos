@@ -3,26 +3,26 @@ import QRCode from "qrcode.react";
 import Popup from "reactjs-popup";
 import CopyToCliboardPopup from "../../components/popup";
 import { useEffect, useRef, useState } from "react";
-import ChangeSelectedReceiveOptionPopup from "../../components/popup/changeSelectedReceiveOption";
 import getLiquidAddressInfo from "../../functions/lookForLiquidPayment";
 import NoAccountRedirect from "../../hooks/redirectWhenNoAccount";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import PosNavbar from "../../components/nav";
-import { useNavigate } from "react-router-dom";
-import ConfirmPaymentScreen from "../../components/confirmScreen/confirmPaymentScreen";
-import LoadingAnimation from "../../components/loadingAnimation";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../contexts/posContext";
 import { reverseSwap } from "../../functions/handleClaim";
 import { getSendAmount } from "../../hooks/getSendAmount";
 import formatLiquidAddress from "./formatLiquidAddress";
 import FullLoadingScreen from "../../components/loadingScreen.js";
 import "./style.css";
+import fetchFunction from "../../functions/fetchFunction.js";
 export default function PaymentPage() {
   const user = getCurrentUser();
   NoAccountRedirect();
   const navigate = useNavigate();
-  const convertedSatAmount = getSendAmount() || 1000;
-  const { currentUserSession } = useGlobalContext();
+  const location = useLocation();
+  const { satAmount, tipAmountSats } = location.state;
+  const convertedSatAmount = satAmount + tipAmountSats || 1000;
+  const { currentUserSession, serverName } = useGlobalContext();
   const liquidAdress = currentUserSession?.account?.receiveAddress;
   const [boltzLoadingAnimation, setBoltzLoadingAnimation] = useState("");
   const [boltzSwapClaimInfo, setBoltzSwapClaimInfo] = useState({});
@@ -65,6 +65,15 @@ export default function PaymentPage() {
   }, [selectedPaymentOption]);
 
   useEffect(() => {
+    const claimObject = {
+      storeName: user,
+      tx: {
+        tipAmountSats,
+        orderAmountSats: satAmount,
+        serverName,
+        time: new Date().getTime(),
+      },
+    };
     async function handleInvoice() {
       const claimInfo = await reverseSwap(
         { amount: convertedSatAmount },
@@ -72,8 +81,7 @@ export default function PaymentPage() {
           ? process.env.REACT_APP_LIQUID_TESTNET_ADDRESS
           : liquidAdress,
         handleConfirmation,
-        // setBoltzInvoice,
-        // user,
+        claimObject,
         setBoltzLoadingAnimation
       );
       setBoltzSwapClaimInfo(claimInfo);
@@ -181,8 +189,12 @@ export default function PaymentPage() {
       </div>
     </div>
   );
-  function handleConfirmation(result) {
-    if (result) navigate(`/${user}/confirmed`, { replace: true });
-    else setBoltzLoadingAnimation("Error receiving payment");
+  async function handleConfirmation(result, claimObject) {
+    console.log(result, "save response");
+
+    if (result) {
+      await fetchFunction("/addTxActivity", claimObject, "post");
+      navigate(`/${user}/confirmed`, { replace: true });
+    } else setBoltzLoadingAnimation("Error receiving payment");
   }
 }

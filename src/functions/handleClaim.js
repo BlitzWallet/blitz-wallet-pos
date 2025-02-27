@@ -35,7 +35,8 @@ import { removeClaim, saveClaim } from "./claims";
 export const waitAndClaim = async (
   claimInfo,
   onFinish,
-  setBoltzLoadingAnimation
+  setBoltzLoadingAnimation,
+  claimObject
 ) => {
   init(await zkpInit());
   let claimTx;
@@ -66,7 +67,7 @@ export const waitAndClaim = async (
 
     if (msg.args[0].error) {
       webSocket.close();
-      onFinish(false);
+      onFinish(false, claimObject);
       return;
     }
 
@@ -74,7 +75,11 @@ export const waitAndClaim = async (
       // "swap.created" means Boltz is waiting for the invoice to be paid
       case "swap.created": {
         console.log("Waiting for invoice to be paid");
-        saveClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
+
+        saveClaim(
+          { ...claimInfo, dbClaim: { ...claimObject } },
+          process.env.REACT_APP_ENVIRONMENT
+        );
         break;
       }
 
@@ -86,7 +91,10 @@ export const waitAndClaim = async (
         try {
           // save claim to be able to retry if something fails
           claimInfo.lastStatus = msg.args[0].status;
-          saveClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
+          saveClaim(
+            { ...claimInfo, dbClaim: { ...claimObject } },
+            process.env.REACT_APP_ENVIRONMENT
+          );
 
           const boltzPublicKey = Buffer.from(
             createdResponse.refundPublicKey,
@@ -207,7 +215,7 @@ export const waitAndClaim = async (
 
           claimInfo.claimed = true;
           removeClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
-          onFinish(true);
+          onFinish(true, claimObject);
           break;
         } catch (err) {
           console.log(`Error when constructing claim tx: ${err}`);
@@ -242,8 +250,7 @@ export const reverseSwap = async (
   recvInfo,
   destinationAddress,
   onFinish,
-  // onInvoice,
-  // buisnessName,
+  claimObject,
   setBoltzLoadingAnimation
 ) => {
   // Create a random preimage for the swap; has to have a length of 32 bytes
@@ -286,7 +293,8 @@ export const reverseSwap = async (
   };
 
   // Wait for Boltz to lock funds onchain and than claim them
-  waitAndClaim(claimInfo, onFinish, setBoltzLoadingAnimation);
+  onFinish(true, claimObject);
+  waitAndClaim(claimInfo, onFinish, setBoltzLoadingAnimation, claimObject);
   return claimInfo;
 };
 

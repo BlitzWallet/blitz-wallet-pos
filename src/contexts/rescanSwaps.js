@@ -3,6 +3,7 @@ import useWindowFocus from "../hooks/isWindowFocused";
 import usePageVisibility from "../hooks/isTabFocused";
 import { getRetriableClaims } from "../functions/claims";
 import { claimUnclaimedSwaps } from "../functions/handleSavedClaim";
+import fetchFunction from "../functions/fetchFunction";
 
 // Create Context
 const RescanLiquidSwaps = createContext();
@@ -46,6 +47,7 @@ export const GlobalRescanLiquidSwaps = ({ children }) => {
       const response = await claimUnclaimedSwaps(element);
 
       if (!response) continue;
+      await fetchFunction("/addTxActivity", element?.dbClaim, "post");
 
       didClaim = true;
       console.log("claim error", err);

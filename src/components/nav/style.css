@@ -14,7 +14,7 @@
   position: absolute;
   left: 0;
 }
-.POS-Container .POS-name {
+.POS-name {
   text-align: center;
   width: 100%;
   text-transform: capitalize;

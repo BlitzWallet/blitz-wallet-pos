@@ -14,7 +14,7 @@ export default function NavigateScreen() {
     if (!shouldNavigate) return;
     setShouldNavigate(null);
     navigate(`/${user}/confirmed`);
-  }, shouldNavigate);
+  }, [shouldNavigate]);
 
   return null;
 }
