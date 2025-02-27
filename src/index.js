@@ -14,6 +14,7 @@ import { GlobalRescanLiquidSwaps } from "./contexts/rescanSwaps";
 import ConfirmPaymentScreen from "./pages/confirmScreen";
 import NavigateScreen from "./pages/navigateScreen";
 import { ACCOUNT_LOCAL_STORAGE } from "./constants";
+import AddTipPage from "./pages/tip";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -41,6 +42,7 @@ root.render(
 
             {/* POS Page Route */}
             <Route path="/:username" element={<POSPage />} />
+            <Route path="/:username/tip" element={<AddTipPage />} />
             <Route path="/:username/checkout" element={<PaymentPage />} />
             <Route
               path="/:username/confirmed"
