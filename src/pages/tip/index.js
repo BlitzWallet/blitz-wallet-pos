@@ -1,11 +1,11 @@
 import "./style.css";
 import { useState } from "react";
-import getCurrentUser from "../../hooks/getCurrnetUser";
 import { useLocation, useNavigate } from "react-router-dom";
 import NoAccountRedirect from "../../hooks/redirectWhenNoAccount";
 import PosNavbar from "../../components/nav";
 import { useGlobalContext } from "../../contexts/posContext";
 import CustomKeyboard from "../../components/keypad";
+import BalanceView from "../../components/balanceView";
 
 export default function AddTipPage() {
   const { currentUserSession } = useGlobalContext();
@@ -17,19 +17,17 @@ export default function AddTipPage() {
   const [tipAmount, setTipAmount] = useState({
     selectedTip: null,
     customTip: "",
-    usingCustomTip: false,
+    showCustomTip: false,
   });
-  const tipAmountFiat = tipAmount.usingCustomTip
-    ? (tipAmount.selectedTip || 0).toFixed(2)
+  const tipAmountFiat = tipAmount.customTip
+    ? ((Number(tipAmount.customTip) || 0) / 100).toFixed(2)
     : (fiatAmount * ((tipAmount.selectedTip || 0) / 100)).toFixed(2);
-  const tipAmountSats = tipAmount.usingCustomTip
+  const tipAmountSats = tipAmount.customTip
     ? Math.round(
-        (100_000_000 / currentUserSession.account?.bitcoinPrice) *
-          (tipAmount.selectedTip || 0)
+        (100_000_000 / currentUserSession.bitcoinPrice) *
+          ((tipAmount.customTip || 0) / 100)
       )
     : Math.round(satAmount * ((tipAmount.selectedTip || 0) / 100));
-
-  console.log(satAmount, fiatAmount, tipAmountFiat, tipAmountSats);
 
   const tipOptionElements = [15, 20, 25, 0].map((item, index) => {
     return (
@@ -37,7 +35,7 @@ export default function AddTipPage() {
         key={item}
         onClick={() => {
           setTipAmount({
-            customTip: 0,
+            customTip: "",
             selectedTip: tipAmount.selectedTip === item ? null : item,
           });
         }}
@@ -64,6 +62,7 @@ export default function AddTipPage() {
     );
   });
 
+  console.log(tipAmount);
   return (
     <div className="TipPage-container">
       <PosNavbar
@@ -77,19 +76,37 @@ export default function AddTipPage() {
         <h3 className="amount-breakdown">
           {`$${fiatAmount} + $${tipAmountFiat} Tip`}
         </h3>
-        {tipAmount.usingCustomTip ? (
+        {tipAmount.showCustomTip ? (
           <>
-            <CustomKeyboard />
+            <BalanceView balance={tipAmount.customTip} />
+            <CustomKeyboard
+              customFunction={(input) => {
+                setTipAmount((prev) => {
+                  if (Number.isInteger(input)) {
+                    let num;
+
+                    if (input === 0) num = String(prev.customTip) + 0;
+                    else num = String(prev.customTip) + input;
+
+                    return { ...prev, customTip: num };
+                  } else {
+                    if (input.toLowerCase() === "c") {
+                      return { ...prev, customTip: 0 };
+                    }
+                  }
+                });
+              }}
+            />
             <button
               className="back-btn"
               onClick={() =>
                 setTipAmount((prev) => ({
-                  customTip: 0,
-                  usingCustomTip: false,
+                  ...prev,
+                  showCustomTip: false,
                 }))
               }
             >
-              Back
+              {tipAmount.customTip ? "Save" : "Back"}
             </button>
           </>
         ) : (
@@ -101,29 +118,45 @@ export default function AddTipPage() {
               className="no-tip"
               onClick={() =>
                 setTipAmount((prev) => ({
+                  customTip: "",
                   selectedTip: null,
-                  usingCustomTip: true,
+                  showCustomTip: true,
                 }))
               }
+              style={{
+                backgroundColor: tipAmount.customTip
+                  ? "var(--primary)"
+                  : "var(--lightModeBackgroundOffset)",
+
+                color: tipAmount.customTip
+                  ? "var(--darkModeText)"
+                  : "var(--lightModeText)",
+              }}
             >
               Custom
             </button>
             <button
               className="continue-btn"
-              onClick={() =>
+              onClick={() => {
+                if (!tipAmount.customTip && tipAmount.selectedTip === null)
+                  return;
+
                 navigate(
                   `../${currentUserSession.account.storeNameLower}/checkout`,
                   {
                     state: {
                       satAmount: Math.round(satAmount),
                       tipAmountFiat,
+                      tipAmountSats,
                     },
                     replace: true,
                   }
-                )
-              }
+                );
+              }}
             >
-              Continue
+              {!tipAmount.customTip && tipAmount.selectedTip === null
+                ? "Select tip"
+                : "Continue"}
             </button>
           </>
         )}

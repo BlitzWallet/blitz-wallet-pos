@@ -1,13 +1,14 @@
 .TipPage-container {
   width: 100%;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 .Tip-container {
   width: 90%;
   max-width: 500px;
-  min-height: calc(100dvh - 130px);
-  margin: auto auto 0;
+  min-height: calc(100dvh - 52px);
+  margin: 0 auto 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,7 +35,7 @@
   font-size: 30px;
   font-weight: normal;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 0;
 }
 .Tip-container .tipContainer {
   width: 100%;
