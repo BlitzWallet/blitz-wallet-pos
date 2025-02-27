@@ -15,6 +15,7 @@ function POSPage() {
   const User = getCurrentUser();
   const { setCurrentUserSession, currentUserSession, serverName } =
     useGlobalContext();
+  const didLoadPOS = useRef(false);
   const [chargeAmount, setChargeAmount] = useState(""); // in cents
   const [popupType, setPopupType] = useState({
     openPopup: false,
@@ -87,6 +88,7 @@ function POSPage() {
         account: data.posData,
         bitcoinPrice: data.bitcoinPrice,
       });
+      didLoadPOS.current = true;
     }
     if (currentUserSession.account && currentUserSession.bitcoinPrice) return;
     if (!didInitialRender.current) return;
@@ -95,7 +97,7 @@ function POSPage() {
   }, [currentUserSession, serverName]);
 
   useEffect(() => {
-    if (!currentUserSession.account || !currentUserSession.bitcoinPrice) return;
+    if (!currentUserSession.bitcoinPrice || !didLoadPOS.current) return;
 
     setPopupType((prev) => {
       let newObject = {};
@@ -106,6 +108,8 @@ function POSPage() {
       return newObject;
     });
   }, [currentUserSession]);
+
+  console.log(currentUserSession, "TSET");
 
   if (
     !currentUserSession.account &&
@@ -341,7 +345,13 @@ function POSPage() {
 
   async function handleInvoice() {
     if (!canReceivePayment) return;
-    navigate(`./checkout?amount=${Math.round(convertedSatAmount)}`);
+
+    navigate(`./tip`, {
+      state: {
+        satAmount: Math.round(convertedSatAmount),
+        fiatAmount: totalAmount,
+      },
+    });
   }
 }
 
