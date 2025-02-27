@@ -293,7 +293,6 @@ export const reverseSwap = async (
   };
 
   // Wait for Boltz to lock funds onchain and than claim them
-  onFinish(true, claimObject);
   waitAndClaim(claimInfo, onFinish, setBoltzLoadingAnimation, claimObject);
   return claimInfo;
 };
