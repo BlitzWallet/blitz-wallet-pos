@@ -1,6 +1,10 @@
 import { useCallback } from "react";
 import "./style.css";
-export default function CustomKeyboard({ customFunction, addNumToBalance }) {
+export default function CustomKeyboard({
+  customFunction,
+  addNumToBalance,
+  showPlus = true,
+}) {
   const handleClick = useCallback(
     (input) => {
       if (customFunction) {
@@ -108,11 +112,12 @@ export default function CustomKeyboard({ customFunction, addNumToBalance }) {
         </div>
         <div
           onClick={() => {
+            if (!showPlus) return;
             handleClick("+");
           }}
           className="key"
         >
-          <span style={{ color: "var(--primary)" }}>+</span>
+          <span style={{ color: "var(--primary)" }}>{showPlus ? "+" : ""}</span>
         </div>
       </div>
     </div>

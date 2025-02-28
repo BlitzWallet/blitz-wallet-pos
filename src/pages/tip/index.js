@@ -62,7 +62,6 @@ export default function AddTipPage() {
     );
   });
 
-  console.log(tipAmount);
   return (
     <div className="TipPage-container">
       <PosNavbar
@@ -80,6 +79,7 @@ export default function AddTipPage() {
           <>
             <BalanceView balance={tipAmount.customTip} />
             <CustomKeyboard
+              showPlus={false}
               customFunction={(input) => {
                 setTipAmount((prev) => {
                   if (Number.isInteger(input)) {
@@ -137,6 +137,12 @@ export default function AddTipPage() {
             </button>
             <button
               className="continue-btn"
+              style={{
+                opacity:
+                  !tipAmount.customTip && tipAmount.selectedTip === null
+                    ? 0.2
+                    : 1,
+              }}
               onClick={() => {
                 if (!tipAmount.customTip && tipAmount.selectedTip === null)
                   return;
@@ -154,9 +160,7 @@ export default function AddTipPage() {
                 );
               }}
             >
-              {!tipAmount.customTip && tipAmount.selectedTip === null
-                ? "Select tip"
-                : "Continue"}
+              Continue
             </button>
           </>
         )}
