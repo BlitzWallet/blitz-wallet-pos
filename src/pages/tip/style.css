@@ -71,6 +71,7 @@
 .Tip-container .continue-btn {
   width: calc(100% - 10px);
   margin-bottom: 20px;
+  margin-top: 10px;
 }
 @media screen and (max-width: 500px) {
   .Tip-container .tipItem {
