@@ -111,8 +111,6 @@ function POSPage() {
     });
   }, [currentUserSession]);
 
-  console.log(currentUserSession, "TSET");
-
   if (
     !currentUserSession.account &&
     !currentUserSession.bitcoinPrice &&
@@ -224,7 +222,7 @@ function POSPage() {
     navigate(`./tip`, {
       state: {
         satAmount: Math.round(convertedSatAmount),
-        fiatAmount: totalAmount,
+        fiatAmount: Number(totalAmount).toFixed(2),
       },
     });
   }
