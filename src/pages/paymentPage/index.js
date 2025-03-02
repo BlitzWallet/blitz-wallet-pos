@@ -73,6 +73,7 @@ export default function PaymentPage() {
         serverName,
         time: new Date().getTime(),
       },
+      bitcoinPrice: currentUserSession?.bitcoinPrice || 0,
     };
     async function handleInvoice() {
       const claimInfo = await reverseSwap(
