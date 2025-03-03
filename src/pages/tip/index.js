@@ -55,8 +55,7 @@ export default function AddTipPage() {
                 : "var(--lightModeText)",
           }}
         >
-          {`${!item ? "No tip" : String(item)}
-          ${!item ? "" : "%"}`}
+          {`${!item ? "No tip" : String(item)}${!item ? "" : "%"}`}
         </p>
       </div>
     );
