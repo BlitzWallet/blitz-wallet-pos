@@ -1,6 +1,13 @@
-import React, { createContext, useContext, useState } from "react";
-import { getLocalStorageItem } from "../functions/localStorage";
-import { ACCOUNT_LOCAL_STORAGE, SERVER_LOCAL_STORAGE } from "../constants";
+import React, { createContext, useCallback, useContext, useState } from "react";
+import {
+  getLocalStorageItem,
+  saveToLocalStorage,
+} from "../functions/localStorage";
+import {
+  ACCOUNT_LOCAL_STORAGE,
+  POS_SETTINGS_LOCAL_STORAGE,
+  SERVER_LOCAL_STORAGE,
+} from "../constants";
 
 // Create Context
 const POSContext = createContext();
@@ -13,8 +20,30 @@ export const GlobalPOSContext = ({ children }) => {
   ); // Example state
   const [currentUserSession, setCurrentUserSession] = useState({
     account: null,
-    bitcoinPrice: 0,
+    bitcoinPrice: null,
   });
+
+  const [currentSettings, setCurrentSettings] = useState(
+    JSON.parse(getLocalStorageItem(POS_SETTINGS_LOCAL_STORAGE)) || {
+      displayCurrency: {
+        isSats: false,
+        isWord: false,
+      },
+    }
+  );
+
+  const toggleSettings = useCallback((newSettings) => {
+    setCurrentSettings((prev) => {
+      const settingsUpdate = { ...prev, ...newSettings };
+      saveToLocalStorage(
+        JSON.stringify(settingsUpdate),
+        POS_SETTINGS_LOCAL_STORAGE
+      );
+      return settingsUpdate;
+    });
+  }, []);
+
+  const dollarSatValue = 100_000_000 / (currentUserSession?.bitcoinPrice || 1);
 
   return (
     <POSContext.Provider
@@ -25,6 +54,9 @@ export const GlobalPOSContext = ({ children }) => {
         setCurrentUserSession,
         serverName,
         setServerName,
+        currentSettings,
+        toggleSettings,
+        dollarSatValue,
       }}
     >
       {children}
