@@ -46,14 +46,7 @@ root.render(
               />
 
               {/* POS Page Route */}
-              <Route
-                path="/:username"
-                element={
-                  <ProtectedRoute>
-                    <POSPage />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/:username" element={<POSPage />} />
               <Route
                 path="/:username/tip"
                 element={
@@ -78,6 +71,8 @@ root.render(
                   </ProtectedRoute>
                 }
               />
+              {/* Catch all route */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </BrowserRouter>
         </GlobalSettingsDisplay>

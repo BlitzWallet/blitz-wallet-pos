@@ -11,7 +11,6 @@ import displayCorrectDenomination from "../../functions/displayCorrectDenominati
 export default function AddTipPage() {
   const { currentUserSession, currentSettings, dollarSatValue } =
     useGlobalContext();
-  NoAccountRedirect();
   const location = useLocation();
   const { satAmount, fiatAmount } = location.state;
   const navigate = useNavigate();

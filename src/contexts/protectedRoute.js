@@ -7,8 +7,10 @@ export const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const currentUser = getCurrentUser();
 
-  // If the user has no account and is not on /:username, redirect
-  if (!currentUserSession.account && location.pathname !== `/${currentUser}`) {
+  if (
+    !currentUserSession.account ||
+    !location.pathname.startsWith(`/${currentUser}`)
+  ) {
     return <Navigate to={`/${currentUser}`} replace />;
   }
 
