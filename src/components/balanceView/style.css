@@ -13,7 +13,8 @@
 }
 .POS-BalanceScrollView {
   width: auto;
-  max-width: calc(100dvw - 100px);
+  max-width: calc(95% - 100px);
   height: fit-content;
-  overflow-y: scroll;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent text from wrapping */
 }
