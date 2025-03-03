@@ -4,6 +4,7 @@ import CheckMark from "../../public/assets/icons/checkMark.png";
 import LiquidIcon from "../../public/assets/icons/liquidIcon.svg";
 import LightningIconLight from "../../public/assets/icons/LightningIconLight.svg";
 import LightningIconDark from "../../public/assets/icons/LightningIconDark.svg";
+import SettingsIconBlue from "../../public/assets/icons/settings.png";
 
 export default {
   Logo,
@@ -12,4 +13,5 @@ export default {
   LiquidIcon,
   LightningIconLight,
   LightningIconDark,
+  SettingsIconBlue,
 };

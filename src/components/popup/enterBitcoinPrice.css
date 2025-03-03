@@ -24,11 +24,3 @@
 .ChangePaymentContainer-Desc {
   padding: 10px;
 }
-
-.bitcoinPriceInput {
-  background-color: var(--lightModeBackgroundOffset);
-  border-width: 0;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-}

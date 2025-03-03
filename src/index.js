@@ -16,6 +16,8 @@ import NavigateScreen from "./pages/navigateScreen";
 import { ACCOUNT_LOCAL_STORAGE } from "./constants";
 import AddTipPage from "./pages/tip";
 import { ProtectedRoute } from "./contexts/protectedRoute";
+import { GlobalSettingsDisplay } from "./contexts/settingsDisplay";
+import SettingsPage from "./pages/settings";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -23,59 +25,57 @@ root.render(
   <React.StrictMode>
     <GlobalPOSContext>
       <GlobalRescanLiquidSwaps>
-        <BrowserRouter>
-          <NavigateScreen />
-          <Routes>
-            {/* Check if username exists in local storage */}
-            <Route
-              path="/"
-              element={
-                getLocalStorageItem(ACCOUNT_LOCAL_STORAGE) ? (
-                  <Navigate
-                    to={`/${getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)}`}
-                    replace
-                  />
-                ) : (
-                  <HomePage />
-                )
-              }
-            />
+        <GlobalSettingsDisplay>
+          <BrowserRouter>
+            <NavigateScreen />
+            <SettingsPage />
+            <Routes>
+              {/* Check if username exists in local storage */}
+              <Route
+                path="/"
+                element={
+                  getLocalStorageItem(ACCOUNT_LOCAL_STORAGE) ? (
+                    <Navigate
+                      to={`/${getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)}`}
+                      replace
+                    />
+                  ) : (
+                    <HomePage />
+                  )
+                }
+              />
 
-            {/* POS Page Route */}
-            <Route
-              path="/:username"
-              element={
-                <ProtectedRoute>
-                  <POSPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/:username/tip"
-              element={
-                <ProtectedRoute>
-                  <AddTipPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/:username/checkout"
-              element={
-                <ProtectedRoute>
-                  <PaymentPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/:username/confirmed"
-              element={
-                <ProtectedRoute>
-                  <ConfirmPaymentScreen />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
+              {/* POS Page Route */}
+              <Route path="/:username" element={<POSPage />} />
+              <Route
+                path="/:username/tip"
+                element={
+                  <ProtectedRoute>
+                    <AddTipPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/:username/checkout"
+                element={
+                  <ProtectedRoute>
+                    <PaymentPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/:username/confirmed"
+                element={
+                  <ProtectedRoute>
+                    <ConfirmPaymentScreen />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Catch all route */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </BrowserRouter>
+        </GlobalSettingsDisplay>
       </GlobalRescanLiquidSwaps>
     </GlobalPOSContext>
   </React.StrictMode>

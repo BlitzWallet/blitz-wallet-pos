@@ -22,3 +22,10 @@
   font-size: 18px;
   margin: 0;
 }
+.nav-settings {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+}

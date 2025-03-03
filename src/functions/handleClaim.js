@@ -261,7 +261,6 @@ export const reverseSwap = async (
   );
   const invoiceAmount = Math.round(Number(recvInfo.amount));
   const description = PAYMENT_DESCRIPTION;
-  console.log("RUNNING IN FUNC");
   const createdResponse = await fetchFunction(
     `${getBoltzApiUrl(process.env.REACT_APP_ENVIRONMENT)}/v2/swap/reverse`,
     {

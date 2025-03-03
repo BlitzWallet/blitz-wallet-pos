@@ -3,17 +3,18 @@ import { useParams } from "react-router-dom";
 
 const getCurrentUser = () => {
   let currentUser = "";
-  const { User } = useGlobalContext();
-  const { username } = useParams();
+  const { user } = useGlobalContext();
+  const { username } = useParams() || {};
+
   if (
-    typeof User === "string" &&
+    typeof user === "string" &&
     typeof username === "string" &&
-    User?.toLowerCase() != username?.toLowerCase()
+    user?.toLowerCase() != username?.toLowerCase()
   ) {
     currentUser = username;
-  } else if (typeof User === "string") {
-    currentUser = User;
-  } else currentUser = username;
+  } else if (typeof user === "string") {
+    currentUser = user;
+  } else currentUser = username || "";
 
   return currentUser;
 };

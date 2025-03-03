@@ -13,12 +13,19 @@ import { removeLocalStorageItem } from "../../functions/localStorage.js";
 import EnterServerName from "../../components/popup/enterServerName.js";
 import CustomKeyboard from "../../components/keypad/index.js";
 import BalanceView from "../../components/balanceView/index.js";
+import displayCorrectDenomination from "../../functions/displayCorrectDenomination.js";
+import { formatBalanceAmount } from "../../functions/formatNumber.js";
 function POSPage() {
   const User = getCurrentUser();
-  const { setCurrentUserSession, currentUserSession, serverName } =
-    useGlobalContext();
+  const {
+    setCurrentUserSession,
+    currentUserSession,
+    serverName,
+    currentSettings,
+    dollarSatValue,
+  } = useGlobalContext();
   const didLoadPOS = useRef(false);
-  const [chargeAmount, setChargeAmount] = useState(""); // in cents
+  const [chargeAmount, setChargeAmount] = useState("");
   const [popupType, setPopupType] = useState({
     openPopup: false,
     bitcoinPrice: false,
@@ -28,19 +35,29 @@ function POSPage() {
   const [hasError, setHasError] = useState("");
   const [addedItems, setAddedItems] = useState([]);
   const didInitialRender = useRef(true);
-
+  const stopClearOnFirstLoad = useRef(true);
   const navigate = useNavigate();
 
   const totalAmount =
     addedItems.reduce((a, b) => {
-      return a + Number(b.amount / 100);
-    }, 0) +
-    Number(chargeAmount) / 100;
+      return a + Number(b.amount);
+    }, 0) + Number(chargeAmount);
 
-  const dollarSatValue = 100000000 / currentUserSession.bitcoinPrice;
-  const convertedSatAmount = dollarSatValue * totalAmount;
+  const dollarValue = totalAmount / 100;
+  const convertedSatAmount = currentSettings?.displayCurrency?.isSats
+    ? totalAmount
+    : dollarSatValue * dollarValue;
 
   const canReceivePayment = totalAmount != 0 && convertedSatAmount >= 1000;
+
+  useEffect(() => {
+    if (stopClearOnFirstLoad.current) {
+      stopClearOnFirstLoad.current = false;
+      return;
+    }
+    setAddedItems([]);
+    setChargeAmount("");
+  }, [currentSettings?.displayCurrency?.isSats]);
 
   useEffect(() => {
     async function initPage() {
@@ -111,14 +128,6 @@ function POSPage() {
     });
   }, [currentUserSession]);
 
-  if (
-    !currentUserSession.account &&
-    !currentUserSession.bitcoinPrice &&
-    !hasError
-  ) {
-    return <FullLoadingScreen text="Setting up the point-of-sale system" />;
-  }
-
   return (
     <div className="POS-Container">
       <PosNavbar
@@ -151,43 +160,72 @@ function POSPage() {
       ) : (
         <div />
       )}
-      <div className="POS-ContentContainer">
-        {addedItems.length === 0 ? (
-          <p className="POS-chargeItems">No charged items</p>
-        ) : (
-          <p className="POS-chargeItems">
-            {addedItems
-              .map((value) => {
-                return `${(value.amount / 100).toFixed(2).toLocaleString()} ${
-                  currentUserSession?.account?.storeCurrency || "USD"
-                }`;
-              })
-              .join(" + ")}
+      {!currentUserSession.account || !currentUserSession.bitcoinPrice ? (
+        <FullLoadingScreen text="Setting up the point-of-sale system" />
+      ) : (
+        <div className="POS-ContentContainer">
+          {addedItems.length === 0 ? (
+            <p className="POS-chargeItems">No charged items</p>
+          ) : (
+            <p className="POS-chargeItems">
+              {addedItems
+                .map((value) => {
+                  return formatBalanceAmount(
+                    displayCorrectDenomination({
+                      amount: currentSettings?.displayCurrency?.isSats
+                        ? value.amount
+                        : (value.amount / 100).toFixed(2),
+                      fiatCurrency:
+                        currentUserSession.account.storeCurrency || "USD",
+                      showSats: currentSettings.displayCurrency.isSats,
+                      isWord: currentSettings.displayCurrency.isWord,
+                    })
+                  );
+                })
+                .join(" + ")}
+            </p>
+          )}
+          <BalanceView balance={chargeAmount} />
+
+          <p className="POS-AmountError">
+            {convertedSatAmount > 1000
+              ? "\u00A0"
+              : `Minimum invoice amount is ${formatBalanceAmount(
+                  displayCorrectDenomination({
+                    amount: currentSettings?.displayCurrency?.isSats
+                      ? 1000
+                      : (1000 / dollarSatValue).toFixed(2),
+                    fiatCurrency:
+                      currentUserSession.account.storeCurrency || "USD",
+                    showSats: currentSettings.displayCurrency.isSats,
+                    isWord: currentSettings.displayCurrency.isWord,
+                  })
+                )}`}
           </p>
-        )}
-        <BalanceView balance={chargeAmount} />
 
-        <p className="POS-AmountError">
-          {convertedSatAmount > 1000
-            ? "\u00A0"
-            : `Minimum invoice amount is ${(1000 / dollarSatValue).toFixed(
-                2
-              )} ${currentUserSession?.account?.storeCurrency || "USD"}`}
-        </p>
+          <CustomKeyboard customFunction={addNumToBalance} />
 
-        <CustomKeyboard customFunction={addNumToBalance} />
-
-        <button
-          onClick={handleInvoice}
-          style={{ opacity: !canReceivePayment ? 0.5 : 1 }}
-          className="POS-btn"
-        >
-          {`Charge $${totalAmount.toFixed(2).toLocaleString()}`}
-        </button>
-        <p className="POS-denominationDisclaimer">{`Priced in ${
-          currentUserSession?.account?.storeCurrency || "USD"
-        }`}</p>
-      </div>
+          <button
+            onClick={handleInvoice}
+            style={{ opacity: !canReceivePayment ? 0.5 : 1 }}
+            className="POS-btn"
+          >
+            {`Charge ${formatBalanceAmount(
+              displayCorrectDenomination({
+                amount: currentSettings?.displayCurrency?.isSats
+                  ? convertedSatAmount
+                  : dollarValue.toFixed(2),
+                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
+                showSats: currentSettings.displayCurrency.isSats,
+                isWord: currentSettings.displayCurrency.isWord,
+              })
+            )}`}
+          </button>
+          <p className="POS-denominationDisclaimer">{`Conversion based on ${
+            currentUserSession?.account?.storeCurrency || "USD"
+          }`}</p>
+        </div>
+      )}
     </div>
   );
 
@@ -219,10 +257,17 @@ function POSPage() {
 
   async function handleInvoice() {
     if (!canReceivePayment) return;
+    const satValue = currentSettings.displayCurrency.isSats
+      ? totalAmount
+      : dollarSatValue * (totalAmount / 100);
+    const fiatValue = currentSettings.displayCurrency.isSats
+      ? totalAmount / dollarSatValue
+      : totalAmount / 100;
+
     navigate(`./tip`, {
       state: {
-        satAmount: Math.round(convertedSatAmount),
-        fiatAmount: Number(totalAmount).toFixed(2),
+        satAmount: Math.round(satValue),
+        fiatAmount: Number(fiatValue).toFixed(2),
       },
     });
   }

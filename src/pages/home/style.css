@@ -48,14 +48,6 @@
 .Home-main .Home-inputContainer p {
   margin-bottom: 5px;
 }
-.Home-main .Home-inputContainer .Home-input {
-  padding: 10px;
-  border-radius: 8px;
-  background-color: var(--lightModeBackgroundOffset);
-  border-width: 0;
-  color: var(--lightModeText);
-  font-size: 16px;
-}
 
 .Home-main .Home-button {
   margin: 80px auto 20px;

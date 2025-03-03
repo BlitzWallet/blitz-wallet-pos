@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { saveToLocalStorage } from "../../functions/localStorage";
 import { useGlobalContext } from "../../contexts/posContext";
 import { ACCOUNT_LOCAL_STORAGE } from "../../constants";
+import CustomTextInput from "../../components/textInput";
 
 function HomePage() {
   const { setUser } = useGlobalContext();
@@ -25,12 +26,7 @@ function HomePage() {
 
         <div className="Home-inputContainer">
           <p>Enter point-of-sale name</p>
-          <input
-            onInput={(e) => setPosName(e.currentTarget.value)}
-            placeholder="Name..."
-            className="Home-input"
-            type="text"
-          />
+          <CustomTextInput getTextInput={setPosName} placeholder="Name..." />
         </div>
 
         <button

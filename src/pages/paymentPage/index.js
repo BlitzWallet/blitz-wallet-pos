@@ -19,7 +19,7 @@ export default function PaymentPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { satAmount, tipAmountSats } = location.state;
-  const convertedSatAmount = satAmount + tipAmountSats || 1000;
+  const convertedSatAmount = satAmount + tipAmountSats;
   const { currentUserSession, serverName } = useGlobalContext();
   const liquidAdress = currentUserSession?.account?.receiveAddress;
   const [boltzLoadingAnimation, setBoltzLoadingAnimation] = useState("");
@@ -85,7 +85,6 @@ export default function PaymentPage() {
       );
       setBoltzSwapClaimInfo(claimInfo);
     }
-    console.log("RUNNING HERE");
     if (!liquidAdress && process.env.REACT_APP_ENVIRONMENT !== "testnet")
       return;
     if (didRunInvoiceLoad.current) return;

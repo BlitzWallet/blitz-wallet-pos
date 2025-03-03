@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./enterBitcoinPrice.css";
 import { useGlobalContext } from "../../contexts/posContext";
+import CustomTextInput from "../textInput";
 export default function EnterBitcoinPrice({ setPopupType }) {
   const { setCurrentUserSession } = useGlobalContext();
   const [enteredBitcoinPrice, setEnteredBitcoinPrice] = useState(0);
@@ -10,12 +11,11 @@ export default function EnterBitcoinPrice({ setPopupType }) {
         <p className="ChangePaymentContainer-Desc">
           No currency information found. Please enter current bitcoin price.
         </p>
-
-        <input
-          className="bitcoinPriceInput"
-          onInput={(e) => setEnteredBitcoinPrice(e.currentTarget.value)}
+        <CustomTextInput
+          maxLength={50}
+          getTextInput={setEnteredBitcoinPrice}
           placeholder="Bitcoin price (no decimals)"
-          type="text"
+          customStyles={{ marginBottom: "30px" }}
         />
 
         <button
@@ -29,7 +29,6 @@ export default function EnterBitcoinPrice({ setPopupType }) {
               Object.entries(prev).forEach((entry) => {
                 newObject[entry[0]] = false;
               });
-              console.log(newObject);
               return newObject;
             });
           }}

@@ -21,8 +21,7 @@ export const GlobalRescanLiquidSwaps = ({ children }) => {
     console.log(isTabFocused, "isTabFocused");
 
     const claims = getRetriableClaims(process.env.REACT_APP_ENVIRONMENT);
-    console.log("RESCAN SWAPS");
-    console.log(claims);
+    console.log("rescanning swaps....");
 
     let didClaim = false;
 
