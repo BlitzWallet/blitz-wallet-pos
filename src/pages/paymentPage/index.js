@@ -4,7 +4,6 @@ import Popup from "reactjs-popup";
 import CopyToCliboardPopup from "../../components/popup";
 import { useEffect, useRef, useState } from "react";
 import getLiquidAddressInfo from "../../functions/lookForLiquidPayment";
-import NoAccountRedirect from "../../hooks/redirectWhenNoAccount";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import PosNavbar from "../../components/nav";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,7 +16,6 @@ import "./style.css";
 import fetchFunction from "../../functions/fetchFunction.js";
 export default function PaymentPage() {
   const user = getCurrentUser();
-  NoAccountRedirect();
   const navigate = useNavigate();
   const location = useLocation();
   const { satAmount, tipAmountSats } = location.state;

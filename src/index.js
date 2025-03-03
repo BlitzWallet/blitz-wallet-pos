@@ -15,8 +15,9 @@ import ConfirmPaymentScreen from "./pages/confirmScreen";
 import NavigateScreen from "./pages/navigateScreen";
 import { ACCOUNT_LOCAL_STORAGE } from "./constants";
 import AddTipPage from "./pages/tip";
-import SettingsPage from "./pages/settings";
+import { ProtectedRoute } from "./contexts/protectedRoute";
 import { GlobalSettingsDisplay } from "./contexts/settingsDisplay";
+import SettingsPage from "./pages/settings";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -45,12 +46,37 @@ root.render(
               />
 
               {/* POS Page Route */}
-              <Route path="/:username" element={<POSPage />} />
-              <Route path="/:username/tip" element={<AddTipPage />} />
-              <Route path="/:username/checkout" element={<PaymentPage />} />
+              <Route
+                path="/:username"
+                element={
+                  <ProtectedRoute>
+                    <POSPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/:username/tip"
+                element={
+                  <ProtectedRoute>
+                    <AddTipPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/:username/checkout"
+                element={
+                  <ProtectedRoute>
+                    <PaymentPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/:username/confirmed"
-                element={<ConfirmPaymentScreen />}
+                element={
+                  <ProtectedRoute>
+                    <ConfirmPaymentScreen />
+                  </ProtectedRoute>
+                }
               />
             </Routes>
           </BrowserRouter>

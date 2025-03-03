@@ -10,13 +10,14 @@ export default function SettingsPage() {
     useGlobalContext();
   const [isAnimating, setIsAnimating] = useState(false);
 
-  console.log(currentSettings);
   useEffect(() => {
     if (!displaySettings) {
       setIsAnimating(true);
       setTimeout(() => setIsAnimating(false), 300);
     }
   }, [displaySettings]);
+
+  if (!currentUserSession.account) return;
 
   return (
     <div
