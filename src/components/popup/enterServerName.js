@@ -34,7 +34,6 @@ export default function EnterServerName({ setPopupType }) {
               Object.entries(prev).forEach((entry) => {
                 newObject[entry[0]] = false;
               });
-              console.log(newObject);
               return newObject;
             });
           }}

@@ -16,7 +16,6 @@ export default function BalanceView({ balance = 0 }) {
   const currencySymbol = formattedCurrency[2];
   const formatedSat = balance;
 
-  console.log(formattedCurrency);
   return (
     <div className="POS-BalanceView">
       {isSymbolInFront && !showSats && showSymbol && (
