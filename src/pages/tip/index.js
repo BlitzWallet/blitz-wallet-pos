@@ -6,9 +6,12 @@ import PosNavbar from "../../components/nav";
 import { useGlobalContext } from "../../contexts/posContext";
 import CustomKeyboard from "../../components/keypad";
 import BalanceView from "../../components/balanceView";
+import { formatBalanceAmount } from "../../functions/formatNumber";
+import displayCorrectDenomination from "../../functions/displayCorrectDenomination";
 
 export default function AddTipPage() {
-  const { currentUserSession } = useGlobalContext();
+  const { currentUserSession, currentSettings, dollarSatValue } =
+    useGlobalContext();
   NoAccountRedirect();
   const location = useLocation();
   const { satAmount, fiatAmount } = location.state;
@@ -19,15 +22,22 @@ export default function AddTipPage() {
     customTip: "",
     showCustomTip: false,
   });
-  const tipAmountFiat = tipAmount.customTip
-    ? ((Number(tipAmount.customTip) || 0) / 100).toFixed(2)
-    : (fiatAmount * ((tipAmount.selectedTip || 0) / 100)).toFixed(2);
-  const tipAmountSats = tipAmount.customTip
-    ? Math.round(
-        (100_000_000 / currentUserSession.bitcoinPrice) *
-          ((tipAmount.customTip || 0) / 100)
-      )
-    : Math.round(satAmount * ((tipAmount.selectedTip || 0) / 100));
+  const tipValue = tipAmount.customTip
+    ? currentSettings?.displayCurrency?.isSats
+      ? tipAmount.customTip
+      : ((Number(tipAmount.customTip) || 0) / 100).toFixed(2)
+    : (
+        (currentSettings?.displayCurrency?.isSats ? satAmount : fiatAmount) *
+        ((tipAmount.selectedTip || 0) / 100)
+      ).toFixed(currentSettings?.displayCurrency?.isSats ? 0 : 2);
+
+  const tipAmountFiat = currentSettings?.displayCurrency?.isSats
+    ? (tipValue / dollarSatValue).toFixed(2)
+    : Number(tipValue).toFixed(2);
+
+  const tipAmountSats = currentSettings?.displayCurrency?.isSats
+    ? Math.round(tipValue)
+    : Math.round(dollarSatValue * tipValue);
 
   const tipOptionElements = [15, 20, 25, 0].map((item, index) => {
     return (
@@ -70,9 +80,34 @@ export default function AddTipPage() {
       />
 
       <div className="Tip-container">
-        <h2 className="total-amount">{`Total: $${fiatAmount}`}</h2>
+        <h2 className="total-amount">{`Total: ${formatBalanceAmount(
+          displayCorrectDenomination({
+            amount: currentSettings?.displayCurrency?.isSats
+              ? satAmount
+              : fiatAmount,
+            fiatCurrency: currentUserSession.account.storeCurrency || "USD",
+            showSats: currentSettings.displayCurrency.isSats,
+            isWord: currentSettings.displayCurrency.isWord,
+          })
+        )}`}</h2>
         <h3 className="amount-breakdown">
-          {`$${fiatAmount} + $${tipAmountFiat} Tip`}
+          {`${formatBalanceAmount(
+            displayCorrectDenomination({
+              amount: currentSettings?.displayCurrency?.isSats
+                ? satAmount
+                : fiatAmount,
+              fiatCurrency: currentUserSession.account.storeCurrency || "USD",
+              showSats: currentSettings.displayCurrency.isSats,
+              isWord: currentSettings.displayCurrency.isWord,
+            })
+          )} +${formatBalanceAmount(
+            displayCorrectDenomination({
+              amount: tipValue,
+              fiatCurrency: currentUserSession.account.storeCurrency || "USD",
+              showSats: currentSettings.displayCurrency.isSats,
+              isWord: currentSettings.displayCurrency.isWord,
+            })
+          )} Tip`}
         </h3>
         {tipAmount.showCustomTip ? (
           <>
