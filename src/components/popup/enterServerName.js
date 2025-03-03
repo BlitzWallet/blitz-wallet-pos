@@ -3,6 +3,7 @@ import "./enterServerName.css";
 import { saveToLocalStorage } from "../../functions/localStorage";
 import { SERVER_LOCAL_STORAGE } from "../../constants";
 import { useGlobalContext } from "../../contexts/posContext";
+import CustomTextInput from "../textInput";
 export default function EnterServerName({ setPopupType }) {
   const [name, setName] = useState("");
   const { serverName, setServerName } = useGlobalContext();
@@ -14,14 +15,11 @@ export default function EnterServerName({ setPopupType }) {
             ? `Your last used name is ${serverName}. Please enter a name below if you would like to change it. Otherwise click save.`
             : "Please enter your name so tips can be sent to you."}
         </p>
-
-        <input
-          className="bitcoinPriceInput"
-          onInput={(e) => setName(e.currentTarget.value)}
-          value={name}
-          placeholder="Name"
+        <CustomTextInput
           maxLength={50}
-          type="text"
+          getTextInput={setName}
+          placeholder="Name..."
+          customStyles={{ marginBottom: "30px" }}
         />
 
         <button
