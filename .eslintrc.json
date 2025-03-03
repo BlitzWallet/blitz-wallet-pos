@@ -63,6 +63,7 @@
         "avoidEscape": true,
         "allowTemplateLiterals": true
       }
-    ]
+    ],
+    "react/jsx-no-leaked-render": "off"
   }
 }
