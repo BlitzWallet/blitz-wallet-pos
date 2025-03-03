@@ -128,14 +128,6 @@ function POSPage() {
     });
   }, [currentUserSession]);
 
-  if (
-    !currentUserSession.account &&
-    !currentUserSession.bitcoinPrice &&
-    !hasError
-  ) {
-    return <FullLoadingScreen text="Setting up the point-of-sale system" />;
-  }
-
   return (
     <div className="POS-Container">
       <PosNavbar
@@ -168,68 +160,72 @@ function POSPage() {
       ) : (
         <div />
       )}
-      <div className="POS-ContentContainer">
-        {addedItems.length === 0 ? (
-          <p className="POS-chargeItems">No charged items</p>
-        ) : (
-          <p className="POS-chargeItems">
-            {addedItems
-              .map((value) => {
-                return formatBalanceAmount(
+      {!currentUserSession.account || !currentUserSession.bitcoinPrice ? (
+        <FullLoadingScreen text="Setting up the point-of-sale system" />
+      ) : (
+        <div className="POS-ContentContainer">
+          {addedItems.length === 0 ? (
+            <p className="POS-chargeItems">No charged items</p>
+          ) : (
+            <p className="POS-chargeItems">
+              {addedItems
+                .map((value) => {
+                  return formatBalanceAmount(
+                    displayCorrectDenomination({
+                      amount: currentSettings?.displayCurrency?.isSats
+                        ? value.amount
+                        : (value.amount / 100).toFixed(2),
+                      fiatCurrency:
+                        currentUserSession.account.storeCurrency || "USD",
+                      showSats: currentSettings.displayCurrency.isSats,
+                      isWord: currentSettings.displayCurrency.isWord,
+                    })
+                  );
+                })
+                .join(" + ")}
+            </p>
+          )}
+          <BalanceView balance={chargeAmount} />
+
+          <p className="POS-AmountError">
+            {convertedSatAmount > 1000
+              ? "\u00A0"
+              : `Minimum invoice amount is ${formatBalanceAmount(
                   displayCorrectDenomination({
                     amount: currentSettings?.displayCurrency?.isSats
-                      ? value.amount
-                      : (value.amount / 100).toFixed(2),
+                      ? 1000
+                      : (1000 / dollarSatValue).toFixed(2),
                     fiatCurrency:
                       currentUserSession.account.storeCurrency || "USD",
                     showSats: currentSettings.displayCurrency.isSats,
                     isWord: currentSettings.displayCurrency.isWord,
                   })
-                );
-              })
-              .join(" + ")}
+                )}`}
           </p>
-        )}
-        <BalanceView balance={chargeAmount} />
 
-        <p className="POS-AmountError">
-          {convertedSatAmount > 1000
-            ? "\u00A0"
-            : `Minimum invoice amount is ${formatBalanceAmount(
-                displayCorrectDenomination({
-                  amount: currentSettings?.displayCurrency?.isSats
-                    ? 1000
-                    : (1000 / dollarSatValue).toFixed(2),
-                  fiatCurrency:
-                    currentUserSession.account.storeCurrency || "USD",
-                  showSats: currentSettings.displayCurrency.isSats,
-                  isWord: currentSettings.displayCurrency.isWord,
-                })
-              )}`}
-        </p>
+          <CustomKeyboard customFunction={addNumToBalance} />
 
-        <CustomKeyboard customFunction={addNumToBalance} />
-
-        <button
-          onClick={handleInvoice}
-          style={{ opacity: !canReceivePayment ? 0.5 : 1 }}
-          className="POS-btn"
-        >
-          {`Charge ${formatBalanceAmount(
-            displayCorrectDenomination({
-              amount: currentSettings?.displayCurrency?.isSats
-                ? convertedSatAmount
-                : dollarValue.toFixed(2),
-              fiatCurrency: currentUserSession.account.storeCurrency || "USD",
-              showSats: currentSettings.displayCurrency.isSats,
-              isWord: currentSettings.displayCurrency.isWord,
-            })
-          )}`}
-        </button>
-        <p className="POS-denominationDisclaimer">{`Conversion based on ${
-          currentUserSession?.account?.storeCurrency || "USD"
-        }`}</p>
-      </div>
+          <button
+            onClick={handleInvoice}
+            style={{ opacity: !canReceivePayment ? 0.5 : 1 }}
+            className="POS-btn"
+          >
+            {`Charge ${formatBalanceAmount(
+              displayCorrectDenomination({
+                amount: currentSettings?.displayCurrency?.isSats
+                  ? convertedSatAmount
+                  : dollarValue.toFixed(2),
+                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
+                showSats: currentSettings.displayCurrency.isSats,
+                isWord: currentSettings.displayCurrency.isWord,
+              })
+            )}`}
+          </button>
+          <p className="POS-denominationDisclaimer">{`Conversion based on ${
+            currentUserSession?.account?.storeCurrency || "USD"
+          }`}</p>
+        </div>
+      )}
     </div>
   );
 

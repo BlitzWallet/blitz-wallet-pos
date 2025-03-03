@@ -70,6 +70,8 @@ export default function AddTipPage() {
     );
   });
 
+  if (!currentUserSession.account) return;
+
   return (
     <div className="TipPage-container">
       <PosNavbar
