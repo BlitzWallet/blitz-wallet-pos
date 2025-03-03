@@ -15,6 +15,8 @@ import ConfirmPaymentScreen from "./pages/confirmScreen";
 import NavigateScreen from "./pages/navigateScreen";
 import { ACCOUNT_LOCAL_STORAGE } from "./constants";
 import AddTipPage from "./pages/tip";
+import SettingsPage from "./pages/settings";
+import { GlobalSettingsDisplay } from "./contexts/settingsDisplay";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -22,34 +24,37 @@ root.render(
   <React.StrictMode>
     <GlobalPOSContext>
       <GlobalRescanLiquidSwaps>
-        <BrowserRouter>
-          <NavigateScreen />
-          <Routes>
-            {/* Check if username exists in local storage */}
-            <Route
-              path="/"
-              element={
-                getLocalStorageItem(ACCOUNT_LOCAL_STORAGE) ? (
-                  <Navigate
-                    to={`/${getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)}`}
-                    replace
-                  />
-                ) : (
-                  <HomePage />
-                )
-              }
-            />
+        <GlobalSettingsDisplay>
+          <BrowserRouter>
+            <NavigateScreen />
+            <SettingsPage />
+            <Routes>
+              {/* Check if username exists in local storage */}
+              <Route
+                path="/"
+                element={
+                  getLocalStorageItem(ACCOUNT_LOCAL_STORAGE) ? (
+                    <Navigate
+                      to={`/${getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)}`}
+                      replace
+                    />
+                  ) : (
+                    <HomePage />
+                  )
+                }
+              />
 
-            {/* POS Page Route */}
-            <Route path="/:username" element={<POSPage />} />
-            <Route path="/:username/tip" element={<AddTipPage />} />
-            <Route path="/:username/checkout" element={<PaymentPage />} />
-            <Route
-              path="/:username/confirmed"
-              element={<ConfirmPaymentScreen />}
-            />
-          </Routes>
-        </BrowserRouter>
+              {/* POS Page Route */}
+              <Route path="/:username" element={<POSPage />} />
+              <Route path="/:username/tip" element={<AddTipPage />} />
+              <Route path="/:username/checkout" element={<PaymentPage />} />
+              <Route
+                path="/:username/confirmed"
+                element={<ConfirmPaymentScreen />}
+              />
+            </Routes>
+          </BrowserRouter>
+        </GlobalSettingsDisplay>
       </GlobalRescanLiquidSwaps>
     </GlobalPOSContext>
   </React.StrictMode>
