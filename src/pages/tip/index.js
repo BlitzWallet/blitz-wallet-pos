@@ -1,7 +1,6 @@
 import "./style.css";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import NoAccountRedirect from "../../hooks/redirectWhenNoAccount";
 import PosNavbar from "../../components/nav";
 import { useGlobalContext } from "../../contexts/posContext";
 import CustomKeyboard from "../../components/keypad";
@@ -9,7 +8,6 @@ import BalanceView from "../../components/balanceView";
 
 export default function AddTipPage() {
   const { currentUserSession } = useGlobalContext();
-  NoAccountRedirect();
   const location = useLocation();
   const { satAmount, fiatAmount } = location.state;
   const navigate = useNavigate();
