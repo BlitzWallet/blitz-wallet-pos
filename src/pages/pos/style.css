@@ -44,6 +44,7 @@
 }
 .POS-Container .POS-AmountError {
   margin: 0 auto;
+  text-align: center;
 }
 
 .POS-Container .POS-btn {

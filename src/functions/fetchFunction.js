@@ -1,6 +1,6 @@
 export default async function fetchFunction(url, data, method) {
   try {
-    if (method === "post") {
+    if (method?.toLowerCase() === "post") {
       const response = await fetch(`${url}`, {
         method: "POST", // Specify the method as POST
         headers: {

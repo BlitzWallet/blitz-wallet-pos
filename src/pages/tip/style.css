@@ -1,0 +1,84 @@
+.TipPage-container {
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.Tip-container {
+  width: 90%;
+  max-width: 500px;
+  min-height: calc(100dvh - 52px);
+  margin: 0 auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Tip-container .total-amount {
+  width: 100%;
+  font-size: 25px;
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+.Tip-container .amount-breakdown {
+  width: 100%;
+  font-size: 16px;
+  font-weight: normal;
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: auto;
+}
+.Tip-container .header {
+  width: 100%;
+  font-size: 30px;
+  font-weight: normal;
+  text-align: center;
+}
+.Tip-container .tipContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.Tip-container .tipItem {
+  width: calc(100% / 4 - 10px);
+  min-width: 100px;
+  height: 60px;
+  background-color: var(--lightModeBackgroundOffset);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+  border-radius: 8px;
+}
+.Tip-container .tipItem p {
+  color: var(--lightModeText);
+  margin: 0;
+}
+.Tip-container .no-tip {
+  width: calc(100% - 10px);
+  margin: 5px auto 0;
+  margin-bottom: auto;
+}
+.Tip-container .back-btn {
+  width: 100%;
+  max-width: 414px;
+  margin-bottom: 20px;
+}
+.Tip-container .continue-btn {
+  width: calc(100% - 10px);
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+@media screen and (max-width: 500px) {
+  .Tip-container .tipItem {
+    width: calc(100% / 2 - 10px);
+  }
+}
+@media screen and (max-width: 300px) {
+  .Tip-container .tipItem {
+    width: calc(100% - 10px);
+  }
+}
