@@ -3,7 +3,7 @@ import { useGlobalContext } from "../../contexts/posContext";
 import { formatCurrency } from "../../functions/formatCurrency";
 import { formatBalanceAmount } from "../../functions/formatNumber";
 import "./style.css";
-export default function BalanceView({ balance = 0 }) {
+export default function BalanceView({ balance = 0, actionFunction }) {
   const { currentUserSession, currentSettings } = useGlobalContext();
   const currencyText = currentUserSession?.account?.storeCurrency;
   const showSymbol = !currentSettings?.displayCurrency?.isWord;
@@ -17,7 +17,14 @@ export default function BalanceView({ balance = 0 }) {
   const formatedSat = balance;
 
   return (
-    <div className="POS-BalanceView">
+    <div
+      style={{ cursor: actionFunction ? "pointer" : "default" }}
+      onClick={() => {
+        if (!actionFunction) return;
+        actionFunction();
+      }}
+      className="POS-BalanceView"
+    >
       {isSymbolInFront && !showSats && showSymbol && (
         <h1
           style={{

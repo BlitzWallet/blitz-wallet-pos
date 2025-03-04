@@ -56,10 +56,10 @@
 .settings-page .optionsGray p {
   color: var(--primary);
 }
-.settings-page .isWordContainer {
+.settings-page .optionsButtonContainer {
   display: flex;
 }
-.settings-page .isWordContainer .option {
+.settings-page .optionsButtonContainer .option {
   margin: 0 5px;
 }
 

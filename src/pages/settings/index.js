@@ -29,22 +29,56 @@ export default function SettingsPage() {
         <p>Balance denomination</p>
         <div className="optionsContainer">
           <p>Current denomination</p>
-          <div
-            onClick={() => {
-              toggleSettings({
-                displayCurrency: {
-                  isSats: !currentSettings.displayCurrency.isSats,
-                  isWord: currentSettings.displayCurrency.isWord,
-                },
-              });
-            }}
-            className="option"
-            style={{ backgroundColor: "var(--lightModeBackground)" }}
-          >
-            <p>
-              {currentSettings.displayCurrency.isSats
-                ? BITCOIN_SATS_ICON
-                : currentUserSession.account.storeCurrency || "USD"}
+          <div className="optionsButtonContainer">
+            <p
+              onClick={() => {
+                toggleSettings({
+                  displayCurrency: {
+                    isSats: true,
+                    isWord: currentSettings.displayCurrency.isWord,
+                  },
+                });
+              }}
+              className="option"
+              style={{
+                backgroundColor: `var(--${
+                  !currentSettings.displayCurrency.isSats
+                    ? "lightModeBackground"
+                    : "primary"
+                })`,
+                color: `var(--${
+                  !currentSettings.displayCurrency.isSats
+                    ? "lightModeText"
+                    : "darkModeText"
+                })`,
+              }}
+            >
+              {BITCOIN_SATS_ICON}
+            </p>
+            <p
+              onClick={() => {
+                toggleSettings({
+                  displayCurrency: {
+                    isSats: false,
+                    isWord: currentSettings.displayCurrency.isWord,
+                  },
+                });
+              }}
+              className="option"
+              style={{
+                backgroundColor: `var(--${
+                  currentSettings.displayCurrency.isSats
+                    ? "lightModeBackground"
+                    : "primary"
+                })`,
+                color: `var(--${
+                  currentSettings.displayCurrency.isSats
+                    ? "lightModeText"
+                    : "darkModeText"
+                })`,
+              }}
+            >
+              {currentUserSession.account.storeCurrency || "USD"}{" "}
             </p>
           </div>
         </div>
@@ -53,7 +87,7 @@ export default function SettingsPage() {
             How to display{" "}
             {currentSettings.displayCurrency.isSats ? "sats" : "fiat"}
           </p>
-          <div className="isWordContainer">
+          <div className="optionsButtonContainer">
             <p
               onClick={() => {
                 toggleSettings({

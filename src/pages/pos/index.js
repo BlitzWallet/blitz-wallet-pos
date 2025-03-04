@@ -23,6 +23,7 @@ function POSPage() {
     serverName,
     currentSettings,
     dollarSatValue,
+    toggleSettings,
   } = useGlobalContext();
   const didLoadPOS = useRef(false);
   const [chargeAmount, setChargeAmount] = useState("");
@@ -185,7 +186,17 @@ function POSPage() {
                 .join(" + ")}
             </p>
           )}
-          <BalanceView balance={chargeAmount} />
+          <BalanceView
+            actionFunction={() => {
+              toggleSettings({
+                displayCurrency: {
+                  isSats: !currentSettings.displayCurrency.isSats,
+                  isWord: currentSettings.displayCurrency.isWord,
+                },
+              });
+            }}
+            balance={chargeAmount}
+          />
 
           <p className="POS-AmountError">
             {convertedSatAmount > 1000
