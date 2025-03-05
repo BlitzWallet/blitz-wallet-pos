@@ -8,7 +8,7 @@ export default async function getLiquidAddressInfo({ address }) {
         process.env.REACT_APP_ENVIRONMENT === "testnet"
           ? liquidTestnet
           : liquidMainnet
-      }address/${address}`
+      }address/${address}/txs`
     );
 
     return await response.json();

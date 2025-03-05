@@ -36,7 +36,8 @@ export const waitAndClaim = async (
   claimInfo,
   onFinish,
   setBoltzLoadingAnimation,
-  claimObject
+  claimObject,
+  clearIntervalRef
 ) => {
   init(await zkpInit());
   let claimTx;
@@ -87,6 +88,7 @@ export const waitAndClaim = async (
       // which will only happen after the user paid the Lightning hold invoice
       case "transaction.mempool":
       case "transaction.confirmed": {
+        clearIntervalRef();
         setBoltzLoadingAnimation("Processing payment");
         try {
           // save claim to be able to retry if something fails
@@ -251,7 +253,8 @@ export const reverseSwap = async (
   destinationAddress,
   onFinish,
   claimObject,
-  setBoltzLoadingAnimation
+  setBoltzLoadingAnimation,
+  clearIntervalRef
 ) => {
   // Create a random preimage for the swap; has to have a length of 32 bytes
   const preimage = randomBytes(32);
@@ -292,7 +295,13 @@ export const reverseSwap = async (
   };
 
   // Wait for Boltz to lock funds onchain and than claim them
-  waitAndClaim(claimInfo, onFinish, setBoltzLoadingAnimation, claimObject);
+  waitAndClaim(
+    claimInfo,
+    onFinish,
+    setBoltzLoadingAnimation,
+    claimObject,
+    clearIntervalRef
+  );
   return claimInfo;
 };
 
