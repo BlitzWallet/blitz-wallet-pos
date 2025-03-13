@@ -52,6 +52,7 @@
   justify-content: center;
   margin: 5px;
   border-radius: 8px;
+  cursor: pointer;
 }
 .Tip-container .tipItem p {
   color: var(--lightModeText);

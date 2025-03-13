@@ -275,7 +275,7 @@ function POSPage() {
       ? totalAmount / dollarSatValue
       : totalAmount / 100;
 
-    navigate(`./tip`, {
+    navigate(`/${currentUserSession?.account?.storeName}/tip`, {
       state: {
         satAmount: Math.round(satValue),
         fiatAmount: Number(fiatValue).toFixed(2),

@@ -75,7 +75,7 @@ export default function AddTipPage() {
     <div className="TipPage-container">
       <PosNavbar
         backFunction={() => {
-          navigate(`../../${currentUserSession.account.storeNameLower}`);
+          navigate(-1);
         }}
       />
 
@@ -182,14 +182,13 @@ export default function AddTipPage() {
                   return;
 
                 navigate(
-                  `../${currentUserSession.account.storeNameLower}/checkout`,
+                  `/${currentUserSession.account.storeNameLower}/checkout`,
                   {
                     state: {
                       satAmount: Math.round(satAmount),
                       tipAmountFiat,
                       tipAmountSats,
                     },
-                    replace: true,
                   }
                 );
               }}

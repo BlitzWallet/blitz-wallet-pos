@@ -116,7 +116,7 @@ export default function PaymentPage() {
     <div className="POS-Container">
       <PosNavbar
         backFunction={() => {
-          navigate(`../${user}`);
+          navigate(-1);
         }}
       />
       <div className="POS-ContentContainer">
@@ -160,7 +160,7 @@ export default function PaymentPage() {
             <div className="QR-OptionsContainer">
               <button
                 onClick={() => {
-                  navigate(`../${user}`);
+                  navigate(`/${user}`, { replace: true });
                 }}
                 className="QR-Option"
               >
@@ -211,7 +211,7 @@ export default function PaymentPage() {
 
     if (result) {
       await fetchFunction("/addTxActivity", claimObject, "post");
-      navigate(`/${user}/confirmed`, { replace: true });
+      navigate(`/${user}/confirmed`);
     } else setBoltzLoadingAnimation("Error receiving payment");
   }
 }

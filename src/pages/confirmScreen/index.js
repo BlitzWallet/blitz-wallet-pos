@@ -36,6 +36,6 @@ export default function ConfirmPaymentScreen({ clearSettings }) {
     </div>
   );
   function clearSettings() {
-    navigate(`../../${user}`);
+    navigate(`/${user}`, { replace: true });
   }
 }
