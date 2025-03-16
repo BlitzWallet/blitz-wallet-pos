@@ -12,8 +12,8 @@ export default function EnterServerName({ setPopupType }) {
       <div className="ChangePaymentContainer">
         <p className="ChangePaymentContainer-Desc">
           {serverName
-            ? `Your last used name is ${serverName}. Please enter a name below if you would like to change it. Otherwise click save.`
-            : "Please enter a Blitz contact name or LNURL address so tips can be sent to you."}
+            ? `Your last used name is ${serverName}. Enter a new name below to change it, or click save to keep it.`
+            : "Enter a Blitz contact name or LNURL address to receive tips."}
         </p>
         <CustomTextInput
           maxLength={50}
