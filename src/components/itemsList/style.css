@@ -1,0 +1,40 @@
+.customItemsContainer {
+  width: 100%;
+  height: calc(min(calc(100dvw / 3), 70px) * 4);
+  margin-top: 10px;
+  overflow-y: scroll;
+}
+
+.customItemsContainer .noItemsText {
+  text-align: center;
+  width: 90%;
+  margin: 0 auto;
+}
+.customItemsContainer .itemContainer {
+  width: 80%;
+  background-color: var(--lightModeBackgroundOffset);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px auto;
+  border-radius: 8px;
+  padding: 10px;
+}
+.customItemsContainer .itemContainer p {
+  margin: 0;
+}
+.customItemsContainer .itemContainer p:first-child {
+  text-transform: capitalize;
+}
+.customItemsContainer .itemContainer .addItemIconContainer {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.customItemsContainer .itemContainer .addItemIcon {
+  width: 30px;
+  height: 30px;
+}

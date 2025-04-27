@@ -15,6 +15,7 @@ import CustomKeyboard from "../../components/keypad/index.js";
 import BalanceView from "../../components/balanceView/index.js";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination.js";
 import { formatBalanceAmount } from "../../functions/formatNumber.js";
+import ItemsList from "../../components/itemsList/index.js";
 function POSPage() {
   const User = getCurrentUser();
   const {
@@ -33,6 +34,8 @@ function POSPage() {
     errorScreen: false,
     serverName: false,
   });
+  const [activeInput, setActiveInput] = useState("keypad");
+  const [inputTextWidths, setInputTextWidths] = useState([]);
   const [hasError, setHasError] = useState("");
   const [addedItems, setAddedItems] = useState([]);
   const didInitialRender = useRef(true);
@@ -129,6 +132,39 @@ function POSPage() {
     });
   }, [currentUserSession]);
 
+  useEffect(() => {
+    // Loading widths for inut text elemtns to use for slider
+    setTimeout(
+      () => {
+        const sliderTexts = document.querySelectorAll(".inputText");
+        console.log(sliderTexts);
+        const widths = Array.from(sliderTexts).map((item) => {
+          return item.getBoundingClientRect().width;
+        });
+        setInputTextWidths(widths);
+      },
+      currentUserSession?.account ? 0 : 500
+    );
+  }, [currentUserSession]);
+  console.log(inputTextWidths);
+
+  const handleSlider = (event) => {
+    const targetElement = event.target;
+
+    if (!Array.from(targetElement.classList).includes("inputText")) return;
+    const children = targetElement.parentElement.children;
+    const element = targetElement.innerHTML;
+
+    Array.from(children).forEach((child) => {
+      child.classList.remove("active");
+      if (child.innerHTML === element) {
+        child.classList.add("active");
+      }
+    });
+
+    setActiveInput(element.toLowerCase());
+  };
+
   return (
     <div className="POS-Container">
       <PosNavbar
@@ -197,7 +233,6 @@ function POSPage() {
             }}
             balance={chargeAmount}
           />
-
           <p className="POS-AmountError">
             {convertedSatAmount > 1000
               ? "\u00A0"
@@ -214,7 +249,32 @@ function POSPage() {
                 )}`}
           </p>
 
-          <CustomKeyboard customFunction={addNumToBalance} />
+          <div className="POS-savedItemsContainer" onClick={handleSlider}>
+            <p className="active inputText">Keypad</p>
+            <p className="inputText">Library</p>
+            <div
+              style={{
+                width: inputTextWidths[activeInput === "keypad" ? 0 : 1],
+                left:
+                  activeInput === "keypad"
+                    ? 0
+                    : `calc(100% - ${inputTextWidths[1]}px)`,
+              }}
+              className="selectedInputBar"
+            />
+          </div>
+
+          {activeInput === "keypad" ? (
+            <CustomKeyboard customFunction={addNumToBalance} />
+          ) : (
+            <ItemsList
+              dollarSatValue={dollarSatValue}
+              currentSettings={currentSettings}
+              currentUserSession={currentUserSession}
+              setAddedItems={setAddedItems}
+              listElements={currentUserSession.account?.items}
+            />
+          )}
 
           <button
             onClick={handleInvoice}
