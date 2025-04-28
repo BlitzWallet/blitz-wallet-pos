@@ -137,7 +137,6 @@ function POSPage() {
     setTimeout(
       () => {
         const sliderTexts = document.querySelectorAll(".inputText");
-        console.log(sliderTexts);
         const widths = Array.from(sliderTexts).map((item) => {
           return item.getBoundingClientRect().width;
         });
@@ -146,7 +145,6 @@ function POSPage() {
       currentUserSession?.account ? 0 : 500
     );
   }, [currentUserSession]);
-  console.log(inputTextWidths);
 
   const handleSlider = (event) => {
     const targetElement = event.target;

@@ -20,7 +20,7 @@ export default function PaymentPage() {
   const { satAmount, tipAmountSats } = location.state;
   const convertedSatAmount = satAmount + tipAmountSats;
   const { currentUserSession, serverName } = useGlobalContext();
-  const liquidAdress = currentUserSession?.account?.receiveAddress;
+  const [liquidAdress, setLiquidAdress] = useState("");
   const [boltzLoadingAnimation, setBoltzLoadingAnimation] = useState("");
   const [boltzSwapClaimInfo, setBoltzSwapClaimInfo] = useState({});
   const boltzInvoice = boltzSwapClaimInfo?.createdResponse?.invoice || "";
@@ -46,6 +46,16 @@ export default function PaymentPage() {
     }),
     []
   );
+
+  useEffect(() => {
+    const addressList = currentUserSession?.account?.addressesArray;
+    if (addressList) {
+      const arrayLength = addressList.length - 1;
+      const randomNum = Math.round(Math.random() * arrayLength);
+
+      setLiquidAdress(addressList[randomNum]);
+    } else setLiquidAdress(currentUserSession?.account?.receiveAddress);
+  }, []);
 
   useEffect(() => {
     async function handleInvoice() {
