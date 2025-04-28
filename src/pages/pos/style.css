@@ -18,11 +18,40 @@
   margin-bottom: 0;
   margin: auto auto 0;
   font-size: 20px;
+  text-align: center;
+}
+.POS-Container .POS-savedItemsContainer {
+  width: 100%;
+  max-width: 150px;
+
+  display: flex;
+  justify-content: space-between;
+  margin: auto auto 0;
+  position: relative;
+}
+.POS-Container .POS-savedItemsContainer p {
+  margin: 0 0 8px 0;
+  cursor: pointer;
+}
+.POS-Container .POS-savedItemsContainer .active {
+  font-weight: 500;
+}
+.POS-Container .POS-savedItemsContainer .selectedInputBar {
+  height: 5px;
+  width: 100px;
+  background-color: var(--primary);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-radius: 8px;
+
+  transition: 0.5s all;
 }
 
 .POS-Container .POS-AmountError {
   margin: 0 auto;
   text-align: center;
+  font-size: 14px;
 }
 
 .POS-Container .POS-btn {
