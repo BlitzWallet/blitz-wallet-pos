@@ -16,6 +16,7 @@ import BalanceView from "../../components/balanceView/index.js";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination.js";
 import { formatBalanceAmount } from "../../functions/formatNumber.js";
 import ItemsList from "../../components/itemsList/index.js";
+import { createSparkWallet } from "../../functions/spark.js";
 function POSPage() {
   const User = getCurrentUser();
   const {
@@ -41,6 +42,8 @@ function POSPage() {
   const didInitialRender = useRef(true);
   const stopClearOnFirstLoad = useRef(true);
   const navigate = useNavigate();
+  const isUsingSpark = currentUserSession?.account?.sparkPubKey;
+  const minimumPaymentAmount = isUsingSpark ? 1 : 1000;
 
   const totalAmount =
     addedItems.reduce((a, b) => {
@@ -52,8 +55,15 @@ function POSPage() {
     ? totalAmount
     : dollarSatValue * dollarValue;
 
-  const canReceivePayment = totalAmount != 0 && convertedSatAmount >= 1000;
+  const canReceivePayment =
+    totalAmount != 0 && convertedSatAmount >= minimumPaymentAmount;
 
+  useEffect(() => {
+    async function getSparkInvoice() {
+      await createSparkWallet();
+    }
+    getSparkInvoice();
+  }, []);
   useEffect(() => {
     if (stopClearOnFirstLoad.current) {
       stopClearOnFirstLoad.current = false;
@@ -232,13 +242,13 @@ function POSPage() {
             balance={chargeAmount}
           />
           <p className="POS-AmountError">
-            {convertedSatAmount > 1000
+            {convertedSatAmount > minimumPaymentAmount
               ? "\u00A0"
               : `Minimum invoice amount is ${formatBalanceAmount(
                   displayCorrectDenomination({
                     amount: currentSettings?.displayCurrency?.isSats
-                      ? 1000
-                      : (1000 / dollarSatValue).toFixed(2),
+                      ? minimumPaymentAmount
+                      : (minimumPaymentAmount / dollarSatValue).toFixed(2),
                     fiatCurrency:
                       currentUserSession.account.storeCurrency || "USD",
                     showSats: currentSettings.displayCurrency.isSats,

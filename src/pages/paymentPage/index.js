@@ -13,17 +13,31 @@ import FullLoadingScreen from "../../components/loadingScreen.js";
 import "./style.css";
 import fetchFunction from "../../functions/fetchFunction.js";
 import { hasTwentySecondsPassed } from "../../functions/time.js";
+import lookForPaidPayment, {
+  createSparkWallet,
+  receiveSparkLightningPayment,
+  sparkWallet,
+} from "../../functions/spark.js";
+import useWindowFocus from "../../hooks/isWindowFocused.js";
+import usePageVisibility from "../../hooks/isTabFocused.js";
 export default function PaymentPage() {
   const user = getCurrentUser();
   const navigate = useNavigate();
   const location = useLocation();
+  const isWindowFocused = useWindowFocus();
+  const isTabFocused = usePageVisibility();
   const { satAmount, tipAmountSats } = location.state;
   const convertedSatAmount = satAmount + tipAmountSats;
   const { currentUserSession, serverName } = useGlobalContext();
   const [liquidAdress, setLiquidAdress] = useState("");
+  const [sparkAddress, setSparkAddress] = useState("");
   const [boltzLoadingAnimation, setBoltzLoadingAnimation] = useState("");
   const [boltzSwapClaimInfo, setBoltzSwapClaimInfo] = useState({});
-  const boltzInvoice = boltzSwapClaimInfo?.createdResponse?.invoice || "";
+  const didRunSparkInvoiceGeneration = useRef(null);
+  const isUsingSpark = !!currentUserSession.account.sparkPubKey;
+  const boltzInvoice = isUsingSpark
+    ? sparkAddress
+    : boltzSwapClaimInfo?.createdResponse?.invoice || "";
   const formatedLiquidAddress = formatLiquidAddress(
     liquidAdress,
     convertedSatAmount
@@ -47,7 +61,47 @@ export default function PaymentPage() {
     []
   );
 
+  const runLookupForPayment = async () => {
+    if (!sparkWallet) return;
+    const wasPaid = await lookForPaidPayment(convertedSatAmount);
+    if (wasPaid) {
+      handleConfirmation(true, claimObject);
+    }
+  };
+
   useEffect(() => {
+    if (!sparkAddress) return;
+    if (!isWindowFocused || !isTabFocused) return;
+
+    runLookupForPayment();
+
+    const intervalId = setInterval(() => {
+      runLookupForPayment();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [isTabFocused, isWindowFocused, sparkAddress]);
+
+  useEffect(() => {
+    if (!isUsingSpark) return;
+    if (didRunSparkInvoiceGeneration.current) return;
+    didRunSparkInvoiceGeneration.current = true;
+
+    async function getSparkInvoice() {
+      await createSparkWallet();
+      // remove all listeners
+      const invoice = await receiveSparkLightningPayment({
+        amountSats: convertedSatAmount,
+        receiverIdentityPubkey: currentUserSession.account.sparkPubKey,
+      });
+
+      setSparkAddress(invoice.invoice.encodedInvoice);
+    }
+    getSparkInvoice();
+  }, []);
+
+  useEffect(() => {
+    if (isUsingSpark) return;
     const addressList = currentUserSession?.account?.addressesArray;
     if (addressList) {
       const arrayLength = addressList.length - 1;
@@ -58,6 +112,7 @@ export default function PaymentPage() {
   }, []);
 
   useEffect(() => {
+    if (isUsingSpark) return;
     async function handleInvoice() {
       const claimInfo = await reverseSwap(
         { amount: convertedSatAmount },
@@ -80,6 +135,7 @@ export default function PaymentPage() {
   }, [liquidAdress]);
 
   useEffect(() => {
+    if (isUsingSpark) return;
     if (!Object.keys(boltzSwapClaimInfo).length) return;
     const startTime = new Date().getTime() + 1000 * 10;
     let initialMempoolTxCount = null;
@@ -119,7 +175,10 @@ export default function PaymentPage() {
     };
   }, [boltzSwapClaimInfo]);
 
-  if (!Object.keys(boltzSwapClaimInfo).length) {
+  if (!isUsingSpark && !Object.keys(boltzSwapClaimInfo).length) {
+    return <FullLoadingScreen text="Generating Invoice" />;
+  }
+  if (isUsingSpark && !sparkAddress) {
     return <FullLoadingScreen text="Generating Invoice" />;
   }
   return (
@@ -145,7 +204,9 @@ export default function PaymentPage() {
                       size={220}
                       value={
                         selectedPaymentOption === "lightning"
-                          ? boltzSwapClaimInfo.createdResponse.invoice
+                          ? isUsingSpark
+                            ? sparkAddress
+                            : boltzSwapClaimInfo.createdResponse.invoice
                           : formatedLiquidAddress
                       }
                       renderAs="canvas"
@@ -159,7 +220,9 @@ export default function PaymentPage() {
                 <CopyToCliboardPopup
                   content={
                     selectedPaymentOption === "lightning"
-                      ? boltzInvoice
+                      ? isUsingSpark
+                        ? sparkAddress
+                        : boltzInvoice
                       : formatedLiquidAddress
                   }
                   close={close}
@@ -184,7 +247,9 @@ export default function PaymentPage() {
                   <CopyToCliboardPopup
                     content={
                       selectedPaymentOption === "lightning"
-                        ? boltzInvoice
+                        ? isUsingSpark
+                          ? sparkAddress
+                          : boltzInvoice
                         : formatedLiquidAddress
                     }
                     close={close}
