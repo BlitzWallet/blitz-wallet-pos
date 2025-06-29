@@ -13,7 +13,8 @@ module.exports = {
       add: [
         new webpack.ProvidePlugin({
           Buffer: ["buffer", "Buffer"],
-          process: "process/browser",
+          process: "process/browser.js",
+          global: "global",
         }),
         new webpack.IgnorePlugin({
           checkResource(resource) {
@@ -34,6 +35,9 @@ module.exports = {
         path: require.resolve("path-browserify"),
         crypto: require.resolve("crypto-browserify"),
         stream: require.resolve("stream-browserify"),
+        process: require.resolve("process/browser.js"),
+        global: require.resolve("global"),
+
         fs: false,
       };
       return webpackConfig;
