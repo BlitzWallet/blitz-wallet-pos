@@ -6,6 +6,7 @@
   "dependencies": {
     "@bitcoinerlab/secp256k1": "^1.0.5",
     "@boltz/bitcoin-ops": "^2.0.0",
+    "@buildonspark/spark-sdk": "^0.1.41",
     "@noble/curves": "^1.4.0",
     "@noble/secp256k1": "^2.2.3",
     "@scure/base": "^1.1.6",
@@ -30,6 +31,7 @@
     "decimal.js": "^10.4.3",
     "dotenv": "^16.4.7",
     "firebase": "^10.13.0",
+    "global": "^4.4.0",
     "liquidjs-lib": "^6.0.2-liquid.34",
     "lottie-react": "^2.4.0",
     "path-browserify": "^1.0.1",
