@@ -39,20 +39,14 @@ export const receiveSparkLightningPayment = async ({
   try {
     if (!sparkWallet) throw new Error("sparkWallet not initialized");
     let payment;
-    if (receiverIdentityPubkey) {
-      payment = await sparkWallet.createLightningInvoice({
-        amountSats,
-        memo,
-        expirySeconds: 60 * 3,
-        receiverIdentityPubkey,
-      });
-    } else {
-      payment = await sparkWallet.createLightningInvoice({
-        amountSats,
-        memo,
-        expirySeconds: 60 * 3,
-      });
-    }
+
+    payment = await sparkWallet.createLightningInvoice({
+      amountSats,
+      memo,
+      expirySeconds: 60 * 15,
+      receiverIdentityPubkey,
+    });
+
     let savedPaymentCodes =
       JSON.parse(getLocalStorageItem("spark_pending_ids")) || [];
 
