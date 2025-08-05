@@ -107,7 +107,7 @@ export default async function lookForPaidPayment(convertedSatAmount) {
           wasPaid = true;
           removeIds.push(invoice.id);
           break;
-        } else if (Math.abs(invoice.timeAdded - currentTime) > 1000 * 60 * 3) {
+        } else if (Math.abs(invoice.timeAdded - currentTime) > 1000 * 60 * 15) {
           removeIds.push(invoice.id);
         }
       } catch (error) {
