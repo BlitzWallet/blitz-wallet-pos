@@ -30,6 +30,7 @@ export default function ItemsList({
   };
 
   const elements = listElements.map((item) => {
+    if (!item.price) return;
     return (
       <div className="itemContainer" key={item.uuid}>
         <div>
@@ -39,7 +40,7 @@ export default function ItemsList({
               displayCorrectDenomination({
                 amount: currentSettings?.displayCurrency?.isSats
                   ? Math.round(dollarSatValue * item.price)
-                  : item.price.toFixed(2),
+                  : item.price?.toFixed(2),
                 fiatCurrency: currentUserSession.account.storeCurrency || "USD",
                 showSats: currentSettings.displayCurrency.isSats,
                 isWord: currentSettings.displayCurrency.isWord,
