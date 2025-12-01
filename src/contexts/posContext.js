@@ -23,6 +23,8 @@ export const GlobalPOSContext = ({ children }) => {
     bitcoinPrice: null,
   });
 
+  const [didConfirmSavedUsername, setDidConfirmSavedUsername] = useState(false);
+
   const [currentSettings, setCurrentSettings] = useState(
     JSON.parse(getLocalStorageItem(POS_SETTINGS_LOCAL_STORAGE)) || {
       displayCurrency: {
@@ -57,6 +59,8 @@ export const GlobalPOSContext = ({ children }) => {
         currentSettings,
         toggleSettings,
         dollarSatValue,
+        didConfirmSavedUsername,
+        setDidConfirmSavedUsername,
       }}
     >
       {children}

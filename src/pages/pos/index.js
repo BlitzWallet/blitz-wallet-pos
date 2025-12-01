@@ -129,9 +129,7 @@ function POSPage() {
     initPage();
   }, [currentUserSession, serverName]);
 
-  useEffect(() => {
-    if (!currentUserSession.bitcoinPrice || !didLoadPOS.current) return;
-
+  const handleOpenChangeUsername = () => {
     setPopupType((prev) => {
       let newObject = {};
       Object.entries(prev).forEach((entry) => {
@@ -140,7 +138,7 @@ function POSPage() {
       });
       return newObject;
     });
-  }, [currentUserSession]);
+  };
 
   useEffect(() => {
     // Loading widths for inut text elemtns to use for slider
@@ -179,6 +177,7 @@ function POSPage() {
         backFunction={() => {
           logout();
         }}
+        openNamePopupFunction={handleOpenChangeUsername}
       />
       {popupType.openPopup ? (
         <>

@@ -38,7 +38,7 @@ export default function EnterServerName({ setPopupType }) {
             });
           }}
         >
-          Save
+          {serverName && !name ? "Keep" : "Save"}
         </button>
       </div>
     </div>
