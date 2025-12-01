@@ -240,21 +240,6 @@ function POSPage() {
             }}
             balance={chargeAmount}
           />
-          <p className="POS-AmountError">
-            {convertedSatAmount > minimumPaymentAmount
-              ? "\u00A0"
-              : `Minimum invoice amount is ${formatBalanceAmount(
-                  displayCorrectDenomination({
-                    amount: currentSettings?.displayCurrency?.isSats
-                      ? minimumPaymentAmount
-                      : (minimumPaymentAmount / dollarSatValue).toFixed(2),
-                    fiatCurrency:
-                      currentUserSession.account.storeCurrency || "USD",
-                    showSats: currentSettings.displayCurrency.isSats,
-                    isWord: currentSettings.displayCurrency.isWord,
-                  })
-                )}`}
-          </p>
 
           <div className="POS-savedItemsContainer" onClick={handleSlider}>
             <p className="active inputText">Keypad</p>

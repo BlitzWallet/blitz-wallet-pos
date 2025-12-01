@@ -60,13 +60,8 @@
   border-width: 0;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
 
   background-color: white;
-}
-
-.PaymentPage-QRcontainer:hover {
-  transform: translateY(-2px);
 }
 
 /* Timer Style */
