@@ -2,33 +2,45 @@ import { SparkWallet } from "@buildonspark/spark-sdk";
 import { getLocalStorageItem, saveToLocalStorage } from "./localStorage";
 
 export let sparkWallet = null;
+let sparkWalletPromise = null;
+
 export async function createSparkWallet() {
-  if (sparkWallet) return;
-  let wallet;
-  let numberOfTries = 0;
-  const maxNumberOfTries = 5;
+  if (sparkWallet) return sparkWallet;
 
-  while (numberOfTries < maxNumberOfTries && !wallet) {
-    numberOfTries++;
-    try {
-      const { wallet: w } = await SparkWallet.initialize({
-        options: {
-          network: "MAINNET",
-        },
-      });
-      wallet = w;
-
-      break;
-    } catch (err) {
-      console.log("Spark wallet initialization error", err.message);
-    }
-
-    if (!wallet) {
-      console.log(`Running attempt ${numberOfTries} of ${maxNumberOfTries}`);
-      await new Promise((res) => setTimeout(res, 2000));
-    }
+  if (sparkWalletPromise) {
+    await sparkWalletPromise;
+    return sparkWallet;
   }
-  sparkWallet = wallet;
+
+  sparkWalletPromise = (async () => {
+    let wallet;
+    let numberOfTries = 0;
+    const maxNumberOfTries = 5;
+
+    while (numberOfTries < maxNumberOfTries && !wallet) {
+      numberOfTries++;
+      try {
+        const { wallet: w } = await SparkWallet.initialize({
+          options: {
+            network: "MAINNET",
+          },
+        });
+        wallet = w;
+        break;
+      } catch (err) {
+        console.log("Spark wallet initialization error", err.message);
+      }
+      if (!wallet) {
+        console.log(`Running attempt ${numberOfTries} of ${maxNumberOfTries}`);
+        await new Promise((res) => setTimeout(res, 2000));
+      }
+    }
+
+    sparkWallet = wallet;
+    return wallet;
+  })();
+
+  return await sparkWalletPromise;
 }
 
 export const receiveSparkLightningPayment = async ({
