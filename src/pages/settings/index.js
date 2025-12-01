@@ -85,7 +85,7 @@ export default function SettingsPage() {
         <div className="optionsContainer">
           <p>
             How to display{" "}
-            {currentSettings.displayCurrency.isSats ? "sats" : "fiat"}
+            {currentSettings.displayCurrency.isSats ? "SAT" : "fiat"}
           </p>
           <div className="optionsButtonContainer">
             <p
@@ -137,7 +137,7 @@ export default function SettingsPage() {
               }}
             >
               {currentSettings.displayCurrency.isSats
-                ? "Sats"
+                ? "SAT"
                 : currentUserSession.account.storeCurrency || "USD"}{" "}
             </p>
           </div>

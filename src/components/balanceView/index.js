@@ -94,7 +94,7 @@ export default function BalanceView({ balance = 0, actionFunction }) {
           }}
           className="POS-totalBalance"
         >
-          sats
+          SAT
         </h1>
       )}
     </div>

@@ -21,7 +21,7 @@ export default function displayCorrectDenomination({
 
     if (showSats) {
       if (showSymbol) return BITCOIN_SATS_ICON + formatedSat;
-      else return formatedSat + " sats";
+      else return formatedSat + " SAT";
     } else {
       if (showSymbol && isSymbolInFront)
         return currencySymbol + formattedCurrency[1];
