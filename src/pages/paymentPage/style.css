@@ -1,78 +1,116 @@
 .POS-Container {
   width: 100%;
-
   display: flex;
   flex-direction: column;
 }
+
 .POS-ContentContainer {
   width: 90%;
-  max-width: 500px;
-  min-height: calc(100dvh - 50px);
-  margin: auto auto 0;
+  max-width: 400px;
+  min-height: calc(100dvh - 60px);
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: baseline;
+  align-items: center;
+  justify-content: center;
 }
+
 .PaymentPage-Container {
-  margin: auto;
+  width: 100%;
+  max-width: 300px;
   align-items: center;
   justify-content: center;
   display: flex;
   flex-direction: column;
+  text-align: center;
+}
+
+.balance-text {
+  font-size: 50px;
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+
+.payment-type {
+  opacity: 0.5;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+.PaymentPage-Instruction {
+  font-size: 16px;
+  opacity: 0.7;
+  margin-bottom: 15px;
 }
 
 .PaymentPage-QRcontainer {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+
   overflow: hidden;
   border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--lightModeBackgroundOffset);
-  padding: 10px;
+  padding: 0;
   border-width: 0;
   cursor: pointer;
-}
-.PaymentPage-QRPadding {
-  padding: 10px;
-  border-radius: 8px;
-  background-color: var(--darkModeText);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+
+  background-color: white;
 }
 
-.PaymentPage-QR {
-  width: 250px;
-  height: 250px;
-  background-color: var(--darkModeText);
+.PaymentPage-QRcontainer:hover {
+  transform: translateY(-2px);
+}
+
+/* Timer Style */
+.PaymentPage-Timer {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 20px;
+  color: var(--primary);
+}
+
+.PaymentPage-Timer.expired {
+  color: var(--cancelRed);
+  font-weight: 700;
 }
 
 .QR-OptionsContainer {
-  width: 240px;
-  display: flex;
-  margin-top: 20px;
-  justify-content: space-between;
+  display: none;
 }
 
-.QR-Option {
-  width: 45%;
-  background-color: var(--darkModeText);
-  border-width: 0;
-  padding: 8px 0;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.QR-OptionNoFill {
-  width: max-content;
-  max-width: 250px;
-  background-color: unset;
-  border-width: 1px;
-  margin-top: 10px;
-  padding: 8px 10px;
-  color: var(--lightModeText);
-  border-color: var(--lightModeText);
-}
-/* Changing global styles */
 .FullLoadingScreen {
   width: 100%;
   height: calc(100dvh - 55px);
+}
+/* Stale state */
+.stale-state-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.stale-state-content {
+  text-align: center;
+}
+
+.stale-state-text {
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+.stale-state-button {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }

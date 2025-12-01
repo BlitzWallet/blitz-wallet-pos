@@ -55,7 +55,7 @@ export const receiveSparkLightningPayment = async ({
       payment = await sparkWallet.createLightningInvoice({
         amountSats,
         memo,
-        expirySeconds: 60 * 3,
+        expirySeconds: 60 * 5,
         receiverIdentityPubkey,
       });
     } else {
