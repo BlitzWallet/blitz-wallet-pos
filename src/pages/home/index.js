@@ -41,7 +41,7 @@ function HomePage() {
           onClick={() => {
             saveToLocalStorage(posName, ACCOUNT_LOCAL_STORAGE);
             setUser(posName);
-            navigate(`./${posName}`);
+            navigate(`./createTipsUsername`);
           }}
           className="Home-button"
         >

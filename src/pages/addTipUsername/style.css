@@ -1,4 +1,4 @@
-.Home {
+.addTipsUsername {
   width: 90%;
   min-height: 100dvh;
   margin: 0 auto;
@@ -6,25 +6,25 @@
   display: flex;
   flex-direction: column;
 }
-.Home-main {
+.addTipsUsername-main {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
 }
-.Home-header {
+.addTipsUsername-header {
   width: 100%;
   margin: 0 auto;
   padding: 10px 0;
 }
-.Home-header .App-logo {
+.addTipsUsername-header .App-logo {
   height: 50px;
   width: 50px;
   pointer-events: none;
 }
 
-.Home-main .Home-title {
-  font-size: 80px;
+.addTipsUsername-main .addTipsUsername-title {
+  font-size: 60px;
   font-style: italic;
   font-weight: 600;
   color: var(--primary);
@@ -32,14 +32,14 @@
   text-align: center;
   margin-top: auto;
 }
-.Home-main .Home-subtitle {
+.addTipsUsername-main .addTipsUsername-subtitle {
   width: 100%;
   max-width: 500px;
-  font-size: 20px;
+  font-size: 18px;
   margin: 0 auto;
   text-align: center;
 }
-.Home-main .Home-inputContainer {
+.addTipsUsername-main .addTipsUsername-inputContainer {
   width: 100%;
   max-width: 250px;
   display: flex;
@@ -47,11 +47,11 @@
   justify-content: center;
   margin: 50px auto auto;
 }
-.Home-main .Home-inputContainer p {
+.addTipsUsername-main .addTipsUsername-inputContainer p {
   margin-bottom: 5px;
 }
 
-.Home-main .Home-button {
+.addTipsUsername-main .addTipsUsername-button {
   margin: 80px auto 20px;
 }
 /* @media (prefers-reduced-motion: no-preference) {

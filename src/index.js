@@ -17,6 +17,7 @@ import { ACCOUNT_LOCAL_STORAGE } from "./constants";
 import AddTipPage from "./pages/tip";
 import { GlobalSettingsDisplay } from "./contexts/settingsDisplay";
 import SettingsPage from "./pages/settings";
+import AddTipsUsername from "./pages/addTipUsername";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -43,6 +44,8 @@ root.render(
                   )
                 }
               />
+              {/* First time add tips username */}
+              <Route path="/createTipsUsername" element={<AddTipsUsername />} />
 
               {/* POS Page Route */}
               <Route path="/:username" element={<POSPage />} />
