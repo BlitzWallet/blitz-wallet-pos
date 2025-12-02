@@ -176,7 +176,7 @@ export default function PaymentPage() {
               {formatBalanceAmount(
                 displayCorrectDenomination({
                   amount: !currentSettings?.displayCurrency?.isSats
-                    ? Math.round(dollarSatValue * convertedSatAmount)
+                    ? (convertedSatAmount / dollarSatValue).toFixed(2)
                     : convertedSatAmount.toFixed(0),
                   fiatCurrency:
                     currentUserSession.account.storeCurrency || "USD",
