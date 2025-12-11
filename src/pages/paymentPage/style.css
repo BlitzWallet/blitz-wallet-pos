@@ -28,6 +28,10 @@
 .balance-text {
   font-size: 50px;
   font-weight: 500;
+  margin-bottom: 0;
+}
+.PaymentPage-Container .alt-amount {
+  font-size: 18px;
   margin-bottom: 25px;
 }
 

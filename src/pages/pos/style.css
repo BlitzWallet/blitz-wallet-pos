@@ -36,6 +36,11 @@
 .POS-Container .POS-savedItemsContainer .active {
   font-weight: 500;
 }
+
+.POS-Container .alt-amount {
+  margin: 0;
+  font-size: 18px;
+}
 .POS-Container .POS-savedItemsContainer .selectedInputBar {
   height: 5px;
   width: 100px;

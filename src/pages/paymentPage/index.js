@@ -186,6 +186,20 @@ export default function PaymentPage() {
               )}
             </h1>
 
+            <p className="alt-amount">
+              {formatBalanceAmount(
+                displayCorrectDenomination({
+                  amount: currentSettings?.displayCurrency?.isSats
+                    ? (convertedSatAmount / dollarSatValue).toFixed(2)
+                    : convertedSatAmount.toFixed(0),
+                  fiatCurrency:
+                    currentUserSession.account.storeCurrency || "USD",
+                  showSats: !currentSettings.displayCurrency.isSats,
+                  isWord: currentSettings.displayCurrency.isWord,
+                })
+              )}
+            </p>
+
             {/* 2. QR Code (wrapped in a copy-trigger) */}
             <p className="PaymentPage-Instruction">Scan to Pay via Lightning</p>
             <Popup

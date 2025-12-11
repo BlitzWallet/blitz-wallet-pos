@@ -240,6 +240,18 @@ function POSPage() {
             }}
             balance={chargeAmount}
           />
+          <p className="alt-amount">
+            {`${formatBalanceAmount(
+              displayCorrectDenomination({
+                amount: !currentSettings?.displayCurrency?.isSats
+                  ? ((totalAmount / 100) * dollarSatValue).toFixed(2)
+                  : (totalAmount / dollarSatValue).toFixed(2),
+                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
+                showSats: !currentSettings.displayCurrency.isSats,
+                isWord: currentSettings.displayCurrency.isWord,
+              })
+            )}`}
+          </p>
 
           <div className="POS-savedItemsContainer" onClick={handleSlider}>
             <p className="active inputText">Keypad</p>
