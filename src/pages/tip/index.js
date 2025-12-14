@@ -125,7 +125,7 @@ export default function AddTipPage() {
                     return { ...prev, customTip: num };
                   } else {
                     if (input.toLowerCase() === "c") {
-                      return { ...prev, customTip: 0 };
+                      return { ...prev, customTip: "" };
                     }
                   }
                 });
