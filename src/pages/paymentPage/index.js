@@ -157,13 +157,13 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className="POS-Container">
+    <div className="PaymentPage-Container-globalOuter">
       <PosNavbar
         backFunction={() => {
           navigate(-1);
         }}
       />
-      <div className="POS-ContentContainer">
+      <div className="PaymentPage-Container-globalInner">
         {boltzLoadingAnimation ? (
           <FullLoadingScreen text={boltzLoadingAnimation} />
         ) : (
