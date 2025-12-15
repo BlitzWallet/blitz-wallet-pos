@@ -1,20 +1,3 @@
-.POS-Container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.POS-ContentContainer {
-  width: 90%;
-  max-width: 400px;
-  min-height: calc(100dvh - 60px);
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
 .PaymentPage-Container {
   width: 100%;
   max-width: 300px;
