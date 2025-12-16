@@ -16,10 +16,11 @@ export default function AddTipPage() {
   const navigate = useNavigate();
 
   const [tipAmount, setTipAmount] = useState({
-    selectedTip: null,
+    selectedTip: undefined,
     customTip: "",
     showCustomTip: false,
   });
+
   const tipValue = tipAmount.customTip
     ? currentSettings?.displayCurrency?.isSats
       ? tipAmount.customTip
@@ -37,38 +38,6 @@ export default function AddTipPage() {
     ? Math.round(tipValue)
     : Math.round(dollarSatValue * tipValue);
 
-  const tipOptionElements = [15, 20, 25, 0].map((item, index) => {
-    return (
-      <div
-        key={item}
-        onClick={() => {
-          setTipAmount({
-            customTip: "",
-            selectedTip: tipAmount.selectedTip === item ? null : item,
-          });
-        }}
-        className="tipItem"
-        style={{
-          backgroundColor:
-            tipAmount.selectedTip == item
-              ? "var(--primary)"
-              : "var(--lightModeBackgroundOffset)",
-        }}
-      >
-        <p
-          style={{
-            color:
-              tipAmount.selectedTip == item
-                ? "var(--darkModeText)"
-                : "var(--lightModeText)",
-          }}
-        >
-          {`${!item ? "No tip" : String(item)}${!item ? "" : "%"}`}
-        </p>
-      </div>
-    );
-  });
-
   if (!currentUserSession.account) return;
 
   return (
@@ -79,49 +48,55 @@ export default function AddTipPage() {
         }}
       />
 
-      <div className="Tip-container">
-        <h2 className="total-amount">{`Total: ${formatBalanceAmount(
-          displayCorrectDenomination({
-            amount: currentSettings?.displayCurrency?.isSats
-              ? satAmount
-              : fiatAmount,
-            fiatCurrency: currentUserSession.account.storeCurrency || "USD",
-            showSats: currentSettings.displayCurrency.isSats,
-            isWord: currentSettings.displayCurrency.isWord,
-          })
-        )}`}</h2>
-        <h3 className="amount-breakdown">
-          {`${formatBalanceAmount(
-            displayCorrectDenomination({
-              amount: currentSettings?.displayCurrency?.isSats
-                ? satAmount
-                : fiatAmount,
-              fiatCurrency: currentUserSession.account.storeCurrency || "USD",
-              showSats: currentSettings.displayCurrency.isSats,
-              isWord: currentSettings.displayCurrency.isWord,
-            })
-          )} +${formatBalanceAmount(
-            displayCorrectDenomination({
-              amount: tipValue,
-              fiatCurrency: currentUserSession.account.storeCurrency || "USD",
-              showSats: currentSettings.displayCurrency.isSats,
-              isWord: currentSettings.displayCurrency.isWord,
-            })
-          )} Tip`}
-        </h3>
+      {/* Content */}
+      <main className="Tip-container">
+        {/* Total Section */}
+        <div className="total-section">
+          <div className="total-label">Total amount</div>
+          <div className="total-amount-large">
+            {formatBalanceAmount(
+              displayCorrectDenomination({
+                amount: currentSettings?.displayCurrency?.isSats
+                  ? Number(satAmount) + Number(tipAmountSats)
+                  : Number(fiatAmount) + Number(tipAmountFiat),
+                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
+                showSats: currentSettings.displayCurrency.isSats,
+                isWord: currentSettings.displayCurrency.isWord,
+              })
+            )}
+          </div>
+          <div className="amount-breakdown">
+            {`${formatBalanceAmount(
+              displayCorrectDenomination({
+                amount: currentSettings?.displayCurrency?.isSats
+                  ? satAmount
+                  : fiatAmount,
+                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
+                showSats: currentSettings.displayCurrency.isSats,
+                isWord: currentSettings.displayCurrency.isWord,
+              })
+            )} + ${formatBalanceAmount(
+              displayCorrectDenomination({
+                amount: tipValue,
+                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
+                showSats: currentSettings.displayCurrency.isSats,
+                isWord: currentSettings.displayCurrency.isWord,
+              })
+            )} tip`}
+          </div>
+        </div>
+
         {tipAmount.showCustomTip ? (
-          <>
-            <BalanceView balance={tipAmount.customTip} />
+          <div className="custom-tip-section">
+            {/* <BalanceView balance={tipAmount.customTip} /> */}
             <CustomKeyboard
               showPlus={false}
               customFunction={(input) => {
                 setTipAmount((prev) => {
                   if (Number.isInteger(input)) {
                     let num;
-
                     if (input === 0) num = String(prev.customTip) + 0;
                     else num = String(prev.customTip) + input;
-
                     return { ...prev, customTip: num };
                   } else {
                     if (input.toLowerCase() === "c") {
@@ -132,53 +107,78 @@ export default function AddTipPage() {
               }}
             />
             <button
-              className="back-btn"
               onClick={() =>
                 setTipAmount((prev) => ({
                   ...prev,
                   showCustomTip: false,
                 }))
               }
+              className="continue-btn"
             >
               {tipAmount.customTip ? "Save" : "Back"}
             </button>
-          </>
+          </div>
         ) : (
           <>
-            <h2 className="header">Add a tip?</h2>
-            <div className="tipContainer">{tipOptionElements}</div>
+            {/* Tip Selection */}
+            <div className="tip-selection-section">
+              <h2 className="tip-header-text">Add a tip?</h2>
 
-            <button
-              className="no-tip"
-              onClick={() =>
-                setTipAmount((prev) => ({
-                  customTip: "",
-                  selectedTip: null,
-                  showCustomTip: true,
-                }))
-              }
-              style={{
-                backgroundColor: tipAmount.customTip
-                  ? "var(--primary)"
-                  : "var(--lightModeBackgroundOffset)",
+              <div className="tip-grid">
+                {[15, 18, 20, "custom"].map((item) => {
+                  const isSelected =
+                    tipAmount.selectedTip === item ||
+                    (typeof item === "string" && !!tipAmount.customTip);
 
-                color: tipAmount.customTip
-                  ? "var(--darkModeText)"
-                  : "var(--lightModeText)",
-              }}
-            >
-              Custom
-            </button>
+                  return (
+                    <button
+                      key={item}
+                      onClick={() => {
+                        if (typeof item === "string") {
+                          setTipAmount({
+                            customTip: "",
+                            selectedTip: undefined,
+                            showCustomTip: true,
+                          });
+                        } else {
+                          setTipAmount({
+                            customTip: "",
+                            selectedTip:
+                              tipAmount.selectedTip === item ? undefined : item,
+                            showCustomTip: false,
+                          });
+                        }
+                      }}
+                      className={`tip-option ${
+                        isSelected ? "tip-option-selected" : ""
+                      }`}
+                    >
+                      {typeof item === "string" ? "Custom" : `${item}%`}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() =>
+                  setTipAmount({
+                    customTip: "",
+                    selectedTip: null,
+                    showCustomTip: false,
+                  })
+                }
+                className={`no-tip-btn ${
+                  tipAmount.selectedTip === null ? "no-tip-selected" : ""
+                }`}
+              >
+                No tip
+              </button>
+            </div>
+
+            {/* Continue Button */}
             <button
-              className="continue-btn"
-              style={{
-                opacity:
-                  !tipAmount.customTip && tipAmount.selectedTip === null
-                    ? 0.2
-                    : 1,
-              }}
               onClick={() => {
-                if (!tipAmount.customTip && tipAmount.selectedTip === null)
+                if (!tipAmount.customTip && tipAmount.selectedTip === undefined)
                   return;
 
                 navigate(
@@ -192,12 +192,16 @@ export default function AddTipPage() {
                   }
                 );
               }}
+              disabled={
+                !tipAmount.customTip && tipAmount.selectedTip === undefined
+              }
+              className="continue-btn"
             >
               Continue
             </button>
           </>
         )}
-      </div>
+      </main>
     </div>
   );
 }

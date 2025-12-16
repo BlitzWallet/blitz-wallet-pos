@@ -31,6 +31,7 @@ function AddTipsUsername() {
 
         <button
           onClick={() => {
+            if (!name) return;
             saveToLocalStorage(name, SERVER_LOCAL_STORAGE);
             setServerName(name);
             navigate(`/${user}`);

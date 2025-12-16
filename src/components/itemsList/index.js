@@ -31,7 +31,17 @@ export default function ItemsList({
   const elements = listElements.map((item) => {
     if (!item.price) return;
     return (
-      <div className="itemContainer" key={item.uuid}>
+      <div
+        onClick={() =>
+          addItemToTotal(
+            currentSettings?.displayCurrency?.isSats
+              ? Math.round(dollarSatValue * item.price)
+              : (item.price * 100).toFixed(2)
+          )
+        }
+        className="itemContainer"
+        key={item.uuid}
+      >
         <div>
           <p>{item.name}</p>
           <p>
@@ -47,16 +57,7 @@ export default function ItemsList({
             )}
           </p>
         </div>
-        <div
-          onClick={() =>
-            addItemToTotal(
-              currentSettings?.displayCurrency?.isSats
-                ? Math.round(dollarSatValue * item.price)
-                : (item.price * 100).toFixed(2)
-            )
-          }
-          className="addItemIconContainer"
-        >
+        <div className="addItemIconContainer">
           <img className="addItemIcon" src="/assets/icons/plus.png" />
         </div>
       </div>

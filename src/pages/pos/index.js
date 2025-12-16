@@ -12,11 +12,11 @@ import FullLoadingScreen from "../../components/loadingScreen.js";
 import { removeLocalStorageItem } from "../../functions/localStorage.js";
 import EnterServerName from "../../components/popup/enterServerName.js";
 import CustomKeyboard from "../../components/keypad/index.js";
-import BalanceView from "../../components/balanceView/index.js";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination.js";
 import { formatBalanceAmount } from "../../functions/formatNumber.js";
 import ItemsList from "../../components/itemsList/index.js";
 import { createSparkWallet } from "../../functions/spark.js";
+
 function POSPage() {
   const User = getCurrentUser();
   const {
@@ -36,7 +36,6 @@ function POSPage() {
     serverName: false,
   });
   const [activeInput, setActiveInput] = useState("keypad");
-  const [inputTextWidths, setInputTextWidths] = useState([]);
   const [hasError, setHasError] = useState("");
   const [addedItems, setAddedItems] = useState([]);
   const didInitialRender = useRef(true);
@@ -64,6 +63,7 @@ function POSPage() {
     }
     getSparkInvoice();
   }, []);
+
   useEffect(() => {
     if (stopClearOnFirstLoad.current) {
       stopClearOnFirstLoad.current = false;
@@ -140,37 +140,6 @@ function POSPage() {
     });
   };
 
-  useEffect(() => {
-    // Loading widths for inut text elemtns to use for slider
-    setTimeout(
-      () => {
-        const sliderTexts = document.querySelectorAll(".inputText");
-        const widths = Array.from(sliderTexts).map((item) => {
-          return item.getBoundingClientRect().width;
-        });
-        setInputTextWidths(widths);
-      },
-      currentUserSession?.account ? 0 : 500
-    );
-  }, [currentUserSession]);
-
-  const handleSlider = (event) => {
-    const targetElement = event.target;
-
-    if (!Array.from(targetElement.classList).includes("inputText")) return;
-    const children = targetElement.parentElement.children;
-    const element = targetElement.innerHTML;
-
-    Array.from(children).forEach((child) => {
-      child.classList.remove("active");
-      if (child.innerHTML === element) {
-        child.classList.add("active");
-      }
-    });
-
-    setActiveInput(element.toLowerCase());
-  };
-
   return (
     <div className="POS-Container">
       <PosNavbar
@@ -208,97 +177,125 @@ function POSPage() {
         <FullLoadingScreen text="Setting up the point-of-sale system" />
       ) : (
         <div className="POS-ContentContainer">
-          {addedItems.length === 0 ? (
-            <p className="POS-chargeItems">No charged items</p>
-          ) : (
-            <p className="POS-chargeItems">
-              {addedItems
-                .map((value) => {
-                  return formatBalanceAmount(
-                    displayCorrectDenomination({
-                      amount: currentSettings?.displayCurrency?.isSats
-                        ? value.amount
-                        : (value.amount / 100).toFixed(2),
-                      fiatCurrency:
-                        currentUserSession.account.storeCurrency || "USD",
-                      showSats: currentSettings.displayCurrency.isSats,
-                      isWord: currentSettings.displayCurrency.isWord,
+          {/* Amount Display Section */}
+          <div className="POS-AmountDisplay">
+            <div className="POS-chargeItems">
+              {addedItems.length === 0
+                ? "No charged items"
+                : addedItems
+                    .map((value) => {
+                      return formatBalanceAmount(
+                        displayCorrectDenomination({
+                          amount: currentSettings?.displayCurrency?.isSats
+                            ? value.amount
+                            : (value.amount / 100).toFixed(2),
+                          fiatCurrency:
+                            currentUserSession.account.storeCurrency || "USD",
+                          showSats: currentSettings.displayCurrency.isSats,
+                          isWord: currentSettings.displayCurrency.isWord,
+                        })
+                      );
                     })
-                  );
-                })
-                .join(" + ")}
-            </p>
-          )}
-          <BalanceView
-            actionFunction={() => {
-              toggleSettings({
-                displayCurrency: {
-                  isSats: !currentSettings.displayCurrency.isSats,
-                  isWord: currentSettings.displayCurrency.isWord,
-                },
-              });
-            }}
-            balance={chargeAmount}
-          />
-          <p className="alt-amount">
-            {`${formatBalanceAmount(
-              displayCorrectDenomination({
-                amount: !currentSettings?.displayCurrency?.isSats
-                  ? ((totalAmount / 100) * dollarSatValue).toFixed(2)
-                  : (totalAmount / dollarSatValue).toFixed(2),
-                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
-                showSats: !currentSettings.displayCurrency.isSats,
-                isWord: currentSettings.displayCurrency.isWord,
-              })
-            )}`}
-          </p>
-
-          <div className="POS-savedItemsContainer" onClick={handleSlider}>
-            <p className="active inputText">Keypad</p>
-            <p className="inputText">Library</p>
+                    .join(" + ")}
+            </div>
             <div
-              style={{
-                width: inputTextWidths[activeInput === "keypad" ? 0 : 1],
-                left:
-                  activeInput === "keypad"
-                    ? 0
-                    : `calc(100% - ${inputTextWidths[1]}px)`,
+              className="POS-MainAmount"
+              onClick={() => {
+                toggleSettings({
+                  displayCurrency: {
+                    isSats: !currentSettings.displayCurrency.isSats,
+                    isWord: currentSettings.displayCurrency.isWord,
+                  },
+                });
               }}
-              className="selectedInputBar"
-            />
+            >
+              {formatBalanceAmount(
+                displayCorrectDenomination({
+                  amount: currentSettings?.displayCurrency?.isSats
+                    ? totalAmount || "0"
+                    : (totalAmount / 100).toFixed(2) || "0.00",
+                  fiatCurrency:
+                    currentUserSession.account.storeCurrency || "USD",
+                  showSats: currentSettings.displayCurrency.isSats,
+                  isWord: currentSettings.displayCurrency.isWord,
+                })
+              )}
+            </div>
+            <div className="POS-AltAmount">
+              {formatBalanceAmount(
+                displayCorrectDenomination({
+                  amount: !currentSettings?.displayCurrency?.isSats
+                    ? ((totalAmount / 100) * dollarSatValue).toFixed(2)
+                    : (totalAmount / dollarSatValue).toFixed(2),
+                  fiatCurrency:
+                    currentUserSession.account.storeCurrency || "USD",
+                  showSats: !currentSettings.displayCurrency.isSats,
+                  isWord: currentSettings.displayCurrency.isWord,
+                })
+              )}
+            </div>
           </div>
 
-          {activeInput === "keypad" ? (
-            <CustomKeyboard customFunction={addNumToBalance} />
-          ) : (
-            <ItemsList
-              dollarSatValue={dollarSatValue}
-              currentSettings={currentSettings}
-              currentUserSession={currentUserSession}
-              setAddedItems={setAddedItems}
-              listElements={currentUserSession.account?.items}
-            />
-          )}
+          {/* Tab Navigation */}
+          <div className="POS-TabNavigation">
+            <button
+              onClick={() => setActiveInput("keypad")}
+              className={`POS-TabButton ${
+                activeInput === "keypad" ? "active" : ""
+              }`}
+            >
+              Keypad
+            </button>
+            <button
+              onClick={() => setActiveInput("library")}
+              className={`POS-TabButton ${
+                activeInput === "library" ? "active" : ""
+              }`}
+            >
+              Library
+            </button>
+          </div>
 
-          <button
-            onClick={handleInvoice}
-            style={{ opacity: !canReceivePayment ? 0.5 : 1 }}
-            className="POS-btn"
-          >
-            {`Charge ${formatBalanceAmount(
-              displayCorrectDenomination({
-                amount: currentSettings?.displayCurrency?.isSats
-                  ? convertedSatAmount
-                  : dollarValue.toFixed(2),
-                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
-                showSats: currentSettings.displayCurrency.isSats,
-                isWord: currentSettings.displayCurrency.isWord,
-              })
-            )}`}
-          </button>
-          <p className="POS-denominationDisclaimer">{`Conversion based on ${
-            currentUserSession?.account?.storeCurrency || "USD"
-          }`}</p>
+          {/* Content Area */}
+          <div className="POS-ContentArea">
+            {activeInput === "keypad" ? (
+              <CustomKeyboard customFunction={addNumToBalance} />
+            ) : (
+              <ItemsList
+                dollarSatValue={dollarSatValue}
+                currentSettings={currentSettings}
+                currentUserSession={currentUserSession}
+                setAddedItems={setAddedItems}
+                listElements={currentUserSession.account?.items}
+              />
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="POS-Footer">
+            <button
+              onClick={handleInvoice}
+              disabled={!canReceivePayment}
+              className="POS-ChargeButton"
+            >
+              {`Charge ${formatBalanceAmount(
+                displayCorrectDenomination({
+                  amount: currentSettings?.displayCurrency?.isSats
+                    ? convertedSatAmount || "0"
+                    : dollarValue.toFixed(2) || "0.00",
+                  fiatCurrency:
+                    currentUserSession.account.storeCurrency || "USD",
+                  showSats: currentSettings.displayCurrency.isSats,
+                  isWord: currentSettings.displayCurrency.isWord,
+                })
+              )}`}
+            </button>
+            <div className="POS-denominationDisclaimer">
+              {`Conversion based on ${
+                currentUserSession?.account?.storeCurrency || "USD"
+              }`}
+            </div>
+          </div>
         </div>
       )}
     </div>

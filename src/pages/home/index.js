@@ -39,6 +39,7 @@ function HomePage() {
 
         <button
           onClick={() => {
+            if (!posName) return;
             saveToLocalStorage(posName, ACCOUNT_LOCAL_STORAGE);
             setUser(posName);
             navigate(`./createTipsUsername`);

@@ -1,124 +1,111 @@
 .POS-Container {
   width: 100%;
-
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
+
 .POS-ContentContainer {
-  width: 90%;
-  max-width: 500px;
-  min-height: calc(100dvh - 50px);
-  margin: auto auto 0;
+  width: 100%;
+  min-height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.POS-Container .POS-chargeItems {
-  margin-bottom: 0;
-  margin: auto auto 0;
-  font-size: 20px;
+.POS-AmountDisplay {
+  padding: 3rem 1.5rem 2rem;
   text-align: center;
 }
-.POS-Container .POS-savedItemsContainer {
-  width: 100%;
-  max-width: 150px;
 
-  display: flex;
-  justify-content: space-between;
-  margin: auto auto 0;
-  position: relative;
+.POS-chargeItems {
+  opacity: 0.5;
+  font-size: 0.875rem;
+  margin-bottom: 20px;
 }
-.POS-Container .POS-savedItemsContainer p {
-  margin: 0 0 8px 0;
+
+.POS-MainAmount {
+  font-size: 50px;
+  line-height: 1;
   cursor: pointer;
-}
-.POS-Container .POS-savedItemsContainer .active {
   font-weight: 500;
 }
 
-.POS-Container .alt-amount {
+.POS-AltAmount {
+  opacity: 0.5;
+  font-size: 0.875rem;
   margin: 0;
-  font-size: 18px;
-}
-.POS-Container .POS-savedItemsContainer .selectedInputBar {
-  height: 5px;
-  width: 100px;
-  background-color: var(--primary);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  border-radius: 8px;
-
-  transition: 0.5s all;
 }
 
-.POS-Container .POS-AmountError {
-  margin: 0 auto;
-  text-align: center;
-  font-size: 14px;
-}
-
-.POS-Container .POS-btn {
+/* Tab Navigation */
+.POS-TabNavigation {
   display: flex;
-  background-color: var(--primary);
-  color: var(--darkModeText);
+  justify-content: center;
+  gap: 2rem;
+  padding: 0 1.5rem;
+}
 
+.POS-TabButton {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 5px 0.5rem;
+  opacity: 0.6;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.POS-TabButton.active {
+  opacity: 1;
+  border-bottom-color: #111827;
+}
+
+/* Content Area */
+.POS-ContentArea {
+  flex: 1;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 1.5rem 0;
+  overflow-y: auto;
+  display: flex;
+  justify-content: end;
+  margin: 0 auto;
+}
+.POS-ContentArea .POS-keypad {
+  margin-top: auto;
+}
+
+/* Footer */
+.POS-Footer {
+  width: 100%;
   align-items: center;
-  margin: 10px auto 0;
-}
-.POS-Container .POS-btn .POS-btnIcon {
-  height: 25px;
-  width: auto;
-  margin-right: 5px;
-}
-
-.chargeContainer {
-  width: 90%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 10px auto;
-
-  background-color: rgb(0, 54, 83);
-  border-radius: 10px;
-  color: white;
-}
-.navItems {
-  width: 100%;
-  display: flex;
-  position: relative;
-  margin-bottom: 20px;
-}
-.navItems h3 {
-  width: 50%;
-  text-align: center;
-  cursor: pointer;
-  padding: 10px 0;
-  text-transform: uppercase;
-}
-.navItems .slider {
-  position: absolute;
-  bottom: 0;
-  height: 2px;
-  width: 50%;
-  left: 0%;
-  background-color: green;
-  transition: 0.3s all ease-out;
+  margin-bottom: 10px;
 }
 
-.navItems .translated {
-  left: 50%;
-}
-.navItems .unTranslated {
-  left: 0%;
-}
-
-.dollarValue {
-  margin: 0 auto;
+.POS-ChargeButton {
+  margin: 0 auto 5px;
+  transition: all 0.2s;
 }
 
 .POS-denominationDisclaimer {
-  margin: 5px auto 20px;
-  font-size: 12px;
+  text-align: center;
+  opacity: 0.5;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+/* Legacy classes - kept for compatibility */
+.POS-savedItemsContainer {
+  display: none;
+}
+
+.POS-btn {
+  display: none;
+}
+
+.alt-amount {
+  display: none;
 }
