@@ -1,13 +1,13 @@
 .POS-Container {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
 .POS-ContentContainer {
   width: 100%;
-  min-height: calc(100vh - 50px);
+  min-height: calc(100dvh - 50px);
   display: flex;
   flex-direction: column;
 }

@@ -57,8 +57,8 @@ export default function AddTipPage() {
             {formatBalanceAmount(
               displayCorrectDenomination({
                 amount: currentSettings?.displayCurrency?.isSats
-                  ? Number(satAmount) + Number(tipAmountSats)
-                  : Number(fiatAmount) + Number(tipAmountFiat),
+                  ? (Number(satAmount) + Number(tipAmountSats)).toFixed(0)
+                  : (Number(fiatAmount) + Number(tipAmountFiat)).toFixed(2),
                 fiatCurrency: currentUserSession.account.storeCurrency || "USD",
                 showSats: currentSettings.displayCurrency.isSats,
                 isWord: currentSettings.displayCurrency.isWord,

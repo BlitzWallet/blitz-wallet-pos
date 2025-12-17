@@ -212,8 +212,8 @@ function POSPage() {
               {formatBalanceAmount(
                 displayCorrectDenomination({
                   amount: currentSettings?.displayCurrency?.isSats
-                    ? totalAmount || "0"
-                    : (totalAmount / 100).toFixed(2) || "0.00",
+                    ? chargeAmount || "0"
+                    : (chargeAmount / 100).toFixed(2) || "0.00",
                   fiatCurrency:
                     currentUserSession.account.storeCurrency || "USD",
                   showSats: currentSettings.displayCurrency.isSats,
@@ -225,8 +225,8 @@ function POSPage() {
               {formatBalanceAmount(
                 displayCorrectDenomination({
                   amount: !currentSettings?.displayCurrency?.isSats
-                    ? ((totalAmount / 100) * dollarSatValue).toFixed(2)
-                    : (totalAmount / dollarSatValue).toFixed(2),
+                    ? ((chargeAmount / 100) * dollarSatValue).toFixed(2)
+                    : (chargeAmount / dollarSatValue).toFixed(2),
                   fiatCurrency:
                     currentUserSession.account.storeCurrency || "USD",
                   showSats: !currentSettings.displayCurrency.isSats,

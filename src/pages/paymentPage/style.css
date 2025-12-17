@@ -1,6 +1,5 @@
 .PaymentPage-Container-globalOuter {
   width: 100%;
-
   display: flex;
   flex-direction: column;
 }
@@ -92,7 +91,7 @@
 }
 /* Stale state */
 .stale-state-container {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
