@@ -113,3 +113,74 @@
   border-radius: 8px;
   cursor: pointer;
 }
+
+.swap-status {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: var(--lightModeBackgroundOffset);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.swap-status-text {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.swap-status-confirmations {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.change-payment-method-btn {
+  margin-top: 15px;
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.change-payment-method-btn:hover {
+  background-color: var(--primary);
+  color: var(--darkModeText);
+}
+
+.payment-method-info-banner {
+  margin: 15px 0;
+  padding: 12px;
+  background-color: rgba(3, 117, 246, 0.1);
+  border-left: 4px solid var(--primary);
+  border-radius: 4px;
+}
+
+.payment-method-info-banner p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.stablecoin-amount-display {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: var(--lightModeBackgroundOffset);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stablecoin-amount-display p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.stablecoin-amount-display .amount {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--primary);
+}

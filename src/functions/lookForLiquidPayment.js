@@ -5,10 +5,10 @@ export default async function getLiquidAddressInfo({ address }) {
   try {
     const response = await fetch(
       `${
-        process.env.REACT_APP_ENVIRONMENT === "testnet"
+        process.env.VITE_ENVIRONMENT === "testnet"
           ? liquidTestnet
           : liquidMainnet
-      }address/${address}/txs`
+      }address/${address}/txs`,
     );
 
     return await response.json();

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/logo.png" />
+    <link rel="icon" href="/src/assets/logo.png" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
@@ -13,21 +13,9 @@
       name="description"
       content="Blitz Wallet POS is a powerful online terminal that enables businesses to seamlessly accept Bitcoin Lightning payments remotely, directly into their Blitz Wallet account."
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon512_rounded.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <link rel="apple-touch-icon" href="/src/assets/icon512_rounded.png" />
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+    <link rel="manifest" href="/src/assets/manifest.json" />
 
     <meta
       name="keywords"
@@ -45,7 +33,7 @@
       property="og:description"
       content="Blitz Wallet POS makes it easy for businesses to accept Bitcoin Lightning payments securely and remotely."
     />
-    <meta property="og:image" content="%PUBLIC_URL%/icon512_rounded.png" />
+    <meta property="og:image" content="/src/assets/icon512_rounded.png" />
     <meta property="og:url" content="https://pay.blitzwalletapp.com" />
 
     <!-- Twitter Meta Tags -->
@@ -58,7 +46,7 @@
       name="twitter:description"
       content="A seamless way for businesses to accept Bitcoin Lightning payments remotely with Blitz Wallet POS."
     />
-    <meta name="twitter:image" content="%PUBLIC_URL%/icon512_rounded.png" />
+    <meta name="twitter:image" content="/src/assets/icon512_rounded.png" />
 
     <title>Blitz Wallet POS | Accept Bitcoin Lightning Payments</title>
   </head>
@@ -89,5 +77,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script type="module" src="/src/index.jsx"></script>
   </body>
 </html>

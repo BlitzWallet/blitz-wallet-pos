@@ -31,7 +31,7 @@ import { getSwapStatus } from "./swapStatus";
 export async function claimUnclaimedSwaps(claimInfo) {
   init(await zkpInit());
   let claimTx;
-  const network = getNetwork(process.env.REACT_APP_ENVIRONMENT);
+  const network = getNetwork(process.env.VITE_ENVIRONMENT);
   const { createdResponse, destinationAddress, keys, preimage } = claimInfo;
 
   try {
@@ -48,7 +48,7 @@ export async function claimUnclaimedSwaps(claimInfo) {
     ]);
     const tweakedKey = TaprootUtils.tweakMusig(
       musig,
-      SwapTreeSerializer.deserializeSwapTree(createdResponse.swapTree).tree
+      SwapTreeSerializer.deserializeSwapTree(createdResponse.swapTree).tree,
     );
 
     // Parse the lockup transaction and find the output relevant for the swap
@@ -83,13 +83,13 @@ export async function claimUnclaimedSwaps(claimInfo) {
         fee,
         true,
         network,
-        address.fromConfidential(destinationAddress).blindingKey
-      )
+        address.fromConfidential(destinationAddress).blindingKey,
+      ),
     );
 
     console.log("Getting partial signature from Boltz");
     const boltzSig = await fetchFunction(
-      `${getBoltzApiUrl(process.env.REACT_APP_ENVIRONMENT)}/v2/swap/reverse/${
+      `${getBoltzApiUrl(process.env.VITE_ENVIRONMENT)}/v2/swap/reverse/${
         createdResponse.id
       }/claim`,
       {
@@ -98,7 +98,7 @@ export async function claimUnclaimedSwaps(claimInfo) {
         preimage: preimage.toString("hex"),
         pubNonce: Buffer.from(musig.getPublicNonce()).toString("hex"),
       },
-      "post"
+      "post",
     );
 
     // Aggregate the nonces
@@ -113,15 +113,15 @@ export async function claimUnclaimedSwaps(claimInfo) {
         [swapOutput.script],
         [{ asset: swapOutput.asset, value: swapOutput.value }],
         Transaction.SIGHASH_DEFAULT,
-        network.genesisBlockHash
-      )
+        network.genesisBlockHash,
+      ),
     );
 
     // Add the partial signature from Boltz
 
     musig.addPartial(
       boltzPublicKey,
-      Buffer.from(boltzSig.partialSignature, "hex")
+      Buffer.from(boltzSig.partialSignature, "hex"),
     );
 
     // Create our partial signature
@@ -132,24 +132,24 @@ export async function claimUnclaimedSwaps(claimInfo) {
 
     // save claimtx hex on claimInfo
     claimInfo.claimTx = claimTx.toHex();
-    saveClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
+    saveClaim(claimInfo, process.env.VITE_ENVIRONMENT);
 
     console.log("Broadcasting claim transaction");
 
     const didBroadcast = fetchFunction(
       `${getBoltzApiUrl(
-        process.env.REACT_APP_ENVIRONMENT
+        process.env.VITE_ENVIRONMENT,
       )}/v2/chain/L-BTC/transaction`,
       {
         hex: claimTx.toHex(),
       },
-      "post"
+      "post",
     );
 
     if (!didBroadcast) throw Error("did not broadcast");
 
     claimInfo.claimed = true;
-    removeClaim(claimInfo, process.env.REACT_APP_ENVIRONMENT);
+    removeClaim(claimInfo, process.env.VITE_ENVIRONMENT);
     return true;
   } catch (err) {
     console.log(`Error when constructing claim tx: ${err}`);

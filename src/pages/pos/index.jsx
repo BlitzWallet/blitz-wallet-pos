@@ -1,21 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { setupSession } from "../../functions/getUserFromFirebase";
-import EnterBitcoinPrice from "../../components/popup/enterBitcoinPrice";
-import ErrorPopup from "../../components/errorScreen";
-import getCurrentUser from "../../hooks/getCurrnetUser";
-import { useGlobalContext } from "../../contexts/posContext";
-import PosNavbar from "../../components/nav";
-import logout from "../../functions/logout";
-import FullLoadingScreen from "../../components/loadingScreen.js";
+import { setupSession } from "../../functions/getUserFromFirebase.js";
+import EnterBitcoinPrice from "../../components/popup/enterBitcoinPrice.jsx";
+import ErrorPopup from "../../components/errorScreen/index.jsx";
+import getCurrentUser from "../../hooks/getCurrnetUser.js";
+import { useGlobalContext } from "../../contexts/posContext.jsx";
+import PosNavbar from "../../components/nav/index.jsx";
+import logout from "../../functions/logout.js";
+import FullLoadingScreen from "../../components/loadingScreen.js/index.jsx";
 import { removeLocalStorageItem } from "../../functions/localStorage.js";
-import EnterServerName from "../../components/popup/enterServerName.js";
-import CustomKeyboard from "../../components/keypad/index.js";
+import EnterServerName from "../../components/popup/enterServerName.jsx";
+import CustomKeyboard from "../../components/keypad/index.jsx";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination.js";
 import { formatBalanceAmount } from "../../functions/formatNumber.js";
-import ItemsList from "../../components/itemsList/index.js";
-import { createSparkWallet } from "../../functions/spark.js";
+import ItemsList from "../../components/itemsList/index.jsx";
 
 function POSPage() {
   const User = getCurrentUser();
@@ -56,13 +55,6 @@ function POSPage() {
 
   const canReceivePayment =
     totalAmount != 0 && convertedSatAmount >= minimumPaymentAmount;
-
-  useEffect(() => {
-    async function getSparkInvoice() {
-      await createSparkWallet();
-    }
-    getSparkInvoice();
-  }, []);
 
   useEffect(() => {
     if (stopClearOnFirstLoad.current) {
@@ -193,7 +185,7 @@ function POSPage() {
                             currentUserSession.account.storeCurrency || "USD",
                           showSats: currentSettings.displayCurrency.isSats,
                           isWord: currentSettings.displayCurrency.isWord,
-                        })
+                        }),
                       );
                     })
                     .join(" + ")}
@@ -218,7 +210,7 @@ function POSPage() {
                     currentUserSession.account.storeCurrency || "USD",
                   showSats: currentSettings.displayCurrency.isSats,
                   isWord: currentSettings.displayCurrency.isWord,
-                })
+                }),
               )}
             </div>
             <div className="POS-AltAmount">
@@ -231,7 +223,7 @@ function POSPage() {
                     currentUserSession.account.storeCurrency || "USD",
                   showSats: !currentSettings.displayCurrency.isSats,
                   isWord: currentSettings.displayCurrency.isWord,
-                })
+                }),
               )}
             </div>
           </div>
@@ -287,7 +279,7 @@ function POSPage() {
                     currentUserSession.account.storeCurrency || "USD",
                   showSats: currentSettings.displayCurrency.isSats,
                   isWord: currentSettings.displayCurrency.isWord,
-                })
+                }),
               )}`}
             </button>
             <div className="POS-denominationDisclaimer">
