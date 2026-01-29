@@ -1,14 +1,9 @@
 import "./style.css";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
-import checkAnimation from "../../../public/assets/checkmark.json";
-import getCurrentUser from "../../hooks/getCurrnetUser";
-import { useNavigate } from "react-router-dom";
+import checkAnimation from "/src/assets/checkmark.json";
 
 export default function ConfirmPaymentScreen({ clearSettings }) {
-  const user = getCurrentUser();
-
-  const navigate = useNavigate();
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
@@ -35,7 +30,4 @@ export default function ConfirmPaymentScreen({ clearSettings }) {
       </div>
     </div>
   );
-  function clearSettings() {
-    navigate(`/${user}`, { replace: true });
-  }
 }
