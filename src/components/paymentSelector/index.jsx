@@ -10,8 +10,6 @@ export default function PaymentMethodSelector({
 }) {
   const { isInitialized } = useLendaSwap();
 
-  console.log(isInitialized, "testing");
-
   const hasSparkSupport = !!currentUserSession?.account?.sparkPubKey;
 
   const paymentMethods = [
@@ -19,12 +17,14 @@ export default function PaymentMethodSelector({
       id: "lightning",
       name: "BTC",
       description: "Lightning network",
+      network: "bitcoin",
       enabled: hasSparkSupport,
       disabledReason: "Lightning not configured",
     },
     {
-      id: "USDT_pol",
+      id: "USDT0_pol",
       name: "USDT",
+      network: "polygon",
       icon: null,
       description: "Polygon Network",
       enabled: isInitialized,
@@ -32,6 +32,7 @@ export default function PaymentMethodSelector({
     {
       id: "USDT_eth",
       name: "USDT",
+      network: "ethereum",
       icon: null,
       description: "Ethereum Network",
       enabled: isInitialized,
@@ -39,6 +40,7 @@ export default function PaymentMethodSelector({
     {
       id: "USDC_pol",
       name: "USDC",
+      network: "polygon",
       icon: null,
       description: "Polygon Network",
       enabled: isInitialized,
@@ -46,6 +48,7 @@ export default function PaymentMethodSelector({
     {
       id: "USDC_eth",
       name: "USDC",
+      network: "ethereum",
       icon: null,
       description: "Ethereum Network",
       enabled: isInitialized,
@@ -63,7 +66,7 @@ export default function PaymentMethodSelector({
           return (
             <button
               key={method.id}
-              onClick={() => method.enabled && onSelect(method.id)}
+              onClick={() => method.enabled && onSelect(method)}
               disabled={isDisabled}
               className={`payment-method-option ${
                 isSelected ? "selected" : ""

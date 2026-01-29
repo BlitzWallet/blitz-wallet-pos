@@ -1,8 +1,8 @@
 import LoadingAnimation from "../loadingAnimation";
 import "./style.css";
-export default function FullLoadingScreen({ text = "" }) {
+export default function FullLoadingScreen({ text = "", containerStyles = {} }) {
   return (
-    <div className="FullLoadingScreen">
+    <div style={containerStyles} className="FullLoadingScreen">
       <div className="POS-LoadingScreen">
         <LoadingAnimation />
         <p className="POS-LoadingScreenDescription">{text}</p>

@@ -14,18 +14,21 @@ export async function createSparkWallet() {
 
   sparkWalletPromise = (async () => {
     let wallet;
+    let walletMnemonic;
     let numberOfTries = 0;
     const maxNumberOfTries = 5;
 
     while (numberOfTries < maxNumberOfTries && !wallet) {
       numberOfTries++;
       try {
-        const { wallet: w } = await SparkWallet.initialize({
+        const { wallet: w, mnemonic } = await SparkWallet.initialize({
           options: {
             network: "MAINNET",
           },
         });
+        walletMnemonic = mnemonic;
         wallet = w;
+        console.log("spark wallet created successfully");
         break;
       } catch (err) {
         console.log("Spark wallet initialization error", err.message);
@@ -37,7 +40,7 @@ export async function createSparkWallet() {
     }
 
     sparkWallet = wallet;
-    return wallet;
+    return { wallet, walletMnemonic };
   })();
 
   return await sparkWalletPromise;
@@ -80,7 +83,7 @@ export const receiveSparkLightningPayment = async ({
 
 export const getSparkTransactions = async (
   transferCount = 100,
-  offsetIndex
+  offsetIndex,
 ) => {
   try {
     if (!sparkWallet) throw new Error("sparkWallet not initialized");
@@ -131,14 +134,14 @@ export default async function lookForPaidPayment(convertedSatAmount) {
       } catch (error) {
         console.error(
           `Failed to check payment status for ${invoice.id}:`,
-          error
+          error,
         );
       }
     }
 
     if (removeIds.length) {
       const newListOfIds = savedPaymentCodes.filter(
-        (item) => !removeIds.includes(item.id)
+        (item) => !removeIds.includes(item.id),
       );
       saveToLocalStorage(JSON.stringify(newListOfIds), "spark_pending_ids");
     }
