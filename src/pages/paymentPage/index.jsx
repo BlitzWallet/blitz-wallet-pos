@@ -26,34 +26,6 @@ import {
 } from "../../functions/lendaswapUtils.js";
 import { useLendaSwap } from "../../contexts/lendaswapContext.jsx";
 
-/**
- * Build an EIP-681 payment URI for ERC20 token transfers.
- * When scanned by MetaMask or other EIP-681 wallets, this triggers
- * an ERC20 transfer() call — not a native ETH/MATIC send.
- *
- * Format: ethereum:<tokenAddress>@<chainId>/transfer?address=<recipient>&uint256=<amount>
- *
- * @param {string} tokenAddress - ERC20 token contract address
- * @param {string} recipientAddress - Address to receive the tokens (HTLC contract)
- * @param {number|string} amount - Amount in human-readable units (e.g. 0.85698)
- * @param {number} decimals - Token decimals (6 for USDC/USDT)
- * @param {string} network - "polygon" or "ethereum"
- * @returns {string} EIP-681 URI
- */
-function buildERC20PaymentURI(
-  tokenAddress,
-  recipientAddress,
-  amount,
-  decimals,
-  network,
-) {
-  const chainId = network === "polygon" ? 137 : 1;
-  // Convert human-readable amount to base units (e.g. 0.85698 * 10^6 = 856980)
-  const amountBigInt = BigInt(Math.round(parseFloat(amount) * 10 ** decimals));
-
-  return `ethereum:${tokenAddress}@${chainId}/transfer?address=${recipientAddress}&uint256=${amountBigInt}`;
-}
-
 // Utility component for the countdown timer
 const InvoiceTimer = ({ expirySeconds = 300 }) => {
   const [timeLeft, setTimeLeft] = useState(expirySeconds);
@@ -232,16 +204,9 @@ export default function EnhancedPaymentPage() {
       const displayAmount = String(swap.sourceAmount);
       setStablecoinAmount(displayAmount);
 
-      // Build EIP-681 URI so MetaMask triggers an ERC20 transfer() when scanned
-      const paymentURI = buildERC20PaymentURI(
-        swap.source_token_address,
-        swap.htlc_address_evm,
-        displayAmount,
-        6, // USDC/USDT decimals
-        selectedPaymentMethod.network,
-      );
-      console.log("Payment URI:", paymentURI);
-      setPaymentAddress(paymentURI);
+      // Not sure what to do here
+
+      setPaymentAddress("");
       setLoadingMessage("");
 
       // Start monitoring swap status — the customer sends directly to the HTLC
