@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./enterServerName.css";
 import { saveToLocalStorage } from "../../functions/localStorage";
 import { SERVER_LOCAL_STORAGE } from "../../constants";
@@ -6,9 +6,37 @@ import { useGlobalContext } from "../../contexts/posContext";
 import CustomTextInput from "../textInput";
 export default function EnterServerName({ setPopupType }) {
   const [name, setName] = useState("");
-  const { serverName, setServerName } = useGlobalContext();
+  const { serverName, setServerName, setDidConfirmSavedUsername } =
+    useGlobalContext();
+
+  const closePopup = () => {
+    setPopupType((prev) => {
+      let newObject = {};
+      Object.entries(prev).forEach((entry) => {
+        newObject[entry[0]] = false;
+      });
+      return newObject;
+    });
+  };
+
+  const handleNameInput = () => {
+    if (!serverName && !name) return;
+    if (name) {
+      saveToLocalStorage(name, SERVER_LOCAL_STORAGE);
+      setServerName(name);
+    }
+    setDidConfirmSavedUsername(true);
+    closePopup();
+  };
+
+  const handleContainerClick = (event) => {
+    if (event.target === event.currentTarget) {
+      closePopup(); // call your close function here
+    }
+  };
+
   return (
-    <div className="namePopup-Container">
+    <div onClick={handleContainerClick} className="namePopup-Container">
       <div className="ChangePaymentContainer">
         <p className="ChangePaymentContainer-Desc">
           {serverName
@@ -22,22 +50,7 @@ export default function EnterServerName({ setPopupType }) {
           customStyles={{ marginBottom: "30px" }}
         />
 
-        <button
-          onClick={() => {
-            if (!serverName && !name) return;
-            if (name) {
-              saveToLocalStorage(name, SERVER_LOCAL_STORAGE);
-              setServerName(name);
-            }
-            setPopupType((prev) => {
-              let newObject = {};
-              Object.entries(prev).forEach((entry) => {
-                newObject[entry[0]] = false;
-              });
-              return newObject;
-            });
-          }}
-        >
+        <button onClick={handleNameInput}>
           {serverName && !name ? "Keep" : "Save"}
         </button>
       </div>

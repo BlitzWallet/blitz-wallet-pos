@@ -193,7 +193,7 @@ function POSPage() {
                             currentUserSession.account.storeCurrency || "USD",
                           showSats: currentSettings.displayCurrency.isSats,
                           isWord: currentSettings.displayCurrency.isWord,
-                        })
+                        }),
                       );
                     })
                     .join(" + ")}
@@ -218,7 +218,7 @@ function POSPage() {
                     currentUserSession.account.storeCurrency || "USD",
                   showSats: currentSettings.displayCurrency.isSats,
                   isWord: currentSettings.displayCurrency.isWord,
-                })
+                }),
               )}
             </div>
             <div className="POS-AltAmount">
@@ -231,7 +231,7 @@ function POSPage() {
                     currentUserSession.account.storeCurrency || "USD",
                   showSats: !currentSettings.displayCurrency.isSats,
                   isWord: currentSettings.displayCurrency.isWord,
-                })
+                }),
               )}
             </div>
           </div>
@@ -287,7 +287,7 @@ function POSPage() {
                     currentUserSession.account.storeCurrency || "USD",
                   showSats: currentSettings.displayCurrency.isSats,
                   isWord: currentSettings.displayCurrency.isWord,
-                })
+                }),
               )}`}
             </button>
             <div className="POS-denominationDisclaimer">
@@ -329,6 +329,10 @@ function POSPage() {
 
   async function handleInvoice() {
     if (!canReceivePayment) return;
+    if (!serverName) {
+      handleOpenChangeUsername();
+      return;
+    }
     const satValue = currentSettings.displayCurrency.isSats
       ? totalAmount
       : dollarSatValue * (totalAmount / 100);

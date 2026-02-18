@@ -5,8 +5,7 @@ import "./style.css";
 import { useGlobalContext } from "../../contexts/posContext";
 
 export default function PosNavbar({ backFunction, openNamePopupFunction }) {
-  const { didConfirmSavedUsername, setDidConfirmSavedUsername } =
-    useGlobalContext();
+  const { didConfirmSavedUsername } = useGlobalContext();
   const User = getCurrentUser();
   const { setDisplaySettings } = useSettingsDisplay();
   const location = useLocation();
@@ -27,7 +26,6 @@ export default function PosNavbar({ backFunction, openNamePopupFunction }) {
           {!didConfirmSavedUsername && (
             <img
               onClick={() => {
-                setDidConfirmSavedUsername(true);
                 openNamePopupFunction();
               }}
               alt="Back arrow"
