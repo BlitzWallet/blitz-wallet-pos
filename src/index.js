@@ -19,6 +19,8 @@ import AddTipPage from "./pages/tip";
 import { GlobalSettingsDisplay } from "./contexts/settingsDisplay";
 import SettingsPage from "./pages/settings";
 import AddTipsUsername from "./pages/addTipUsername";
+import { GlobalErrorDisplay } from "./contexts/errorDisplay";
+import ErrorPopup from "./components/errorScreen";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -27,45 +29,51 @@ root.render(
     <GlobalPOSContext>
       <GlobalRescanLiquidSwaps>
         <GlobalSettingsDisplay>
-          <BrowserRouter>
-            <NavigateScreen />
-            <SettingsPage />
-            <Routes>
-              {/* Hero — skip to POS if already set up */}
-              <Route
-                path="/"
-                element={
-                  getLocalStorageItem(ACCOUNT_LOCAL_STORAGE) ? (
-                    <Navigate
-                      to={`/${getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)}`}
-                      replace
-                    />
-                  ) : (
-                    <HeroPage />
-                  )
-                }
-              />
-              {/* Onboarding step 1: name the POS */}
-              <Route path="/setup" element={<SetupPage />} />
-              {/* Onboarding step 2: add tips username */}
-              <Route path="/createTipsUsername" element={<AddTipsUsername />} />
+          <GlobalErrorDisplay>
+            <BrowserRouter>
+              <NavigateScreen />
+              <SettingsPage />
+              <ErrorPopup />
+              <Routes>
+                {/* Hero — skip to POS if already set up */}
+                <Route
+                  path="/"
+                  element={
+                    getLocalStorageItem(ACCOUNT_LOCAL_STORAGE) ? (
+                      <Navigate
+                        to={`/${getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)}`}
+                        replace
+                      />
+                    ) : (
+                      <HeroPage />
+                    )
+                  }
+                />
+                {/* Onboarding step 1: name the POS */}
+                <Route path="/setup" element={<SetupPage />} />
+                {/* Onboarding step 2: add tips username */}
+                <Route
+                  path="/createTipsUsername"
+                  element={<AddTipsUsername />}
+                />
 
-              {/* POS Page Route */}
-              <Route path="/:username" element={<POSPage />} />
-              <Route path="/:username/tip" element={<AddTipPage />} />
-              <Route path="/:username/checkout" element={<PaymentPage />} />
-              <Route
-                path="/:username/confirmed"
-                element={<ConfirmPaymentScreen />}
-              />
-              {/* Catch all route */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </BrowserRouter>
+                {/* POS Page Route */}
+                <Route path="/:username" element={<POSPage />} />
+                <Route path="/:username/tip" element={<AddTipPage />} />
+                <Route path="/:username/checkout" element={<PaymentPage />} />
+                <Route
+                  path="/:username/confirmed"
+                  element={<ConfirmPaymentScreen />}
+                />
+                {/* Catch all route */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </BrowserRouter>
+          </GlobalErrorDisplay>
         </GlobalSettingsDisplay>
       </GlobalRescanLiquidSwaps>
     </GlobalPOSContext>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 
 // If you want your app to work offline and load faster, you can change

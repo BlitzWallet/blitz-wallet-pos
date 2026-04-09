@@ -5,20 +5,38 @@ import { saveToLocalStorage } from "../../functions/localStorage";
 import { useGlobalContext } from "../../contexts/posContext";
 import { ACCOUNT_LOCAL_STORAGE } from "../../constants";
 import CustomTextInput from "../../components/textInput";
-import { createSparkWallet } from "../../functions/spark";
 import { ArrowLeft } from "lucide-react";
+import { setupSession } from "../../functions/getUserFromFirebase";
+import { useErrorDisplay } from "../../contexts/errorDisplay";
+import FullLoadingScreen from "../../components/loadingScreen.js";
 
 function SetupPage() {
   const { setUser } = useGlobalContext();
   const [posName, setPosName] = useState("");
   const navigate = useNavigate();
+  const { showError } = useErrorDisplay();
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function init() {
-      await createSparkWallet();
+  const handleUsername = async () => {
+    try {
+      if (!posName) return;
+      setLoading(true);
+      const userData = await setupSession(posName.toLowerCase());
+      console.log(userData);
+      saveToLocalStorage(posName, ACCOUNT_LOCAL_STORAGE);
+      setUser(posName);
+      navigate("/createTipsUsername");
+    } catch (err) {
+      console.log(err);
+      showError("No point-of-sale account exists for this username");
+    } finally {
+      setLoading(false);
     }
-    init();
-  }, []);
+  };
+
+  if (loading) {
+    return <FullLoadingScreen />;
+  }
 
   return (
     <div className="ob-page">
@@ -43,16 +61,7 @@ function SetupPage() {
           />
         </div>
 
-        <button
-          className="ob-cta"
-          disabled={!posName}
-          onClick={() => {
-            if (!posName) return;
-            saveToLocalStorage(posName, ACCOUNT_LOCAL_STORAGE);
-            setUser(posName);
-            navigate("/createTipsUsername");
-          }}
-        >
+        <button className="ob-cta" disabled={!posName} onClick={handleUsername}>
           Continue
         </button>
       </div>

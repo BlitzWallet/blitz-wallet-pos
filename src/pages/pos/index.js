@@ -3,7 +3,6 @@ import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { setupSession } from "../../functions/getUserFromFirebase";
 import EnterBitcoinPrice from "../../components/popup/enterBitcoinPrice";
-import ErrorPopup from "../../components/errorScreen";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import { useGlobalContext } from "../../contexts/posContext";
 import PosNavbar from "../../components/nav";
@@ -16,6 +15,7 @@ import displayCorrectDenomination from "../../functions/displayCorrectDenominati
 import { formatBalanceAmount } from "../../functions/formatNumber.js";
 import ItemsList from "../../components/itemsList/index.js";
 import { createSparkWallet } from "../../functions/spark.js";
+import { useErrorDisplay } from "../../contexts/errorDisplay";
 
 function POSPage() {
   const User = getCurrentUser();
@@ -27,12 +27,12 @@ function POSPage() {
     dollarSatValue,
     toggleSettings,
   } = useGlobalContext();
+  const { showError } = useErrorDisplay();
   const didLoadPOS = useRef(false);
   const [chargeAmount, setChargeAmount] = useState("");
   const [popupType, setPopupType] = useState({
     openPopup: false,
     bitcoinPrice: false,
-    errorScreen: false,
     serverName: false,
   });
   const [activeInput, setActiveInput] = useState("keypad");
@@ -80,29 +80,13 @@ function POSPage() {
         data = await setupSession(User.toLowerCase());
       } catch (err) {
         console.log("init page get single contact error", err);
-        setHasError("Unable to authenticate request");
-        setPopupType((prev) => {
-          let newObject = {};
-          Object.entries(prev).forEach((entry) => {
-            newObject[entry[0]] =
-              entry[0] === "errorScreen" || entry[0] === "openPopup";
-          });
-          return newObject;
-        });
+        showError("Unable to authenticate request", { customFunction: logout });
         return;
       }
       console.log("did retrive point-of-sale data", !!data);
 
       if (!data) {
-        setPopupType((prev) => {
-          let newObject = {};
-          Object.entries(prev).forEach((entry) => {
-            newObject[entry[0]] =
-              entry[0] === "errorScreen" || entry[0] === "openPopup";
-          });
-          return newObject;
-        });
-        setHasError("Unable to find point-of-sale");
+        showError("Unable to find point-of-sale", { customFunction: logout });
         return;
       }
 
@@ -152,15 +136,6 @@ function POSPage() {
         <>
           {popupType.bitcoinPrice ? (
             <EnterBitcoinPrice setPopupType={setPopupType} />
-          ) : (
-            <div />
-          )}
-          {popupType.errorScreen ? (
-            <ErrorPopup
-              customFunction={logout}
-              navigatePath="../"
-              errorMessage={hasError}
-            />
           ) : (
             <div />
           )}

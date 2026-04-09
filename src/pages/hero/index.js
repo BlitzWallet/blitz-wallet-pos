@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../logo.png";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
+import { createSparkWallet } from "../../functions/spark";
 
 function HeroPage() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function init() {
+      await createSparkWallet();
+    }
+    init();
+  }, []);
 
   return (
     <div className="hero">
