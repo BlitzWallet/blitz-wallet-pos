@@ -32,7 +32,7 @@ export async function createSparkWallet() {
       }
       if (!wallet) {
         console.log(`Running attempt ${numberOfTries} of ${maxNumberOfTries}`);
-        await new Promise((res) => setTimeout(res, 2000));
+        await new Promise((res) => setTimeout(res, 15000));
       }
     }
 
@@ -80,7 +80,7 @@ export const receiveSparkLightningPayment = async ({
 
 export const getSparkTransactions = async (
   transferCount = 100,
-  offsetIndex
+  offsetIndex,
 ) => {
   try {
     if (!sparkWallet) throw new Error("sparkWallet not initialized");
@@ -131,14 +131,14 @@ export default async function lookForPaidPayment(convertedSatAmount) {
       } catch (error) {
         console.error(
           `Failed to check payment status for ${invoice.id}:`,
-          error
+          error,
         );
       }
     }
 
     if (removeIds.length) {
       const newListOfIds = savedPaymentCodes.filter(
-        (item) => !removeIds.includes(item.id)
+        (item) => !removeIds.includes(item.id),
       );
       saveToLocalStorage(JSON.stringify(newListOfIds), "spark_pending_ids");
     }

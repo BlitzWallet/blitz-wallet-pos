@@ -6,7 +6,7 @@
   "dependencies": {
     "@bitcoinerlab/secp256k1": "^1.0.5",
     "@boltz/bitcoin-ops": "^2.0.0",
-    "@buildonspark/spark-sdk": "^0.6.0",
+    "@buildonspark/spark-sdk": "^0.6.7",
     "@noble/curves": "^1.4.0",
     "@noble/secp256k1": "^2.2.3",
     "@scure/base": "^1.1.6",
@@ -34,6 +34,7 @@
     "global": "^4.4.0",
     "liquidjs-lib": "^6.0.2-liquid.34",
     "lottie-react": "^2.4.0",
+    "lucide-react": "^1.8.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "qrcode.react": "^3.1.0",

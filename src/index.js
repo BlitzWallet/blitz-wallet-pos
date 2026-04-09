@@ -6,7 +6,8 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import POSPage from "./pages/pos";
-import HomePage from "./pages/home";
+import HeroPage from "./pages/hero";
+import SetupPage from "./pages/setup";
 import { getLocalStorageItem } from "./functions/localStorage";
 import { GlobalPOSContext } from "./contexts/posContext";
 import PaymentPage from "./pages/paymentPage";
@@ -30,7 +31,7 @@ root.render(
             <NavigateScreen />
             <SettingsPage />
             <Routes>
-              {/* Check if username exists in local storage */}
+              {/* Hero — skip to POS if already set up */}
               <Route
                 path="/"
                 element={
@@ -40,11 +41,13 @@ root.render(
                       replace
                     />
                   ) : (
-                    <HomePage />
+                    <HeroPage />
                   )
                 }
               />
-              {/* First time add tips username */}
+              {/* Onboarding step 1: name the POS */}
+              <Route path="/setup" element={<SetupPage />} />
+              {/* Onboarding step 2: add tips username */}
               <Route path="/createTipsUsername" element={<AddTipsUsername />} />
 
               {/* POS Page Route */}

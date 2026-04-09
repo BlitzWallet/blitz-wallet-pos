@@ -1,0 +1,135 @@
+/* Shared styles for onboarding form screens (Setup + AddTipsUsername) */
+
+.ob-page {
+  min-height: 100dvh;
+  background: var(--background);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.ob-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  background: var(--lightModeBackground);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lightModeText);
+  transition: background 0.15s ease;
+  z-index: 10;
+  padding: unset;
+}
+
+.ob-back:active {
+  background: var(--lightModeBackgroundOffset);
+}
+
+.ob-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 88px 0 20px;
+  max-width: 480px;
+  width: 90%;
+  margin: 0 auto;
+  animation: obFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes obFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ob-step-badge {
+  display: inline-block;
+  background: var(--primary);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  width: fit-content;
+}
+
+.ob-heading {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.1;
+  color: var(--lightModeText);
+  margin: 0 0 14px;
+  letter-spacing: -0.75px;
+}
+
+.ob-desc {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--gray);
+  margin: 0 0 40px;
+  line-height: 1.55;
+}
+
+.ob-input-wrap {
+  margin-bottom: 24px;
+}
+
+.ob-input-wrap #Custom-input {
+  width: 100%;
+  padding: 15px 16px;
+  border-radius: 12px;
+  background: var(--lightModeBackground);
+  border: 1.5px solid transparent;
+  color: var(--lightModeText);
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+  outline: none;
+}
+
+.ob-input-wrap #Custom-input:focus {
+  border-color: var(--primary);
+}
+
+.ob-cta {
+  width: 100%;
+  padding: 17px;
+  background: var(--primary);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  margin-top: auto;
+}
+
+.ob-cta:active {
+  transform: scale(0.98);
+  box-shadow: 0 3px 10px rgba(3, 117, 246, 0.2);
+}
+
+.ob-cta:disabled {
+  opacity: 0.45;
+  cursor: default;
+  box-shadow: none;
+}

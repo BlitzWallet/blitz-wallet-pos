@@ -33,14 +33,6 @@ export default function PosNavbar({ backFunction, openNamePopupFunction }) {
               src="/assets/icons/warningBlue.png"
             />
           )}
-          <img
-            onClick={() => {
-              setDisplaySettings(true);
-            }}
-            alt="Back arrow"
-            className="nav-settings"
-            src="/assets/icons/settings.png"
-          />
         </>
       )}
     </div>

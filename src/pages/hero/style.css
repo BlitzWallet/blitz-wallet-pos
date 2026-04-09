@@ -1,0 +1,121 @@
+.hero {
+  min-height: 100dvh;
+  background-color: #00254e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grid texture */
+.hero-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+      rgba(3, 117, 246, 0.06) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(3, 117, 246, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+}
+
+/* Radial vignette to focus the center */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 70% at 50% 50%,
+    transparent 30%,
+    rgba(0, 14, 30, 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0;
+  max-width: 450px;
+  width: 90%;
+  height: 100dvh;
+  position: relative;
+  z-index: 1;
+  animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-logo-wrap {
+  position: relative;
+  margin-bottom: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.hero-logo {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  z-index: 1;
+  animation: logoPulse 3.5s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 18px rgba(3, 117, 246, 0.45));
+  }
+  50% {
+    filter: drop-shadow(0 0 38px rgba(3, 117, 246, 0.85));
+  }
+}
+
+.hero-headline {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: min(11cqw, 56px);
+  line-height: 1.08;
+  color: #ffffff;
+  margin: 0 0 20px;
+  letter-spacing: -1.5px;
+  animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.hero-cta {
+  width: 100%;
+  max-width: 340px;
+  padding: 17px;
+  background: var(--primary);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both;
+  margin-top: auto;
+}
+
+.hero-cta:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 14px rgba(3, 117, 246, 0.35);
+}

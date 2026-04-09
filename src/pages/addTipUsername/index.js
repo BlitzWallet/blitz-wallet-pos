@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import logo from "../../logo.png";
-import "./style.css";
+import React, { useState } from "react";
+import "../onboarding.css";
 import { useNavigate } from "react-router-dom";
 import { saveToLocalStorage } from "../../functions/localStorage";
 import { useGlobalContext } from "../../contexts/posContext";
 import { SERVER_LOCAL_STORAGE } from "../../constants";
 import CustomTextInput from "../../components/textInput";
+import { ArrowLeft } from "lucide-react";
 
 function AddTipsUsername() {
   const { setServerName, user } = useGlobalContext();
@@ -13,34 +13,41 @@ function AddTipsUsername() {
   const navigate = useNavigate();
 
   return (
-    <div className="addTipsUsername">
-      <header className="addTipsUsername-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
-      <main className="addTipsUsername-main">
-        <h1 className="addTipsUsername-title">Add Tips Username</h1>
-        <p className="addTipsUsername-subtitle">
-          Enter a Blitz username or a Lightning address to receive tips to. This
-          should be a personal handle that your employer can send your tips to.
+    <div className="ob-page">
+      <button className="ob-back" onClick={() => navigate("/setup")}>
+        <ArrowLeft size={18} color="#0375f6" />
+      </button>
+
+      <div className="ob-content">
+        <h1 className="ob-heading">
+          Where should
+          <br />
+          tips go?
+        </h1>
+        <p className="ob-desc">
+          A Blitz username or Lightning address for receiving tips.
         </p>
 
-        <div className="addTipsUsername-inputContainer">
-          <p>Enter tips name</p>
-          <CustomTextInput getTextInput={setName} placeholder="@username" />
+        <div className="ob-input-wrap">
+          <CustomTextInput
+            getTextInput={setName}
+            placeholder="Eg. blitz or name@domain.com"
+          />
         </div>
 
         <button
+          className="ob-cta"
+          disabled={!name}
           onClick={() => {
             if (!name) return;
             saveToLocalStorage(name, SERVER_LOCAL_STORAGE);
             setServerName(name);
             navigate(`/${user}`);
           }}
-          className="addTipsUsername-button"
         >
           Continue
         </button>
-      </main>
+      </div>
     </div>
   );
 }

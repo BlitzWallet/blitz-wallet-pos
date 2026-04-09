@@ -16,7 +16,7 @@ const POSContext = createContext();
 export const GlobalPOSContext = ({ children }) => {
   const [user, setUser] = useState(getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)); // Example state
   const [serverName, setServerName] = useState(
-    getLocalStorageItem(SERVER_LOCAL_STORAGE)
+    getLocalStorageItem(SERVER_LOCAL_STORAGE),
   ); // Example state
   const [currentUserSession, setCurrentUserSession] = useState({
     account: null,
@@ -28,10 +28,10 @@ export const GlobalPOSContext = ({ children }) => {
   const [currentSettings, setCurrentSettings] = useState(
     JSON.parse(getLocalStorageItem(POS_SETTINGS_LOCAL_STORAGE)) || {
       displayCurrency: {
-        isSats: false,
+        isSats: true,
         isWord: false,
       },
-    }
+    },
   );
 
   const toggleSettings = useCallback((newSettings) => {
@@ -39,7 +39,7 @@ export const GlobalPOSContext = ({ children }) => {
       const settingsUpdate = { ...prev, ...newSettings };
       saveToLocalStorage(
         JSON.stringify(settingsUpdate),
-        POS_SETTINGS_LOCAL_STORAGE
+        POS_SETTINGS_LOCAL_STORAGE,
       );
       return settingsUpdate;
     });
