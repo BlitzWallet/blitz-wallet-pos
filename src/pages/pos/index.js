@@ -16,6 +16,7 @@ import { formatBalanceAmount } from "../../functions/formatNumber.js";
 import ItemsList from "../../components/itemsList/index.js";
 import { createSparkWallet } from "../../functions/spark.js";
 import { useErrorDisplay } from "../../contexts/errorDisplay";
+import SwapHistoryOverlay from "../../components/swapHistoryOverlay/index.js";
 
 function POSPage() {
   const User = getCurrentUser();
@@ -38,6 +39,7 @@ function POSPage() {
   const [activeInput, setActiveInput] = useState("keypad");
   const [hasError, setHasError] = useState("");
   const [addedItems, setAddedItems] = useState([]);
+  const [showSwapHistory, setShowSwapHistory] = useState(false);
   const didInitialRender = useRef(true);
   const stopClearOnFirstLoad = useRef(true);
   const navigate = useNavigate();
@@ -131,6 +133,8 @@ function POSPage() {
           logout();
         }}
         openNamePopupFunction={handleOpenChangeUsername}
+        fromPage="home"
+        setShowSwapHistory={setShowSwapHistory}
       />
       {popupType.openPopup ? (
         <>
@@ -151,7 +155,7 @@ function POSPage() {
       {!currentUserSession.account || !currentUserSession.bitcoinPrice ? (
         <FullLoadingScreen text="Setting up the point-of-sale system" />
       ) : (
-        <div className="POS-ContentContainer">
+        <main className="POS-ContentContainer">
           {/* Amount Display Section */}
           <div className="POS-AmountDisplay">
             <div className="POS-chargeItems">
@@ -271,8 +275,12 @@ function POSPage() {
               }`}
             </div>
           </div>
-        </div>
+        </main>
       )}
+      <SwapHistoryOverlay
+        isOpen={showSwapHistory}
+        onClose={() => setShowSwapHistory(false)}
+      />
     </div>
   );
 

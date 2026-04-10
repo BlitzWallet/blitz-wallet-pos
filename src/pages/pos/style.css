@@ -6,14 +6,16 @@
 }
 
 .POS-ContentContainer {
-  width: 100%;
+  width: 90%;
+  max-width: 500px;
   min-height: calc(100dvh - 50px);
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
 }
 
 .POS-AmountDisplay {
-  padding: 3rem 1.5rem 2rem;
+  padding: 3rem 0 2rem;
   text-align: center;
 }
 
@@ -41,7 +43,6 @@
   display: flex;
   justify-content: center;
   gap: 2rem;
-  padding: 0 1.5rem;
 }
 
 .POS-TabButton {
@@ -52,13 +53,13 @@
   opacity: 0.6;
   cursor: pointer;
   border-radius: 0;
-  transition: all 0.2s;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
   font-size: 1rem;
 }
 
 .POS-TabButton.active {
   opacity: 1;
-  border-bottom-color: #111827;
+  border-bottom-color: var(--lightModeText);
 }
 
 /* Content Area */
@@ -66,7 +67,6 @@
   flex: 1;
   width: 100%;
   max-width: 500px;
-  padding: 0 1.5rem 0;
   overflow-y: auto;
   display: flex;
   justify-content: end;
@@ -82,12 +82,29 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .POS-ChargeButton {
+  width: 90%;
+  max-width: 500px;
+  padding: 17px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
   margin: 0 auto 5px;
-  transition: all 0.2s;
+}
+
+.POS-ChargeButton:active {
+  transform: scale(0.98);
+  box-shadow: 0 3px 10px rgba(3, 117, 246, 0.2);
+}
+
+.POS-ChargeButton:disabled {
+  opacity: 0.45;
 }
 
 .POS-denominationDisclaimer {
@@ -95,6 +112,11 @@
   opacity: 0.5;
   font-size: 0.75rem;
   margin: 0;
+}
+
+/* Swap History debug button */
+.POS-SwapHistoryBtn {
+  cursor: pointer;
 }
 
 /* Legacy classes - kept for compatibility */
