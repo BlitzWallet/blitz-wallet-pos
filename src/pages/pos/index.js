@@ -153,7 +153,7 @@ function POSPage() {
         <div />
       )}
       {!currentUserSession.account || !currentUserSession.bitcoinPrice ? (
-        <FullLoadingScreen text="Setting up the point-of-sale system" />
+        <FullLoadingScreen />
       ) : (
         <main className="POS-ContentContainer">
           {/* Amount Display Section */}
@@ -255,7 +255,7 @@ function POSPage() {
             <button
               onClick={handleInvoice}
               disabled={!canReceivePayment}
-              className="POS-ChargeButton"
+              className="action-button primary"
             >
               {`Charge ${formatBalanceAmount(
                 displayCorrectDenomination({

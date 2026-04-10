@@ -85,19 +85,6 @@
   margin-bottom: 20px;
 }
 
-.POS-ChargeButton {
-  width: 90%;
-  max-width: 500px;
-  padding: 17px;
-  border-radius: 14px;
-  background: var(--primary);
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  margin: 0 auto 5px;
-}
-
 .POS-ChargeButton:active {
   transform: scale(0.98);
   box-shadow: 0 3px 10px rgba(3, 117, 246, 0.2);
@@ -112,6 +99,7 @@
   opacity: 0.5;
   font-size: 0.75rem;
   margin: 0;
+  margin-top: 5px;
 }
 
 /* Swap History debug button */
