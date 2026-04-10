@@ -59,7 +59,7 @@
   color: #ffffff;
   font-family: "Poppins", sans-serif;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.5px;
   padding: 4px 12px;
   border-radius: 20px;
@@ -69,7 +69,7 @@
 
 .ob-heading {
   font-family: "Poppins", sans-serif;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 34px;
   line-height: 1.1;
   color: var(--lightModeText);
@@ -115,7 +115,7 @@
   color: #ffffff;
   font-family: "Poppins", sans-serif;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   border: none;
   border-radius: 14px;
   cursor: pointer;
