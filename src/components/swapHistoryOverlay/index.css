@@ -1,0 +1,153 @@
+.SwapHistory-Container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  background-color: var(--opacityGray);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SwapHistory-Panel {
+  width: 95%;
+  max-width: 360px;
+  max-height: 80dvh;
+  background-color: var(--darkModeText);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.SwapHistory-Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+}
+
+.SwapHistory-Title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.SwapHistory-Subtitle {
+  font-size: 0.65rem;
+  opacity: 0.4;
+  margin: 2px 0 0;
+  letter-spacing: 0.02em;
+}
+
+.SwapHistory-CloseBtn {
+  cursor: pointer;
+}
+
+.SwapHistory-CloseBtn:hover {
+  opacity: 1;
+}
+
+.SwapHistory-List {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px 0;
+}
+
+.SwapHistory-Empty {
+  text-align: center;
+  padding: 32px 16px;
+  opacity: 0.4;
+  font-size: 0.875rem;
+}
+
+.SwapHistory-Row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+.SwapHistory-Row:last-child {
+  border-bottom: none;
+}
+.SwapHistory-ChainLogo-container {
+  position: relative;
+  margin-right: 8px;
+}
+.SwapHistory-ChainLogo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.SwapHistory-CurrencyLogo {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+  flex-shrink: 0;
+  position: absolute;
+  bottom: 2px;
+  right: -5px;
+}
+
+.SwapHistory-Info {
+  flex: 1;
+  min-width: 0;
+}
+
+.SwapHistory-TopRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.SwapHistory-CurrencyBadge {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--primary);
+  background-color: rgba(3, 117, 246, 0.1);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.SwapHistory-NetworkLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.SwapHistory-QuoteId {
+  font-size: 0.7rem;
+  font-family: monospace;
+  opacity: 0.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.SwapHistory-BottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.SwapHistory-Date {
+  font-size: 0.65rem;
+  opacity: 0.4;
+}
+
+.SwapHistory-Amount {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary);
+  flex-shrink: 0;
+}
