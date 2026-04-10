@@ -31,6 +31,7 @@ function AddTipsUsername() {
         <div className="ob-input-wrap">
           <CustomTextInput
             getTextInput={setName}
+            inputText={name}
             placeholder="Eg. blitz or name@domain.com"
           />
         </div>

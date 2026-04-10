@@ -57,6 +57,7 @@ function SetupPage() {
         <div className="ob-input-wrap">
           <CustomTextInput
             getTextInput={setPosName}
+            inputText={posName}
             placeholder="Eg. Joes_Snacks"
           />
         </div>

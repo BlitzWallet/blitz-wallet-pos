@@ -1,8 +1,19 @@
 #Custom-input {
-  padding: 10px;
-  border-radius: 8px;
-  background-color: var(--lightModeBackgroundOffset);
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  padding: 15px 16px;
+  border-radius: 12px;
+  background-color: var(--darkModeText);
   border-width: 0;
   color: var(--lightModeText);
   font-size: 16px;
+  border: unset;
+  outline: none;
+
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+
+#Custom-input:focus {
+  border-color: var(--primary);
 }

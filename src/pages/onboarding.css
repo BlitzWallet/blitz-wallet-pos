@@ -2,7 +2,7 @@
 
 .ob-page {
   min-height: 100dvh;
-  background: var(--background);
+  background: var(--lightModeBackground);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -14,7 +14,7 @@
   left: 20px;
   width: 40px;
   height: 40px;
-  background: var(--lightModeBackground);
+  background: var(--lightModeBackgroundOffset);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -88,24 +88,6 @@
 
 .ob-input-wrap {
   margin-bottom: 24px;
-}
-
-.ob-input-wrap #Custom-input {
-  width: 100%;
-  padding: 15px 16px;
-  border-radius: 12px;
-  background: var(--lightModeBackground);
-  border: 1.5px solid transparent;
-  color: var(--lightModeText);
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  box-sizing: border-box;
-  transition: border-color 0.15s ease;
-  outline: none;
-}
-
-.ob-input-wrap #Custom-input:focus {
-  border-color: var(--primary);
 }
 
 .ob-cta {
