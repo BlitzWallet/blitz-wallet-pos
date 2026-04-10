@@ -2,38 +2,54 @@ import { useState } from "react";
 import "./enterBitcoinPrice.css";
 import { useGlobalContext } from "../../contexts/posContext";
 import CustomTextInput from "../textInput";
+
 export default function EnterBitcoinPrice({ setPopupType }) {
   const { setCurrentUserSession } = useGlobalContext();
   const [enteredBitcoinPrice, setEnteredBitcoinPrice] = useState(0);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const closePopup = () =>
+    setPopupType((prev) =>
+      Object.fromEntries(Object.entries(prev).map(([k]) => [k, false])),
+    );
+
+  const handleClose = () => setIsClosing(true);
+
+  const handleAnimationEnd = () => {
+    if (isClosing) closePopup();
+  };
+
+  const handleSave = () => {
+    if (!enteredBitcoinPrice) return;
+    setCurrentUserSession((prev) => ({
+      ...prev,
+      bitcoinPrice: Number(enteredBitcoinPrice),
+    }));
+    handleClose();
+  };
+
   return (
-    <div className="EnterBitconPrice-Container">
-      <div className="ChangePaymentContainer">
-        <p className="ChangePaymentContainer-Desc">
-          No currency information found. Please enter current bitcoin price.
+    <div
+      className={`bitcoin-price-backdrop${isClosing ? " backdrop-exit" : ""}`}
+    >
+      <div
+        className={`bitcoin-price-sheet${isClosing ? " sheet-exit" : ""}`}
+        onAnimationEnd={handleAnimationEnd}
+      >
+        <div className="sheet-handle" />
+        <p className="sheet-title">Set Bitcoin Price</p>
+        <p className="sheet-description">
+          Enter the current BTC/USD price to calculate amounts.
         </p>
         <CustomTextInput
           maxLength={50}
           getTextInput={setEnteredBitcoinPrice}
+          inputText={enteredBitcoinPrice}
           placeholder="Bitcoin price (no decimals)"
-          customStyles={{ marginBottom: "30px" }}
+          customStyles={{ width: "100%" }}
         />
-
-        <button
-          onClick={() => {
-            if (!enteredBitcoinPrice) return;
-            setCurrentUserSession((prev) => {
-              return { ...prev, bitcoinPrice: Number(enteredBitcoinPrice) };
-            });
-            setPopupType((prev) => {
-              let newObject = {};
-              Object.entries(prev).forEach((entry) => {
-                newObject[entry[0]] = false;
-              });
-              return newObject;
-            });
-          }}
-        >
-          Save
+        <button className="sheet-cta-button" onClick={handleSave}>
+          Save Price
         </button>
       </div>
     </div>

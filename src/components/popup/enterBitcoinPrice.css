@@ -1,26 +1,125 @@
-.EnterBitconPrice-Container {
-  position: absolute;
+@keyframes slideUpIn {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDownOut {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes backdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes backdropOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.bitcoin-price-backdrop {
+  position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100dvw;
   height: 100dvh;
-  background-color: var(--opaicityGray);
+  background: rgba(0, 0, 0, 0.55);
   z-index: 99;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: backdropIn 250ms ease-out;
+}
+
+.bitcoin-price-backdrop.backdrop-exit {
+  animation: backdropOut 200ms ease-in;
+  animation-fill-mode: forwards;
+}
+
+.bitcoin-price-sheet {
+  width: 100%;
+  background-color: var(--lightModeBackground);
+  border-radius: 20px 20px 0 0;
+  padding: 12px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideUpIn 250ms ease-out;
+}
+
+.bitcoin-price-sheet.sheet-exit {
+  animation: slideDownOut 200ms ease-in;
+  animation-fill-mode: forwards;
+}
+
+/* Utility classes scoped under .bitcoin-price-sheet to avoid collision with enterServerName.css */
+.bitcoin-price-sheet .sheet-handle {
+  width: 36px;
+  height: 4px;
+  background-color: var(--gray2);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+}
+
+.bitcoin-price-sheet .sheet-icon-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--bitcoinOrange);
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 16px;
 }
-.ChangePaymentContainer {
-  max-width: 275px;
+.bitcoin-price-sheet .sheet-icon-badge img {
+  width: 30px;
+  height: 30px;
+}
+
+.bitcoin-price-sheet .sheet-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--lightModeText);
+  margin: 0 0 8px;
+  align-self: start;
+}
+
+.bitcoin-price-sheet .sheet-description {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gray);
+  margin: 0 0 20px;
+  align-self: start;
+}
+
+.bitcoin-price-sheet .sheet-cta-button {
   width: 100%;
-  height: fit-content;
-  background-color: var(--darkModeText);
-  text-align: center;
-  border-radius: 8px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-}
-.ChangePaymentContainer-Desc {
-  padding: 10px;
+  background-color: var(--primary);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  margin-top: 100px;
 }
