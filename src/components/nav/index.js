@@ -3,8 +3,14 @@ import { useSettingsDisplay } from "../../contexts/settingsDisplay";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import "./style.css";
 import { useGlobalContext } from "../../contexts/posContext";
+import { AlertTriangle, ArrowLeft, History } from "lucide-react";
 
-export default function PosNavbar({ backFunction, openNamePopupFunction }) {
+export default function PosNavbar({
+  backFunction,
+  openNamePopupFunction,
+  fromPage = "",
+  setShowSwapHistory,
+}) {
   const { didConfirmSavedUsername } = useGlobalContext();
   const User = getCurrentUser();
   const { setDisplaySettings } = useSettingsDisplay();
@@ -12,28 +18,30 @@ export default function PosNavbar({ backFunction, openNamePopupFunction }) {
 
   return (
     <div className="POS-navbar">
-      <img
-        onClick={() => {
-          backFunction();
-        }}
+      <ArrowLeft
+        color="#0375f6"
         alt="Back arrow"
+        onClick={backFunction}
         className="POS-back"
-        src="/assets/icons/arrowLeft.png"
       />
       <h2 className="POS-name">{User}</h2>
       {location.pathname.split("/").length == 2 && (
         <>
           {!didConfirmSavedUsername && (
-            <img
-              onClick={() => {
-                openNamePopupFunction();
-              }}
-              alt="Back arrow"
+            <AlertTriangle
+              onClick={() => openNamePopupFunction()}
+              color="#0375f6"
               className="nav-warning"
-              src="/assets/icons/warningBlue.png"
             />
           )}
         </>
+      )}
+      {fromPage === "home" && (
+        <History
+          className="POS-SwapHistoryBtn"
+          onClick={() => setShowSwapHistory(true)}
+          color="#0375f6"
+        />
       )}
     </div>
   );
