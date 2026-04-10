@@ -12,7 +12,7 @@
 }
 
 .settings-container.active {
-  background: rgba(118, 118, 118, 0.722);
+  background: var(--opacityGray);
 }
 
 .settings-page {
@@ -23,7 +23,7 @@
   max-width: 500px;
   background: var(--lightModeBackground);
   padding: 20px;
-  border-radius: 8px 8px 0 0;
+  border-radius: 20px 20px 0 0;
   transition: bottom 0.3s ease-in-out;
 }
 
@@ -37,7 +37,7 @@
   min-height: 50px;
   background-color: var(--darkModeText);
   margin: 10px 0;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -46,7 +46,7 @@
 
 .settings-page .option {
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 12px;
   min-width: 40px;
   cursor: pointer;
   display: flex;

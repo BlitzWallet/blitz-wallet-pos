@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PosNavbar from "../../components/nav";
 import { useGlobalContext } from "../../contexts/posContext";
 import CustomKeyboard from "../../components/keypad";
-import BalanceView from "../../components/balanceView";
 import { formatBalanceAmount } from "../../functions/formatNumber";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination";
 
@@ -51,38 +50,23 @@ export default function AddTipPage() {
       {/* Content */}
       <main className="Tip-container">
         {/* Total Section */}
-        <div className="total-section">
-          <div className="total-label">Total amount</div>
+        <div className="Tip-AmountDisplay">
+          <div className="total-label">
+            {tipAmount.showCustomTip ? "Tip Amount" : "Total amount"}
+          </div>
           <div className="total-amount-large">
             {formatBalanceAmount(
               displayCorrectDenomination({
-                amount: currentSettings?.displayCurrency?.isSats
+                amount: tipAmount.showCustomTip
+                  ? tipAmount.customTip || 0
+                  : currentSettings?.displayCurrency?.isSats
                   ? (Number(satAmount) + Number(tipAmountSats)).toFixed(0)
                   : (Number(fiatAmount) + Number(tipAmountFiat)).toFixed(2),
                 fiatCurrency: currentUserSession.account.storeCurrency || "USD",
                 showSats: currentSettings.displayCurrency.isSats,
                 isWord: currentSettings.displayCurrency.isWord,
-              })
+              }),
             )}
-          </div>
-          <div className="amount-breakdown">
-            {`${formatBalanceAmount(
-              displayCorrectDenomination({
-                amount: currentSettings?.displayCurrency?.isSats
-                  ? satAmount
-                  : fiatAmount,
-                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
-                showSats: currentSettings.displayCurrency.isSats,
-                isWord: currentSettings.displayCurrency.isWord,
-              })
-            )} + ${formatBalanceAmount(
-              displayCorrectDenomination({
-                amount: tipValue,
-                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
-                showSats: currentSettings.displayCurrency.isSats,
-                isWord: currentSettings.displayCurrency.isWord,
-              })
-            )} tip`}
           </div>
         </div>
 
@@ -106,23 +90,25 @@ export default function AddTipPage() {
                 });
               }}
             />
-            <button
-              onClick={() =>
-                setTipAmount((prev) => ({
-                  ...prev,
-                  showCustomTip: false,
-                }))
-              }
-              className="continue-btn"
-            >
-              {tipAmount.customTip ? "Save" : "Back"}
-            </button>
+            <div className="Tip-Footer">
+              <button
+                onClick={() =>
+                  setTipAmount((prev) => ({
+                    ...prev,
+                    showCustomTip: false,
+                  }))
+                }
+                className="continue-btn"
+              >
+                {tipAmount.customTip ? "Save" : "Back"}
+              </button>
+            </div>
           </div>
         ) : (
           <>
             {/* Tip Selection */}
-            <div className="tip-selection-section">
-              <h2 className="tip-header-text">Add a tip?</h2>
+            <div className="Tip-ContentArea">
+              <h2 className="tip-header-text">Do you want to add a tip?</h2>
 
               <div className="tip-grid">
                 {[15, 18, 20, "custom"].map((item) => {
@@ -153,7 +139,58 @@ export default function AddTipPage() {
                         isSelected ? "tip-option-selected" : ""
                       }`}
                     >
-                      {typeof item === "string" ? "Custom" : `${item}%`}
+                      {typeof item === "string" ? (
+                        <>
+                          <span>Custom</span>
+                          {tipAmount.customTip && (
+                            <span className="tip-option-amount">
+                              {formatBalanceAmount(
+                                displayCorrectDenomination({
+                                  amount: currentSettings?.displayCurrency
+                                    ?.isSats
+                                    ? tipAmount.customTip
+                                    : (
+                                        (Number(tipAmount.customTip) || 0) / 100
+                                      ).toFixed(2),
+                                  fiatCurrency:
+                                    currentUserSession.account.storeCurrency ||
+                                    "USD",
+                                  showSats:
+                                    currentSettings.displayCurrency.isSats,
+                                  isWord:
+                                    currentSettings.displayCurrency.isWord,
+                                }),
+                              )}
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <span className="tip-option-percent">{item}%</span>
+                          <span className="tip-option-amount">
+                            {formatBalanceAmount(
+                              displayCorrectDenomination({
+                                amount: (
+                                  (currentSettings?.displayCurrency?.isSats
+                                    ? satAmount
+                                    : fiatAmount) *
+                                  (item / 100)
+                                ).toFixed(
+                                  currentSettings?.displayCurrency?.isSats
+                                    ? 0
+                                    : 2,
+                                ),
+                                fiatCurrency:
+                                  currentUserSession.account.storeCurrency ||
+                                  "USD",
+                                showSats:
+                                  currentSettings.displayCurrency.isSats,
+                                isWord: currentSettings.displayCurrency.isWord,
+                              }),
+                            )}
+                          </span>
+                        </>
+                      )}
                     </button>
                   );
                 })}
@@ -176,29 +213,34 @@ export default function AddTipPage() {
             </div>
 
             {/* Continue Button */}
-            <button
-              onClick={() => {
-                if (!tipAmount.customTip && tipAmount.selectedTip === undefined)
-                  return;
+            <div className="Tip-Footer">
+              <button
+                onClick={() => {
+                  if (
+                    !tipAmount.customTip &&
+                    tipAmount.selectedTip === undefined
+                  )
+                    return;
 
-                navigate(
-                  `/${currentUserSession.account.storeNameLower}/checkout`,
-                  {
-                    state: {
-                      satAmount: Math.round(satAmount),
-                      tipAmountFiat,
-                      tipAmountSats,
+                  navigate(
+                    `/${currentUserSession.account.storeNameLower}/checkout`,
+                    {
+                      state: {
+                        satAmount: Math.round(satAmount),
+                        tipAmountFiat,
+                        tipAmountSats,
+                      },
                     },
-                  }
-                );
-              }}
-              disabled={
-                !tipAmount.customTip && tipAmount.selectedTip === undefined
-              }
-              className="continue-btn"
-            >
-              Continue
-            </button>
+                  );
+                }}
+                disabled={
+                  !tipAmount.customTip && tipAmount.selectedTip === undefined
+                }
+                className="continue-btn"
+              >
+                Continue
+              </button>
+            </div>
           </>
         )}
       </main>

@@ -18,9 +18,9 @@
 }
 
 /* Total Section */
-.total-section {
+.Tip-AmountDisplay {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .total-label {
@@ -29,57 +29,69 @@
 }
 
 .total-amount-large {
-  font-size: 50px;
+  font-size: 42px;
   font-weight: 500;
 }
 
-.amount-breakdown {
-  opacity: 0.5;
-  font-size: 0.875rem;
-}
-
 /* Tip Selection */
-.tip-selection-section {
+.Tip-ContentArea {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  margin: 20px 0 10px;
+
+  /* gap: 1.5rem; */
 }
 
 .tip-header-text {
   text-align: center;
-  font-size: 1.25rem;
-  font-weight: 400;
+  font-size: 1rem;
+  font-weight: 500;
   margin: 0;
+  margin-bottom: 16px;
 }
 
 .tip-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .tip-option {
-  padding: 1rem 1.5rem;
-  border-radius: 1rem;
+  padding: 1.5rem 1rem;
+  border-radius: 16px;
   border: none;
   cursor: pointer;
   font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background-color: unset;
+  border: 2px solid var(--lightModeBackgroundOffset);
 }
 
 .tip-option-selected {
   background-color: var(--primary) !important;
+  color: white !important;
+  border: unset;
+}
+.tip-option-selected > * {
   color: white !important;
 }
 
 .no-tip-btn {
   width: 100%;
   padding: 1em 0;
-  border-radius: 1rem;
+  border-radius: 12px;
   background-color: transparent;
   border: 2px solid var(--lightModeBackgroundOffset);
   cursor: pointer;
   font-size: 1rem;
+  font-weight: 500;
 }
 
 .no-tip-selected {
@@ -88,9 +100,44 @@
   border-color: transparent !important;
 }
 
+.tip-option-percent {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: -5px;
+}
+.tip-option-amount {
+  font-size: 0.875rem;
+  font-weight: 400;
+  opacity: 0.65;
+}
+
 /* Continue Button */
 .continue-btn {
-  margin: 0 auto;
+  width: 100%;
+  padding: 17px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.continue-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 3px 10px rgba(3, 117, 246, 0.2);
+}
+
+.continue-btn:disabled {
+  opacity: 0.45;
+}
+
+/* Tip Footer */
+.Tip-Footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 }
 
 /* Custom Tip Section */
@@ -98,5 +145,5 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
 }
