@@ -1,22 +1,25 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./enterServerName.css";
 import { saveToLocalStorage } from "../../functions/localStorage";
 import { SERVER_LOCAL_STORAGE } from "../../constants";
 import { useGlobalContext } from "../../contexts/posContext";
 import CustomTextInput from "../textInput";
+
 export default function EnterServerName({ setPopupType }) {
-  const [name, setName] = useState("");
   const { serverName, setServerName, setDidConfirmSavedUsername } =
     useGlobalContext();
+  const [name, setName] = useState(serverName);
+  const [isClosing, setIsClosing] = useState(false);
 
-  const closePopup = () => {
-    setPopupType((prev) => {
-      let newObject = {};
-      Object.entries(prev).forEach((entry) => {
-        newObject[entry[0]] = false;
-      });
-      return newObject;
-    });
+  const closePopup = () =>
+    setPopupType((prev) =>
+      Object.fromEntries(Object.entries(prev).map(([k]) => [k, false])),
+    );
+
+  const handleClose = () => setIsClosing(true);
+
+  const handleAnimationEnd = () => {
+    if (isClosing) closePopup();
   };
 
   const handleNameInput = () => {
@@ -26,31 +29,41 @@ export default function EnterServerName({ setPopupType }) {
       setServerName(name);
     }
     setDidConfirmSavedUsername(true);
-    closePopup();
+    handleClose();
   };
 
   const handleContainerClick = (event) => {
     if (event.target === event.currentTarget) {
-      closePopup(); // call your close function here
+      handleClose();
     }
   };
 
   return (
-    <div onClick={handleContainerClick} className="namePopup-Container">
-      <div className="ChangePaymentContainer">
-        <p className="ChangePaymentContainer-Desc">
+    <div
+      onClick={handleContainerClick}
+      className={`server-name-backdrop${isClosing ? " backdrop-exit" : ""}`}
+    >
+      <div
+        className={`server-name-sheet${isClosing ? " sheet-exit" : ""}`}
+        onAnimationEnd={handleAnimationEnd}
+      >
+        <div className="sheet-handle" />
+        <p className="sheet-title">
+          {serverName ? "Your Blitz Username" : "Set Your Username"}
+        </p>
+        <p className="sheet-description">
           {serverName
-            ? `Your last used Blitz username or LNURL is ${serverName}. Enter a new username or LNURL below to change it, or click save to keep it.`
-            : "Enter a Blitz username or LNURL address to receive tips."}
+            ? "This is your payment handle for receiving tips."
+            : "Enter a Blitz username or lightning address to start accepting payments."}
         </p>
         <CustomTextInput
           maxLength={50}
           getTextInput={setName}
+          inputText={name}
           placeholder="Name..."
-          customStyles={{ marginBottom: "30px" }}
+          customStyles={{ width: "100%" }}
         />
-
-        <button onClick={handleNameInput}>
+        <button className="sheet-cta-button" onClick={handleNameInput}>
           {serverName && !name ? "Keep" : "Save"}
         </button>
       </div>
