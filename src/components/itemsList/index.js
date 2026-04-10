@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination";
 import { formatBalanceAmount } from "../../functions/formatNumber";
 import "./style.css";
@@ -36,7 +37,7 @@ export default function ItemsList({
           addItemToTotal(
             currentSettings?.displayCurrency?.isSats
               ? Math.round(dollarSatValue * item.price)
-              : (item.price * 100).toFixed(2)
+              : (item.price * 100).toFixed(2),
           )
         }
         className="itemContainer"
@@ -53,13 +54,11 @@ export default function ItemsList({
                 fiatCurrency: currentUserSession.account.storeCurrency || "USD",
                 showSats: currentSettings.displayCurrency.isSats,
                 isWord: currentSettings.displayCurrency.isWord,
-              })
+              }),
             )}
           </p>
         </div>
-        <div className="addItemIconContainer">
-          <img className="addItemIcon" src="/assets/icons/plus.png" />
-        </div>
+        <Plus />
       </div>
     );
   });
