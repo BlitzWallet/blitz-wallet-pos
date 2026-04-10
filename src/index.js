@@ -21,6 +21,8 @@ import SettingsPage from "./pages/settings";
 import AddTipsUsername from "./pages/addTipUsername";
 import { GlobalErrorDisplay } from "./contexts/errorDisplay";
 import ErrorPopup from "./components/errorScreen";
+import { GlobalCopyToast } from "./contexts/copyToast";
+import CopyToastPopup from "./components/popup";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -30,10 +32,12 @@ root.render(
       <GlobalRescanLiquidSwaps>
         <GlobalSettingsDisplay>
           <GlobalErrorDisplay>
+            <GlobalCopyToast>
             <BrowserRouter>
               <NavigateScreen />
               <SettingsPage />
               <ErrorPopup />
+              <CopyToastPopup />
               <Routes>
                 {/* Hero — skip to POS if already set up */}
                 <Route
@@ -69,6 +73,7 @@ root.render(
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </BrowserRouter>
+            </GlobalCopyToast>
           </GlobalErrorDisplay>
         </GlobalSettingsDisplay>
       </GlobalRescanLiquidSwaps>
