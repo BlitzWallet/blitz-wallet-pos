@@ -121,7 +121,7 @@ export default async function lookForPaidPayment(convertedSatAmount) {
           removeIds.push(invoice.id);
           continue;
         }
-        if (paymentStatus.transfer) {
+        if (paymentStatus.transfer && paymentStatus.paymentPreimage) {
           wasPaid = true;
           removeIds.push(invoice.id);
           break;

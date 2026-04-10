@@ -48,10 +48,9 @@
 }
 
 .ConfirmScreen-BTN {
-  margin: auto 0 50px;
+  margin: auto 0 20px;
   color: var(--primary);
   background-color: var(--darkModeText);
-  font-weight: 600;
 }
 @keyframes expandCircle {
   0% {

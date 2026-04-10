@@ -4,7 +4,12 @@ import spinner from "../../../public/assets/spinnerloading.json";
 export default function LoadingAnimation() {
   return (
     <div>
-      <Lottie autoPlay animationData={spinner} loop />
+      <Lottie
+        style={{ width: "15vw", height: "15vw" }}
+        autoPlay
+        animationData={spinner}
+        loop
+      />
     </div>
   );
 }

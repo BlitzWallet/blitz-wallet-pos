@@ -26,7 +26,10 @@ export default function ConfirmPaymentScreen({ clearSettings }) {
           animationData={checkAnimation}
         />
         {showButton ? (
-          <button onClick={clearSettings} className="ConfirmScreen-BTN">
+          <button
+            onClick={clearSettings}
+            className="action-button ConfirmScreen-BTN"
+          >
             Continue
           </button>
         ) : (

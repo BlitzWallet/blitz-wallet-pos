@@ -48,6 +48,7 @@
 }
 
 .toast-text {
+  flex: 1;
   font-size: 14px;
   font-weight: 500;
   color: var(--lightModeText);
