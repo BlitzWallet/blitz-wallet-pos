@@ -13,7 +13,7 @@ import { GlobalPOSContext } from "./contexts/posContext";
 import PaymentPage from "./pages/paymentPage";
 import { GlobalRescanLiquidSwaps } from "./contexts/rescanSwaps";
 import ConfirmPaymentScreen from "./pages/confirmScreen";
-import NavigateScreen from "./pages/navigateScreen";
+// import NavigateScreen from "./pages/navigateScreen";
 import { ACCOUNT_LOCAL_STORAGE } from "./constants";
 import AddTipPage from "./pages/tip";
 import { GlobalSettingsDisplay } from "./contexts/settingsDisplay";
@@ -23,61 +23,64 @@ import { GlobalErrorDisplay } from "./contexts/errorDisplay";
 import ErrorPopup from "./components/errorScreen";
 import { GlobalCopyToast } from "./contexts/copyToast";
 import CopyToastPopup from "./components/popup";
+import { GlobalPageStatus } from "./contexts/pageStatus";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <GlobalPOSContext>
-      <GlobalRescanLiquidSwaps>
+    <GlobalPageStatus>
+      <GlobalPOSContext>
+        {/* <GlobalRescanLiquidSwaps> */}
         <GlobalSettingsDisplay>
           <GlobalErrorDisplay>
             <GlobalCopyToast>
-            <BrowserRouter>
-              <NavigateScreen />
-              <SettingsPage />
-              <ErrorPopup />
-              <CopyToastPopup />
-              <Routes>
-                {/* Hero — skip to POS if already set up */}
-                <Route
-                  path="/"
-                  element={
-                    getLocalStorageItem(ACCOUNT_LOCAL_STORAGE) ? (
-                      <Navigate
-                        to={`/${getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)}`}
-                        replace
-                      />
-                    ) : (
-                      <HeroPage />
-                    )
-                  }
-                />
-                {/* Onboarding step 1: name the POS */}
-                <Route path="/setup" element={<SetupPage />} />
-                {/* Onboarding step 2: add tips username */}
-                <Route
-                  path="/createTipsUsername"
-                  element={<AddTipsUsername />}
-                />
+              <BrowserRouter>
+                {/* <NavigateScreen /> */}
+                <SettingsPage />
+                <ErrorPopup />
+                <CopyToastPopup />
+                <Routes>
+                  {/* Hero — skip to POS if already set up */}
+                  <Route
+                    path="/"
+                    element={
+                      getLocalStorageItem(ACCOUNT_LOCAL_STORAGE) ? (
+                        <Navigate
+                          to={`/${getLocalStorageItem(ACCOUNT_LOCAL_STORAGE)}`}
+                          replace
+                        />
+                      ) : (
+                        <HeroPage />
+                      )
+                    }
+                  />
+                  {/* Onboarding step 1: name the POS */}
+                  <Route path="/setup" element={<SetupPage />} />
+                  {/* Onboarding step 2: add tips username */}
+                  <Route
+                    path="/createTipsUsername"
+                    element={<AddTipsUsername />}
+                  />
 
-                {/* POS Page Route */}
-                <Route path="/:username" element={<POSPage />} />
-                <Route path="/:username/tip" element={<AddTipPage />} />
-                <Route path="/:username/checkout" element={<PaymentPage />} />
-                <Route
-                  path="/:username/confirmed"
-                  element={<ConfirmPaymentScreen />}
-                />
-                {/* Catch all route */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </BrowserRouter>
+                  {/* POS Page Route */}
+                  <Route path="/:username" element={<POSPage />} />
+                  <Route path="/:username/tip" element={<AddTipPage />} />
+                  <Route path="/:username/checkout" element={<PaymentPage />} />
+                  <Route
+                    path="/:username/confirmed"
+                    element={<ConfirmPaymentScreen />}
+                  />
+                  {/* Catch all route */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </BrowserRouter>
             </GlobalCopyToast>
           </GlobalErrorDisplay>
         </GlobalSettingsDisplay>
-      </GlobalRescanLiquidSwaps>
-    </GlobalPOSContext>
+        {/* </GlobalRescanLiquidSwaps> */}
+      </GlobalPOSContext>
+    </GlobalPageStatus>
   </React.StrictMode>,
 );
 
