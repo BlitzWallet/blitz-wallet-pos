@@ -17,6 +17,22 @@
   headers = {X-From = "Netlify"}
   signed = "API_SIGNATURE_TOKEN"
 
+  [[redirects]]
+    from = "/createPOSInvoice"
+    to = "https://createPOSInvoice-6krimtymjq-uc.a.run.app"
+    status = 200
+    force = true
+    headers = {X-From = "Netlify"}
+    signed = "API_SIGNATURE_TOKEN"
+
+  [[redirects]]
+    from = "/getPOSPaylinkData"
+    to = "https://getPOSStableData-6krimtymjq-uc.a.run.app"
+    status = 200
+    force = true
+    headers = {X-From = "Netlify"}
+    signed = "API_SIGNATURE_TOKEN"
+
 # Catch-all redirect for SPA (React)
 [[redirects]]
   from = "/*"
