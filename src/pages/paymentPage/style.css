@@ -5,13 +5,14 @@
 }
 .PaymentPage-Container-globalInner {
   width: 90%;
-  max-width: 500px;
+  max-width: 800px;
   min-height: calc(100dvh - 50px);
   margin: auto auto 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-bottom: 20px;
 }
 
 .PaymentPage-Container {
@@ -22,16 +23,21 @@
   display: flex;
   flex-direction: column;
   text-align: center;
+  margin-bottom: auto;
 }
 
 .balance-text {
-  font-size: 50px;
+  font-size: 70px;
   font-weight: 500;
-  margin-bottom: 0;
+  margin: 0;
+  line-height: 1;
 }
+
 .PaymentPage-Container .alt-amount {
-  font-size: 18px;
+  font-size: 20px;
   margin-bottom: 25px;
+  font-weight: 500;
+  opacity: 0.7;
   margin-top: 0px;
 }
 
@@ -44,23 +50,20 @@
 }
 
 .PaymentPage-Instruction {
-  font-size: 16px;
-  opacity: 0.7;
+  font-size: 0.8rem;
+  color: var(--gray);
   margin-bottom: 15px;
+  margin-top: 10px;
 }
 
 .PaymentPage-QRcontainer {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-
   overflow: hidden;
-  border-radius: 15px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--lightModeBackgroundOffset);
-  padding: 0;
+  padding: 20px;
   border-width: 0;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -85,10 +88,6 @@
   display: none;
 }
 
-.FullLoadingScreen {
-  width: 100%;
-  height: calc(100dvh - 55px);
-}
 /* Stale state */
 .stale-state-container {
   min-height: 100dvh;
@@ -108,8 +107,228 @@
 }
 
 .stale-state-button {
-  padding: 12px 32px;
+  padding: 17px;
   border: none;
-  border-radius: 8px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: white;
+  font-weight: 500;
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stale-state-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 3px 10px rgba(3, 117, 246, 0.2);
+}
+
+.stale-state-button:disabled {
+  opacity: 0.45;
+}
+
+/* ── BTC/USD Pill Toggle ──────────────────────────────────────────────────── */
+.pill-toggle {
+  position: relative;
+  width: 100px;
+  height: 48px;
+  border-radius: 100px;
+  background: var(--lightModeBackgroundOffset);
+  border: none;
+  cursor: pointer;
+  padding: 4px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  outline: none;
+  align-self: center;
+  margin-bottom: auto;
+}
+
+/* Sliding circle — always exactly 50% of pill width */
+.pill-toggle__indicator {
+  position: absolute;
+  /* top: 4px; */
+  left: 5px;
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  transition: transform 0.28s cubic-bezier(0.34, 1.15, 0.64, 1);
+  pointer-events: none;
+}
+
+/* Slide to right when USD/stablecoin is active */
+.pill-toggle--usd .pill-toggle__indicator {
+  transform: translateX(50px);
+}
+
+/* Icons */
+.pill-toggle img {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  z-index: 1;
+  /* Inactive = gray: invert white→black, then reduce opacity */
+  filter: invert(1) opacity(0.3);
+  transition: filter 0.22s ease;
+  pointer-events: none;
+}
+
+/* Active icon = solid black */
+.pill-toggle:not(.pill-toggle--usd) img:first-of-type,
+.pill-toggle--usd img:last-of-type {
+  filter: invert(1);
+}
+/* ── Responsive content row ───────────────────────────────────────────────── */
+
+.payment-content-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 0;
+  margin-top: auto;
+}
+
+.payment-info-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.action-button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  font-family: inherit;
+}
+
+.action-button.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.action-button.primary:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.action-button.secondary {
+  background: transparent;
+  color: var(--lightModeText);
+  border: 1px solid var(--lightModeBackgroundOffset);
+}
+
+.stablecoin-error {
+  font-size: 0.875rem;
+  color: var(--cancelRed);
+  text-align: center;
+  margin: 0;
+}
+
+.stablecoin-timeout-msg {
+  font-size: 0.875rem;
+  color: var(--gray);
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Stablecoin QR Screen ─────────────────────────────────────────────────── */
+
+.stablecoin-qr-screen {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.stablecoin-qr-screen .alt-amount {
+  font-size: 16px;
+  opacity: 0.7;
+  margin: 0 0 0.5rem;
+}
+
+.qr-copy-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--lightModeBackgroundOffset);
+  border-radius: 12px;
+  padding: 0.625rem 0.875rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+}
+
+.qr-copy-text {
+  flex: 1;
+  font-size: 0.85rem;
+  color: var(--lightModeText);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qr-clipboard-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--lightModeText);
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+}
+
+.qr-clipboard-btn:hover {
+  opacity: 1;
+}
+
+.change-network-link {
+  margin-top: auto;
+}
+
+/* ── Desktop layout (≥ 640px) ────────────────────────────────────────────── */
+@media (min-width: 640px) {
+  .PaymentPage-Container-globalInner {
+    max-width: 800px;
+  }
+
+  .PaymentPage-Container,
+  .stablecoin-qr-screen {
+    max-width: 100%;
+  }
+
+  .payment-content-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+  }
+
+  .payment-info-col {
+    align-items: flex-start;
+    text-align: left;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .PaymentPage-Container .alt-amount,
+  .stablecoin-qr-screen .alt-amount {
+    margin-bottom: 8px;
+  }
 }

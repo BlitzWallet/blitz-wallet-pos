@@ -12,7 +12,7 @@
 }
 
 .SwapHistory-Panel {
-  width: 95%;
+  width: 90%;
   max-width: 580px;
   max-height: 80dvh;
   background-color: var(--darkModeText);

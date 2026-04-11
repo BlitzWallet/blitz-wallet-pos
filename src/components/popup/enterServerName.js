@@ -63,7 +63,10 @@ export default function EnterServerName({ setPopupType }) {
           placeholder="Name..."
           customStyles={{ width: "100%" }}
         />
-        <button className="sheet-cta-button" onClick={handleNameInput}>
+        <button
+          className="action-button primary sheet-cta-button"
+          onClick={handleNameInput}
+        >
           {serverName && !name ? "Keep" : "Save"}
         </button>
       </div>

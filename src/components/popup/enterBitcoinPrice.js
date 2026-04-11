@@ -48,7 +48,10 @@ export default function EnterBitcoinPrice({ setPopupType }) {
           placeholder="Bitcoin price (no decimals)"
           customStyles={{ width: "100%" }}
         />
-        <button className="sheet-cta-button" onClick={handleSave}>
+        <button
+          className="action-button primary sheet-cta-button"
+          onClick={handleSave}
+        >
           Save Price
         </button>
       </div>

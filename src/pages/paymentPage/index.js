@@ -1,7 +1,6 @@
 import QRCode from "qrcode.react";
-import Popup from "reactjs-popup";
-import CopyToCliboardPopup from "../../components/popup";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCopyToast } from "../../contexts/copyToast";
+import { useCallback, useEffect, useMemo, useRef, useState, memo } from "react";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import PosNavbar from "../../components/nav";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -12,74 +11,121 @@ import fetchFunction from "../../functions/fetchFunction.js";
 import lookForPaidPayment, {
   createSparkWallet,
   receiveSparkLightningPayment,
-  sparkWallet,
 } from "../../functions/spark.js";
-import useWindowFocus from "../../hooks/isWindowFocused.js";
-import usePageVisibility from "../../hooks/isTabFocused.js";
 import { formatBalanceAmount } from "../../functions/formatNumber.js";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination.js";
+import dollarIcon from "../../assets/dollarIcon.png";
+import bitcoinIcon from "../../assets/bitcoinIcon.png";
+import { addSwapToHistory } from "../../functions/swapHistory.js";
+import { useErrorDisplay } from "../../contexts/errorDisplay.js";
+import EnterServerName from "../../components/popup/enterServerName.js";
+import NetworkSelectSheet from "../../components/popup/NetworkSelectSheet.js";
 
-// Utility component for the countdown timer
-const InvoiceTimer = ({ expirySeconds = 300 }) => {
-  const [timeLeft, setTimeLeft] = useState(expirySeconds);
+// ─── Module-level constants (no recreations on render) ───────────────────────
 
-  useEffect(() => {
-    if (timeLeft <= 0) return;
-
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft]);
-
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  const isExpired = timeLeft <= 0;
-
-  return (
-    <p className={`PaymentPage-Timer ${isExpired ? "expired" : ""}`}>
-      {isExpired
-        ? "Invoice Expired"
-        : `Expires in: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`}
-    </p>
-  );
+const NETWORK_LABELS = {
+  ethereum: "Ethereum",
+  polygon: "Polygon",
+  arbitrum: "Arbitrum",
+  optimism: "Optimism",
+  base: "Base",
+  solana: "Solana",
+  tron: "Tron",
 };
+
+// ─── PillToggle — memoised; only re-renders when value/onChange change ────────
+
+const PillToggle = memo(function PillToggle({ value, onChange }) {
+  const isUsd = value === "stablecoin";
+  return (
+    <button
+      className={`pill-toggle${isUsd ? " pill-toggle--usd" : ""}`}
+      onClick={() => onChange(isUsd ? "btc" : "stablecoin")}
+      aria-label={`Switch to ${isUsd ? "BTC" : "USD"} payments`}
+    >
+      <span className="pill-toggle__indicator" />
+      <img src={bitcoinIcon} alt="BTC" className="pill-toggle__icon" />
+      <img src={dollarIcon} alt="USD" className="pill-toggle__icon" />
+    </button>
+  );
+});
+
+// ─── Main component ───────────────────────────────────────────────────────────
 
 export default function PaymentPage() {
   const user = getCurrentUser();
   const navigate = useNavigate();
   const location = useLocation();
-  const isWindowFocused = useWindowFocus();
-  const isTabFocused = usePageVisibility();
-  const INVOICE_EXPIRY_SECONDS = 300;
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const { showError } = useErrorDisplay();
+  const { showCopyToast } = useCopyToast();
 
   const { satAmount, tipAmountSats } = location.state || {};
-  const convertedSatAmount = satAmount + tipAmountSats;
+  const convertedSatAmount = satAmount + tipAmountSats; // stable — from location.state
+
   const { currentUserSession, serverName, currentSettings, dollarSatValue } =
     useGlobalContext();
+
+  // ── Stable dollar amount (inputs never change during page lifetime) ──
+  const dollarAmount = useMemo(
+    () => (convertedSatAmount / dollarSatValue).toFixed(2),
+    [convertedSatAmount, dollarSatValue],
+  );
+
+  // ── UI state ──────────────────────────────────────────────────────────
   const [sparkAddress, setSparkAddress] = useState("");
-  const [boltzLoadingAnimation, setBoltzLoadingAnimation] = useState("");
-  const didRunSparkInvoiceGeneration = useRef(null);
+  const [paymentMode, setPaymentMode] = useState("btc");
+  const [selectedToken, setSelectedToken] = useState(null);
+  const [selectedNetwork, setSelectedNetwork] = useState(null);
+  const [showNetworkModal, setShowNetworkModal] = useState(false);
+  const [stablecoinAddress, setStablecoinAddress] = useState(null);
+  const [stablecoinDisplayAmount, setStablecoinDisplayAmount] = useState(null);
+  const [stablecoinLoading, setStablecoinLoading] = useState(false);
+  const [stablecoinPollTimeout, setStablecoinPollTimeout] = useState(false);
+  const [showServerNamePopup, setShowServerNamePopup] = useState(false);
 
-  const [invoiceGeneratedTime, setInvoiceGeneratedTime] = useState(null);
+  // ── Refs — hold latest values for use inside intervals without stale closures ──
+  const bitcoinPollRef = useRef(null);
+  const stablecoinPollRef = useRef(null);
+  const didRunSparkInvoiceGeneration = useRef(false);
+  const paylinkId = useRef(null);
 
+  // Mirror mutable state into refs so interval callbacks always see current values
+  const paymentModeRef = useRef(paymentMode);
+  const stablecoinAddressRef = useRef(stablecoinAddress);
+  const sparkAddressRef = useRef(sparkAddress);
+  // These need to be readable inside the stablecoin interval without stale closure
+  const selectedTokenRef = useRef(selectedToken);
+  const selectedNetworkRef = useRef(selectedNetwork);
+
+  useEffect(() => {
+    paymentModeRef.current = paymentMode;
+  }, [paymentMode]);
+  useEffect(() => {
+    stablecoinAddressRef.current = stablecoinAddress;
+  }, [stablecoinAddress]);
+  useEffect(() => {
+    sparkAddressRef.current = sparkAddress;
+  }, [sparkAddress]);
+  useEffect(() => {
+    selectedTokenRef.current = selectedToken;
+  }, [selectedToken]);
+  useEffect(() => {
+    selectedNetworkRef.current = selectedNetwork;
+  }, [selectedNetwork]);
+
+  // ── Window resize ─────────────────────────────────────────────────────
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // ── Stable claimObject — inputs are stable for the page lifetime ──────
   const claimObject = useMemo(
     () => ({
       storeName: user,
+      skipSaving: !serverName,
       tx: {
         tipAmountSats,
         orderAmountSats: satAmount,
@@ -88,32 +134,223 @@ export default function PaymentPage() {
       },
       bitcoinPrice: currentUserSession?.bitcoinPrice || 0,
     }),
-    []
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [], // intentionally stable — these values don't change during the page lifetime
   );
 
-  const runLookupForPayment = async () => {
-    if (!sparkWallet) return;
-    const wasPaid = await lookForPaidPayment(convertedSatAmount);
-    if (wasPaid) {
-      handleConfirmation(true, claimObject);
+  // ── clearIntervals — stops ALL polling; safe to call multiple times ───
+  const clearIntervals = useCallback(() => {
+    if (bitcoinPollRef.current) {
+      clearInterval(bitcoinPollRef.current);
+      bitcoinPollRef.current = null;
     }
-  };
+    if (stablecoinPollRef.current) {
+      clearInterval(stablecoinPollRef.current);
+      stablecoinPollRef.current = null;
+    }
+  }, []);
 
+  // ── Cleanup on unmount — prevents interval leaks on back navigation ───
   useEffect(() => {
-    if (!sparkAddress) return;
-    if (!isWindowFocused || !isTabFocused) return;
-    if (Date.now() - invoiceGeneratedTime > INVOICE_EXPIRY_SECONDS * 1000)
-      return;
+    return () => clearIntervals();
+  }, [clearIntervals]);
 
-    runLookupForPayment();
+  // ── resetStablecoinState ──────────────────────────────────────────────
+  const resetStablecoinState = useCallback(() => {
+    setSelectedToken(null);
+    setSelectedNetwork(null);
+    setStablecoinAddress(null);
+    setStablecoinDisplayAmount(null);
+    setStablecoinLoading(false);
+    setStablecoinPollTimeout(false);
+    setShowNetworkModal(false);
+    paylinkId.current = null;
+    // Sync refs immediately so focus-effect guards work before state flushes
+    stablecoinAddressRef.current = null;
+    selectedTokenRef.current = null;
+    selectedNetworkRef.current = null;
+    clearIntervals();
+  }, [clearIntervals]);
 
-    const intervalId = setInterval(() => {
-      runLookupForPayment();
-    }, 5000);
+  // ── Debounce helper (module-level, no deps) ───────────────────────────
+  function useDebounce(fn, delay) {
+    const timerRef = useRef(null);
+    return useCallback(
+      (...args) => {
+        if (timerRef.current) clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+          timerRef.current = null;
+          fn(...args);
+        }, delay);
+      },
+      [fn, delay],
+    );
+  }
 
-    return () => clearInterval(intervalId);
-  }, [isTabFocused, isWindowFocused, sparkAddress, invoiceGeneratedTime]);
+  // ── BTC poller ────────────────────────────────────────────────────────
+  // No dep on sparkAddress state — reads the ref inside the callback instead.
+  const runLookupForPayment = useCallback(() => {
+    // Always clear any existing BTC poller first
+    if (bitcoinPollRef.current) {
+      clearInterval(bitcoinPollRef.current);
+      bitcoinPollRef.current = null;
+    }
 
+    bitcoinPollRef.current = setInterval(async () => {
+      // Guard: only poll when we are still in BTC mode
+      if (paymentModeRef.current !== "btc") {
+        clearInterval(bitcoinPollRef.current);
+        bitcoinPollRef.current = null;
+        return;
+      }
+
+      console.log("running btc poller");
+      const wasPaid = await lookForPaidPayment(convertedSatAmount);
+      if (wasPaid) {
+        clearInterval(bitcoinPollRef.current);
+        bitcoinPollRef.current = null;
+        await fetchFunction("/addTxActivity", claimObject, "post");
+        navigate(`/${user}/confirmed`);
+      }
+    }, 5_000);
+  }, [claimObject, convertedSatAmount, navigate, user]);
+
+  // ── Stablecoin poller ─────────────────────────────────────────────────
+  const runLookupForStablecoinPayment = useCallback(() => {
+    // Must have a paylinkId to poll against
+    if (!paylinkId.current) return;
+
+    // Always clear any existing stablecoin poller first
+    if (stablecoinPollRef.current) {
+      clearInterval(stablecoinPollRef.current);
+      stablecoinPollRef.current = null;
+    }
+
+    let pollCount = 0;
+    const MAX_POLLS = 60;
+
+    stablecoinPollRef.current = setInterval(async () => {
+      // Guard: only poll when still in stablecoin mode
+      if (paymentModeRef.current !== "stablecoin") {
+        clearInterval(stablecoinPollRef.current);
+        stablecoinPollRef.current = null;
+        return;
+      }
+
+      pollCount++;
+      if (pollCount > MAX_POLLS) {
+        clearInterval(stablecoinPollRef.current);
+        stablecoinPollRef.current = null;
+        setStablecoinPollTimeout(true);
+        return;
+      }
+
+      try {
+        const result = await fetchFunction(
+          "/getPOSPaylinkData",
+          { paylinkId: paylinkId.current, checkInvoice: true },
+          "post",
+        );
+
+        if (result?.data?.isPaid) {
+          clearInterval(stablecoinPollRef.current);
+          stablecoinPollRef.current = null;
+
+          // Read token/network from refs — avoids stale closure over state
+          const stablecoinClaimObject = {
+            storeName: user,
+            skipSaving: !serverName,
+            tx: {
+              tipAmountSats,
+              orderAmountSats: satAmount,
+              serverName,
+              time: new Date().getTime(),
+              paymentType: "stablecoin",
+              stablecoinToken: selectedTokenRef.current,
+              stablecoinNetwork: selectedNetworkRef.current,
+            },
+            bitcoinPrice: currentUserSession?.bitcoinPrice || 0,
+          };
+
+          await fetchFunction("/addTxActivity", stablecoinClaimObject, "post");
+          navigate(`/${user}/confirmed`);
+        }
+      } catch (_) {
+        // Silently ignore transient poll errors; keep polling.
+      }
+    }, 10_000);
+  }, [
+    currentUserSession,
+    navigate,
+    satAmount,
+    serverName,
+    tipAmountSats,
+    user,
+  ]);
+
+  // ── Invoice generation ────────────────────────────────────────────────
+  const generateStablecoinInvoice = useCallback(
+    async (network, token) => {
+      setStablecoinLoading(true);
+      try {
+        const newPaylinkId = crypto.randomUUID();
+        paylinkId.current = newPaylinkId;
+
+        const result = await fetchFunction(
+          "/createPOSInvoice",
+          {
+            paylinkId: newPaylinkId,
+            sparkPubKey: currentUserSession.account.sparkPubKey,
+            network,
+            currency: token,
+            fiatAmount: dollarAmount,
+            fiatCode: currentUserSession.account.storeCurrency || "USD",
+          },
+          "post",
+        );
+
+        if (!result || result.status !== "SUCCESS") {
+          throw new Error(result?.message || "Failed to create invoice");
+        }
+
+        addSwapToHistory({
+          quoteId: result.quoteId,
+          depositAddress: result.depositAddress,
+          network,
+          currency: token,
+          amountIn: result.amountIn,
+          dateAdded: new Date().toISOString(),
+        });
+
+        const displayAmt = result.amountIn
+          ? (Number(result.amountIn) / 1_000_000).toFixed(2)
+          : dollarAmount;
+
+        // Update ref immediately so the focus-effect guard works before state flushes
+        stablecoinAddressRef.current = result.depositAddress;
+        setStablecoinAddress(result.depositAddress);
+        setStablecoinDisplayAmount(displayAmt);
+
+        // Start polling only after we have a valid address + paylinkId
+        runLookupForStablecoinPayment();
+      } catch (err) {
+        showError(err.message || "Something went wrong. Please try again.");
+        // Reset mode back to BTC so the UI isn't stuck on a blank stablecoin screen
+        setPaymentMode("btc");
+        paymentModeRef.current = "btc";
+      } finally {
+        setStablecoinLoading(false);
+      }
+    },
+    [
+      currentUserSession,
+      dollarAmount,
+      runLookupForStablecoinPayment,
+      showError,
+    ],
+  );
+
+  // ── Spark invoice generation (runs once on mount) ─────────────────────
   useEffect(() => {
     if (didRunSparkInvoiceGeneration.current) return;
     if (!currentUserSession.account?.sparkPubKey) return;
@@ -124,120 +361,230 @@ export default function PaymentPage() {
 
       const invoice = await receiveSparkLightningPayment({
         amountSats: convertedSatAmount,
-        receiverIdentityPubkey: currentUserSession.account?.sparkPubKey,
+        receiverIdentityPubkey: currentUserSession.account.sparkPubKey,
       });
 
-      setSparkAddress(invoice.invoice.encodedInvoice);
-      setInvoiceGeneratedTime(Date.now());
+      if (!invoice) {
+        showError(
+          "There was a problem creating your invoice. Please try again.",
+        );
+        return;
+      }
+
+      const encodedInvoice = invoice.invoice.encodedInvoice;
+      // Update ref immediately before state flush
+      sparkAddressRef.current = encodedInvoice;
+      setSparkAddress(encodedInvoice);
+      runLookupForPayment();
     }
+
     getSparkInvoice();
   }, []);
 
-  if (!currentUserSession.account?.sparkPubKey && !satAmount)
+  // ── Mode toggle handler ───────────────────────────────────────────────
+  const handleModeChange = useCallback(
+    (newMode) => {
+      if (newMode === "stablecoin") {
+        if (Number(dollarAmount) < 1) {
+          showError(
+            "This amount is below the minimum allowed. For smaller transactions, only Bitcoin is supported.",
+          );
+          return;
+        }
+        // Stop BTC polling before switching mode
+        clearIntervals();
+        resetStablecoinState();
+        setPaymentMode("stablecoin");
+        paymentModeRef.current = "stablecoin";
+        setShowNetworkModal(true);
+      } else {
+        // Switching back to BTC — stop stablecoin polling, restart BTC polling
+        clearIntervals();
+        resetStablecoinState();
+        setPaymentMode("btc");
+        paymentModeRef.current = "btc";
+        // Only restart BTC polling if we already have an invoice
+        if (sparkAddressRef.current) {
+          runLookupForPayment();
+        }
+      }
+    },
+    [
+      clearIntervals,
+      dollarAmount,
+      resetStablecoinState,
+      runLookupForPayment,
+      showError,
+    ],
+  );
+
+  // ── Network select handler ────────────────────────────────────────────
+  const handleNetworkSelect = useCallback(
+    (network, token) => {
+      console.log("running network selection");
+      setSelectedNetwork(network);
+      setSelectedToken(token);
+      selectedNetworkRef.current = network;
+      selectedTokenRef.current = token;
+      setShowNetworkModal(false);
+      generateStablecoinInvoice(network, token);
+    },
+    [generateStablecoinInvoice],
+  );
+
+  const handleNetworkClose = useCallback(() => {
+    setShowNetworkModal(false);
+    // If no network was ever selected, snap back to BTC mode
+    if (!selectedNetworkRef.current) {
+      setPaymentMode("btc");
+      paymentModeRef.current = "btc";
+      if (sparkAddressRef.current) runLookupForPayment();
+    }
+  }, [runLookupForPayment]);
+
+  // ── Guard: stale session or missing amount ────────────────────────────
+  if (!currentUserSession.account?.sparkPubKey || !satAmount) {
     return (
       <div className="stale-state-container">
         <div className="stale-state-content">
           <p className="stale-state-text">
-            Your session has timed out, Please log back in.
+            Your session has timed out. Please log back in.
           </p>
           <button
-            onClick={() => {
-              navigate("../");
-            }}
-            className="stale-state-button"
+            onClick={() => navigate("../")}
+            className="action-button stale-state-button"
           >
             Go Home
           </button>
         </div>
       </div>
     );
-
-  if (!sparkAddress || !invoiceGeneratedTime) {
-    return <FullLoadingScreen text="Generating Invoice" />;
   }
+
+  if ((paymentMode === "btc" && !sparkAddress) || stablecoinLoading) {
+    return <FullLoadingScreen />;
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────
+  const qrSize = Math.min(windowWidth * 0.8, 315);
 
   return (
     <div className="PaymentPage-Container-globalOuter">
       <PosNavbar
         backFunction={() => {
+          resetStablecoinState();
           navigate(-1);
         }}
+        openNamePopupFunction={() => setShowServerNamePopup(true)}
       />
+
+      {showServerNamePopup && (
+        <EnterServerName setPopupType={() => setShowServerNamePopup(false)} />
+      )}
+
+      {showNetworkModal && (
+        <NetworkSelectSheet
+          onSelect={handleNetworkSelect}
+          onClose={handleNetworkClose}
+        />
+      )}
+
       <div className="PaymentPage-Container-globalInner">
-        {boltzLoadingAnimation ? (
-          <FullLoadingScreen text={boltzLoadingAnimation} />
-        ) : (
+        <PillToggle value={paymentMode} onChange={handleModeChange} />
+
+        {paymentMode === "btc" ? (
           <div className="PaymentPage-Container">
-            {/* 1. Total Amount */}
-            <h1
-              className="balance-text"
-              style={{ textTransform: "capitalize" }}
-            >
-              {formatBalanceAmount(
-                displayCorrectDenomination({
-                  amount: !currentSettings?.displayCurrency?.isSats
-                    ? (convertedSatAmount / dollarSatValue).toFixed(2)
-                    : convertedSatAmount.toFixed(0),
-                  fiatCurrency:
-                    currentUserSession.account.storeCurrency || "USD",
-                  showSats: currentSettings.displayCurrency.isSats,
-                  isWord: currentSettings.displayCurrency.isWord,
-                })
-              )}
-            </h1>
-
-            <p className="alt-amount">
-              {formatBalanceAmount(
-                displayCorrectDenomination({
-                  amount: currentSettings?.displayCurrency?.isSats
-                    ? (convertedSatAmount / dollarSatValue).toFixed(2)
-                    : convertedSatAmount.toFixed(0),
-                  fiatCurrency:
-                    currentUserSession.account.storeCurrency || "USD",
-                  showSats: !currentSettings.displayCurrency.isSats,
-                  isWord: currentSettings.displayCurrency.isWord,
-                })
-              )}
-            </p>
-
-            {/* 2. QR Code (wrapped in a copy-trigger) */}
-            <p className="PaymentPage-Instruction">Scan to Pay via Lightning</p>
-            <Popup
-              trigger={
-                <button className="PaymentPage-QRcontainer">
+            <div className="payment-content-row">
+              <div className="payment-info-col">
+                <h1
+                  className="balance-text"
+                  style={{ textTransform: "capitalize" }}
+                >
+                  {formatBalanceAmount(
+                    displayCorrectDenomination({
+                      amount: !currentSettings?.displayCurrency?.isSats
+                        ? (convertedSatAmount / dollarSatValue).toFixed(2)
+                        : convertedSatAmount.toFixed(0),
+                      fiatCurrency:
+                        currentUserSession.account.storeCurrency || "USD",
+                      showSats: currentSettings.displayCurrency.isSats,
+                      isWord: currentSettings.displayCurrency.isWord,
+                    }),
+                  )}
+                </h1>
+                <p className="alt-amount">
+                  {formatBalanceAmount(
+                    displayCorrectDenomination({
+                      amount: currentSettings?.displayCurrency?.isSats
+                        ? (convertedSatAmount / dollarSatValue).toFixed(2)
+                        : convertedSatAmount.toFixed(0),
+                      fiatCurrency:
+                        currentUserSession.account.storeCurrency || "USD",
+                      showSats: !currentSettings.displayCurrency.isSats,
+                      isWord: currentSettings.displayCurrency.isWord,
+                    }),
+                  )}
+                </p>
+              </div>
+              <div>
+                <button
+                  className="PaymentPage-QRcontainer"
+                  onClick={() => showCopyToast(sparkAddress)}
+                >
                   <QRCode
-                    size={Math.min(windowWidth * 0.8, 260)}
+                    size={qrSize}
                     value={sparkAddress}
                     renderAs="canvas"
                   />
                 </button>
-              }
-              modal
-            >
-              {(close) => (
-                <CopyToCliboardPopup content={sparkAddress} close={close} />
-              )}
-            </Popup>
-
-            {/* 3. Timer */}
-            <InvoiceTimer
-              expirySeconds={
-                INVOICE_EXPIRY_SECONDS -
-                Math.floor((Date.now() - invoiceGeneratedTime) / 1000)
-              }
-            />
+                <p className="PaymentPage-Instruction">
+                  Scan to pay using a Bitcoin Lightning wallet
+                </p>
+              </div>
+            </div>
           </div>
-        )}
+        ) : stablecoinAddress ? (
+          <div className="stablecoin-qr-screen">
+            <div className="payment-content-row">
+              <div className="payment-info-col">
+                <h1 className="balance-text">${stablecoinDisplayAmount}</h1>
+                <p className="alt-amount">
+                  {selectedToken} ·{" "}
+                  {selectedNetwork ? NETWORK_LABELS[selectedNetwork] : ""}
+                </p>
+              </div>
+              <div>
+                <button
+                  className="PaymentPage-QRcontainer"
+                  onClick={() => showCopyToast(stablecoinAddress)}
+                >
+                  <QRCode
+                    size={qrSize}
+                    value={stablecoinAddress}
+                    renderAs="canvas"
+                  />
+                </button>
+                <p className="PaymentPage-Instruction">
+                  {`Scan to pay using your ${selectedToken} wallet`}
+                </p>
+              </div>
+            </div>
+
+            {stablecoinPollTimeout && (
+              <p className="stablecoin-timeout-msg">
+                Payment not detected yet — still waiting…
+              </p>
+            )}
+
+            <button
+              className="action-button primary change-network-link"
+              onClick={() => setShowNetworkModal(true)}
+            >
+              Change network
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
-
-  async function handleConfirmation(result, claimObject) {
-    console.log(result, "save response");
-
-    if (result) {
-      await fetchFunction("/addTxActivity", claimObject, "post");
-      navigate(`/${user}/confirmed`);
-    } else setBoltzLoadingAnimation("Error receiving payment");
-  }
 }

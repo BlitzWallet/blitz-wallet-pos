@@ -8,15 +8,14 @@
   position: relative;
 }
 .POS-back {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
   margin-right: auto;
 }
 .POS-name {
-  width: calc(100% - 110px);
+  width: calc(100% - 130px);
   text-align: center;
-
   text-transform: capitalize;
   font-weight: 500;
   font-size: 18px;
@@ -34,6 +33,11 @@
   flex-shrink: 0;
   margin-left: 5px;
   background-color: var(--background);
+}
+.POS-SwapHistoryBtn {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 
 .nav-profile-initial {

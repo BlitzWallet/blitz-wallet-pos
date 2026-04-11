@@ -52,7 +52,7 @@
 }
 
 .ns-card {
-  width: min(580px, calc(100dvw - 32px));
+  width: min(580px, 90%);
   max-height: min(480px, calc(100dvh - 64px));
   background-color: var(--darkModeText);
   border-radius: 16px;

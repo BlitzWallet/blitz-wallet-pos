@@ -52,11 +52,11 @@ const NETWORKS = Object.keys(NETWORK_TOKENS);
 export default function NetworkSelectSheet({ onSelect, onClose }) {
   const [isClosing, setIsClosing] = useState(false);
   const [activeNetwork, setActiveNetwork] = useState(NETWORKS[0]);
-  const [activeToken, setActiveToken] = useState({});
 
   const handleClose = () => setIsClosing(true);
 
   const handleAnimationEnd = (e) => {
+    console.log(e.target.classList, e.target.classList.contains("ns-card"));
     if (isClosing && e.target.classList.contains("ns-card")) {
       onClose();
     }
@@ -71,9 +71,8 @@ export default function NetworkSelectSheet({ onSelect, onClose }) {
   };
 
   const handleTokenSelect = (token) => {
-    setActiveToken(token);
+    onSelect(activeNetwork, token);
     setIsClosing(true);
-    setTimeout(() => onSelect(activeNetwork, token), 150);
   };
 
   return (
@@ -122,9 +121,7 @@ export default function NetworkSelectSheet({ onSelect, onClose }) {
             {NETWORK_TOKENS[activeNetwork].map((token) => (
               <button
                 key={token}
-                className={`ns-token-row${
-                  activeToken === token ? " selected" : ""
-                }`}
+                className="ns-token-row"
                 onClick={() => handleTokenSelect(token)}
               >
                 <img
