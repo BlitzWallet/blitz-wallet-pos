@@ -1,6 +1,6 @@
 .POS-navbar {
   width: 90%;
-  max-width: 500px;
+  max-width: 800px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,12 +23,24 @@
   margin: 0;
   position: absolute;
 }
-.nav-warning {
-  width: 22px;
-  height: 22px;
+.nav-profile-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  margin-top: 2px;
-  margin-right: 5px;
+  flex-shrink: 0;
+  margin-left: 5px;
+  background-color: var(--background);
+}
+
+.nav-profile-initial {
+  color: #0375f6;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .nav-settings {

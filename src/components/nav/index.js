@@ -1,9 +1,8 @@
-import { useLocation } from "react-router-dom";
 import { useSettingsDisplay } from "../../contexts/settingsDisplay";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import "./style.css";
 import { useGlobalContext } from "../../contexts/posContext";
-import { AlertTriangle, ArrowLeft, History } from "lucide-react";
+import { ArrowLeft, History, UserRound } from "lucide-react";
 
 export default function PosNavbar({
   backFunction,
@@ -11,10 +10,9 @@ export default function PosNavbar({
   fromPage = "",
   setShowSwapHistory,
 }) {
-  const { didConfirmSavedUsername } = useGlobalContext();
+  const { serverName } = useGlobalContext();
   const User = getCurrentUser();
   const { setDisplaySettings } = useSettingsDisplay();
-  const location = useLocation();
 
   return (
     <div className="POS-navbar">
@@ -25,17 +23,7 @@ export default function PosNavbar({
         className="POS-back"
       />
       <h2 className="POS-name">{User}</h2>
-      {location.pathname.split("/").length == 2 && (
-        <>
-          {!didConfirmSavedUsername && (
-            <AlertTriangle
-              onClick={() => openNamePopupFunction()}
-              color="#0375f6"
-              className="nav-warning"
-            />
-          )}
-        </>
-      )}
+
       {fromPage === "home" && (
         <History
           className="POS-SwapHistoryBtn"
@@ -43,6 +31,18 @@ export default function PosNavbar({
           color="#0375f6"
         />
       )}
+      <div
+        className="nav-profile-badge"
+        onClick={() => openNamePopupFunction?.()}
+      >
+        {serverName ? (
+          <span className="nav-profile-initial">
+            {serverName[0].toUpperCase()}
+          </span>
+        ) : (
+          <UserRound size={16} color="#0375f6" />
+        )}
+      </div>
     </div>
   );
 }

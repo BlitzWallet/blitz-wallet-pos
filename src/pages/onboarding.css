@@ -115,3 +115,17 @@
   cursor: default;
   box-shadow: none;
 }
+
+.ob-skip {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  color: var(--primary);
+  font-family: "Poppins", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  margin-top: 8px;
+}

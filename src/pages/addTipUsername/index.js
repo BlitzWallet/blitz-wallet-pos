@@ -25,7 +25,7 @@ function AddTipsUsername() {
           tips go?
         </h1>
         <p className="ob-desc">
-          A Blitz username or Lightning address for receiving tips.
+          Add a Blitz username or Lightning address to receive tips
         </p>
 
         <div className="ob-input-wrap">
@@ -47,6 +47,9 @@ function AddTipsUsername() {
           }}
         >
           Continue
+        </button>
+        <button className="ob-skip" onClick={() => navigate(`/${user}`)}>
+          Skip
         </button>
       </div>
     </div>
