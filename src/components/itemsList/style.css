@@ -13,7 +13,7 @@
 }
 .customItemsContainer .itemContainer {
   width: 80%;
-  background-color: var(--lightModeBackgroundOffset);
+  background-color: var(--background);
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -312,10 +312,6 @@ function POSPage() {
 
   async function handleInvoice() {
     if (!canReceivePayment) return;
-    if (!serverName) {
-      handleOpenChangeUsername();
-      return;
-    }
     const satValue = currentSettings.displayCurrency.isSats
       ? totalAmount
       : dollarSatValue * (totalAmount / 100);

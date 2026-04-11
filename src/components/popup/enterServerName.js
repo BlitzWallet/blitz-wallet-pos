@@ -54,12 +54,12 @@ export default function EnterServerName({ setPopupType }) {
         <p className="sheet-description">
           {serverName
             ? "This is your payment handle for receiving tips."
-            : "Enter a Blitz username or lightning address to start accepting payments."}
+            : "Enter your Blitz username or Lightning address to receive tips."}
         </p>
         <CustomTextInput
           maxLength={50}
           getTextInput={setName}
-          inputText={name}
+          inputText={name || ""}
           placeholder="Name..."
           customStyles={{ width: "100%" }}
         />

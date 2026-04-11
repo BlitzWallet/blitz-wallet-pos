@@ -58,7 +58,7 @@ export default function ItemsList({
             )}
           </p>
         </div>
-        <Plus />
+        <Plus color="#0375f6" />
       </div>
     );
   });

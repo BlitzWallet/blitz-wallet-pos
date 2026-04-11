@@ -6,6 +6,7 @@ import { useGlobalContext } from "../../contexts/posContext";
 import CustomKeyboard from "../../components/keypad";
 import { formatBalanceAmount } from "../../functions/formatNumber";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination";
+import EnterServerName from "../../components/popup/enterServerName";
 
 export default function AddTipPage() {
   const { currentUserSession, currentSettings, dollarSatValue } =
@@ -13,6 +14,10 @@ export default function AddTipPage() {
   const location = useLocation();
   const { satAmount, fiatAmount } = location.state;
   const navigate = useNavigate();
+
+  const [showServerNamePopup, setShowServerNamePopup] = useState(false);
+
+  const handleOpenChangeUsername = () => setShowServerNamePopup(true);
 
   const [tipAmount, setTipAmount] = useState({
     selectedTip: undefined,
@@ -45,30 +50,37 @@ export default function AddTipPage() {
         backFunction={() => {
           navigate(-1);
         }}
+        openNamePopupFunction={handleOpenChangeUsername}
       />
+      {showServerNamePopup && (
+        <EnterServerName setPopupType={() => setShowServerNamePopup(false)} />
+      )}
 
       {/* Content */}
       <main className="Tip-container">
         {/* Total Section */}
-        <div className="Tip-AmountDisplay">
-          <div className="total-label">
-            {tipAmount.showCustomTip ? "Tip Amount" : "Total amount"}
+        {tipAmount.showCustomTip && (
+          <div className="Tip-AmountDisplay">
+            <div className="total-label">
+              {tipAmount.showCustomTip ? "Tip Amount" : "Total amount"}
+            </div>
+            <div className="total-amount-large">
+              {formatBalanceAmount(
+                displayCorrectDenomination({
+                  amount: tipAmount.showCustomTip
+                    ? tipAmount.customTip / 100 || 0
+                    : currentSettings?.displayCurrency?.isSats
+                    ? (Number(satAmount) + Number(tipAmountSats)).toFixed(0)
+                    : (Number(fiatAmount) + Number(tipAmountFiat)).toFixed(2),
+                  fiatCurrency:
+                    currentUserSession.account.storeCurrency || "USD",
+                  showSats: currentSettings.displayCurrency.isSats,
+                  isWord: currentSettings.displayCurrency.isWord,
+                }),
+              )}
+            </div>
           </div>
-          <div className="total-amount-large">
-            {formatBalanceAmount(
-              displayCorrectDenomination({
-                amount: tipAmount.showCustomTip
-                  ? tipAmount.customTip || 0
-                  : currentSettings?.displayCurrency?.isSats
-                  ? (Number(satAmount) + Number(tipAmountSats)).toFixed(0)
-                  : (Number(fiatAmount) + Number(tipAmountFiat)).toFixed(2),
-                fiatCurrency: currentUserSession.account.storeCurrency || "USD",
-                showSats: currentSettings.displayCurrency.isSats,
-                isWord: currentSettings.displayCurrency.isWord,
-              }),
-            )}
-          </div>
-        </div>
+        )}
 
         {tipAmount.showCustomTip ? (
           <div className="custom-tip-section">

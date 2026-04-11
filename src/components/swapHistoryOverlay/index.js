@@ -68,6 +68,8 @@ export default function SwapHistoryOverlay({ isOpen, onClose }) {
     showCopyToast(entry.quoteId);
   };
 
+  console.log(history);
+
   return (
     <div className="SwapHistory-Container">
       <div className="SwapHistory-Panel">
@@ -75,12 +77,9 @@ export default function SwapHistoryOverlay({ isOpen, onClose }) {
           <div>
             <p className="SwapHistory-Title">Swap History</p>
           </div>
-          <X
-            className="SwapHistory-CloseBtn "
-            onClick={onClose}
-            size={20}
-            color="#0375f6"
-          />
+          <button className="ns-close-btn" onClick={onClose} aria-label="Close">
+            <X size={18} color="#0375f6" />
+          </button>
         </div>
         <div className="SwapHistory-List">
           {history.length === 0 ? (

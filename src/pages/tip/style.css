@@ -7,7 +7,7 @@
 
 .Tip-container {
   width: 90%;
-  max-width: 500px;
+  max-width: 800px;
   flex: 1;
   min-height: calc(100dvh - 52px);
   margin: 0 auto 0;
@@ -26,11 +26,13 @@
 .total-label {
   opacity: 0.5;
   font-size: 0.875rem;
+  margin-bottom: 10px;
 }
 
 .total-amount-large {
-  font-size: 42px;
+  font-size: 50px;
   font-weight: 500;
+  line-height: 1;
 }
 
 /* Tip Selection */
@@ -39,6 +41,7 @@
   display: flex;
   flex-direction: column;
   margin: 20px 0 20px;
+  justify-content: center;
 
   /* gap: 1.5rem; */
 }
@@ -76,8 +79,8 @@
 
 .tip-option-selected {
   background-color: var(--primary) !important;
+  border: 2px solid var(--primary);
   color: white !important;
-  border: unset;
 }
 .tip-option-selected > * {
   color: white !important;
