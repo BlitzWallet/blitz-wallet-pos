@@ -79,10 +79,11 @@
 /* Footer */
 .POS-Footer {
   width: 100%;
+  max-width: 400px;
   align-items: center;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin: 0 auto 20px;
 }
 
 .POS-ChargeButton:active {

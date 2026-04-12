@@ -27,8 +27,10 @@ function HeroPage() {
           <br />
           Your Money.
         </h1>
-
-        <button className="hero-cta" onClick={() => navigate("/setup")}>
+        <button
+          className="action-button primary hero-cta"
+          onClick={() => navigate("/setup")}
+        >
           Get Started
         </button>
       </div>

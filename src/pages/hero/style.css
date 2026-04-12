@@ -5,11 +5,12 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
 }
 
 /* Subtle grid texture */
 .hero-bg-grid {
+  width: 100%;
+  height: 100%;
   position: absolute;
   inset: 0;
   background-image: linear-gradient(
@@ -42,7 +43,7 @@
   padding: 20px 0;
   max-width: 450px;
   width: 90%;
-  height: 100dvh;
+  min-height: 100dvh;
   position: relative;
   z-index: 1;
   animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -61,7 +62,6 @@
 
 .hero-logo-wrap {
   position: relative;
-  margin-bottom: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,29 +93,11 @@
   font-size: min(11cqw, 56px);
   line-height: 1.2;
   color: #ffffff;
-  margin: 0 0 20px;
+  margin: 44px 0 30px;
   letter-spacing: -1.5px;
   animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
 }
 
 .hero-cta {
-  width: 100%;
-  max-width: 340px;
-  padding: 17px;
-  background: var(--primary);
-  color: #ffffff;
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  border: none;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both;
   margin-top: auto;
-}
-
-.hero-cta:active {
-  transform: scale(0.98);
-  box-shadow: 0 3px 10px rgba(3, 117, 246, 0.2);
 }

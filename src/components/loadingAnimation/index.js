@@ -5,7 +5,7 @@ export default function LoadingAnimation() {
   return (
     <div>
       <Lottie
-        style={{ width: "15vw", height: "15vw", maxWidth: 150, maxHeight: 150 }}
+        style={{ width: "15vw", height: "15vw", maxWidth: 80, maxHeight: 80 }}
         autoPlay
         animationData={spinner}
         loop

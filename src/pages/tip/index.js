@@ -110,7 +110,7 @@ export default function AddTipPage() {
                     showCustomTip: false,
                   }))
                 }
-                className="continue-btn"
+                className="action-button primary continue-btn"
               >
                 {tipAmount.customTip ? "Save" : "Back"}
               </button>
@@ -248,7 +248,7 @@ export default function AddTipPage() {
                 disabled={
                   !tipAmount.customTip && tipAmount.selectedTip === undefined
                 }
-                className="continue-btn"
+                className="action-button primary continue-btn"
               >
                 Continue
               </button>

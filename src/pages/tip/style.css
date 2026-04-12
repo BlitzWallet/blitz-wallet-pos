@@ -38,9 +38,11 @@
 /* Tip Selection */
 .Tip-ContentArea {
   flex: 1;
+  width: 100%;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
-  margin: 20px 0 20px;
+  margin: 20px auto 0.75rem;
   justify-content: center;
 
   /* gap: 1.5rem; */
@@ -55,6 +57,7 @@
 }
 
 .tip-grid {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
@@ -116,19 +119,8 @@
 
 /* Continue Button */
 .continue-btn {
-  width: 100%;
-  padding: 17px;
-  border-radius: 14px;
-  background: var(--primary);
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.continue-btn:active {
-  transform: scale(0.98);
-  box-shadow: 0 3px 10px rgba(3, 117, 246, 0.2);
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .continue-btn:disabled {

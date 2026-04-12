@@ -81,7 +81,6 @@ export default function PaymentPage() {
   const [stablecoinAddress, setStablecoinAddress] = useState(null);
   const [stablecoinDisplayAmount, setStablecoinDisplayAmount] = useState(null);
   const [stablecoinLoading, setStablecoinLoading] = useState(false);
-  const [stablecoinPollTimeout, setStablecoinPollTimeout] = useState(false);
   const [showServerNamePopup, setShowServerNamePopup] = useState(false);
 
   // ── Refs — hold latest values for use inside intervals without stale closures ──
@@ -162,7 +161,7 @@ export default function PaymentPage() {
     setStablecoinAddress(null);
     setStablecoinDisplayAmount(null);
     setStablecoinLoading(false);
-    setStablecoinPollTimeout(false);
+
     setShowNetworkModal(false);
     paylinkId.current = null;
     // Sync refs immediately so focus-effect guards work before state flushes
@@ -227,7 +226,7 @@ export default function PaymentPage() {
     }
 
     let pollCount = 0;
-    const MAX_POLLS = 60;
+    const MAX_POLLS = 200;
 
     stablecoinPollRef.current = setInterval(async () => {
       // Guard: only poll when still in stablecoin mode
@@ -241,7 +240,6 @@ export default function PaymentPage() {
       if (pollCount > MAX_POLLS) {
         clearInterval(stablecoinPollRef.current);
         stablecoinPollRef.current = null;
-        setStablecoinPollTimeout(true);
         return;
       }
 
@@ -569,12 +567,6 @@ export default function PaymentPage() {
                 </p>
               </div>
             </div>
-
-            {stablecoinPollTimeout && (
-              <p className="stablecoin-timeout-msg">
-                Payment not detected yet — still waiting…
-              </p>
-            )}
 
             <button
               className="action-button primary change-network-link"
