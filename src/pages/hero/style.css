@@ -13,12 +13,6 @@
   height: 100%;
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(
-      rgba(3, 117, 246, 0.06) 1px,
-      transparent 1px
-    ),
-    linear-gradient(90deg, rgba(3, 117, 246, 0.06) 1px, transparent 1px);
-  background-size: 44px 44px;
   pointer-events: none;
 }
 
@@ -27,11 +21,6 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse 70% 70% at 50% 50%,
-    transparent 30%,
-    rgba(0, 14, 30, 0.55) 100%
-  );
   pointer-events: none;
 }
 

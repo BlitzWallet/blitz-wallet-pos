@@ -8,10 +8,15 @@ function HeroPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.body.style.background = "#00254e";
+
     async function init() {
       await createSparkWallet();
     }
     init();
+    return () => {
+      document.body.style.backgroundColor = "";
+    };
   }, []);
 
   return (
