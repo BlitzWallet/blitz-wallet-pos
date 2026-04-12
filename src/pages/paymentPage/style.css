@@ -1,12 +1,12 @@
 .PaymentPage-Container-globalOuter {
-  width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 .PaymentPage-Container-globalInner {
   width: 90%;
   max-width: 800px;
-  min-height: calc(100dvh - 50px);
+  min-height: calc(100dvh - 100px);
   margin: auto auto 0;
   display: flex;
   flex-direction: column;
@@ -23,7 +23,6 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-bottom: auto;
 }
 
 .balance-text {
@@ -133,7 +132,7 @@
   width: 100px;
   height: 48px;
   border-radius: 100px;
-  background: var(--lightModeBackgroundOffset);
+  background: var(--lightModeBackground);
   border: none;
   cursor: pointer;
   padding: 4px 15px;

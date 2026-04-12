@@ -56,7 +56,6 @@ export default function NetworkSelectSheet({ onSelect, onClose }) {
   const handleClose = () => setIsClosing(true);
 
   const handleAnimationEnd = (e) => {
-    console.log(e.target.classList, e.target.classList.contains("ns-card"));
     if (isClosing && e.target.classList.contains("ns-card")) {
       onClose();
     }

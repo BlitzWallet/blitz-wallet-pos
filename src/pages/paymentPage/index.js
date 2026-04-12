@@ -203,7 +203,6 @@ export default function PaymentPage() {
         return;
       }
 
-      console.log("running btc poller");
       const wasPaid = await lookForPaidPayment(convertedSatAmount);
       if (wasPaid) {
         clearInterval(bitcoinPollRef.current);
@@ -419,7 +418,6 @@ export default function PaymentPage() {
   // ── Network select handler ────────────────────────────────────────────
   const handleNetworkSelect = useCallback(
     (network, token) => {
-      console.log("running network selection");
       setSelectedNetwork(network);
       setSelectedToken(token);
       selectedNetworkRef.current = network;
@@ -474,6 +472,9 @@ export default function PaymentPage() {
           navigate(-1);
         }}
         openNamePopupFunction={() => setShowServerNamePopup(true)}
+        PillToggle={
+          <PillToggle value={paymentMode} onChange={handleModeChange} />
+        }
       />
 
       {showServerNamePopup && (
@@ -488,8 +489,6 @@ export default function PaymentPage() {
       )}
 
       <div className="PaymentPage-Container-globalInner">
-        <PillToggle value={paymentMode} onChange={handleModeChange} />
-
         {paymentMode === "btc" ? (
           <div className="PaymentPage-Container">
             <div className="payment-content-row">

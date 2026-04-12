@@ -9,7 +9,7 @@
   width: 90%;
   max-width: 800px;
   flex: 1;
-  min-height: calc(100dvh - 52px);
+  min-height: calc(100dvh - 100px);
   margin: 0 auto 0;
   display: flex;
   flex-direction: column;

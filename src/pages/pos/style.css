@@ -8,7 +8,7 @@
 .POS-ContentContainer {
   width: 90%;
   max-width: 800px;
-  min-height: calc(100dvh - 50px);
+  min-height: calc(100dvh - 100px);
   display: flex;
   flex-direction: column;
   margin: 0 auto;
