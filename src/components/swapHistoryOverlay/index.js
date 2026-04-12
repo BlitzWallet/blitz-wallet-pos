@@ -68,8 +68,6 @@ export default function SwapHistoryOverlay({ isOpen, onClose }) {
     showCopyToast(entry.quoteId);
   };
 
-  console.log(history);
-
   return (
     <div className="SwapHistory-Container">
       <div className="SwapHistory-Panel">

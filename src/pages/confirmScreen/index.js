@@ -1,7 +1,7 @@
 import "./style.css";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
-import checkAnimation from "../../../public/assets/checkmark.json";
+import checkAnimation from "../../assets/checkmark.json";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import { useNavigate } from "react-router-dom";
 
