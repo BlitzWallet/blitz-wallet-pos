@@ -45,13 +45,7 @@ export default function PosNavbar({
               onClick={() => openNamePopupFunction?.()}
               aria-label="Profile settings"
             >
-              {serverName ? (
-                <span className="nav-profile-initial">
-                  {serverName[0].toUpperCase()}
-                </span>
-              ) : (
-                <UserRound size={20} color="#0375f6" />
-              )}
+              <UserRound size={20} color="#0375f6" />
             </button>
           </>
         )}

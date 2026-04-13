@@ -53,10 +53,3 @@
   transition: background 0.15s ease;
   flex-shrink: 0;
 }
-
-.nav-profile-initial {
-  color: var(--primary);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-}
