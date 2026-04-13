@@ -25,20 +25,22 @@ export default function AddTipPage() {
     showCustomTip: false,
   });
 
+  const isSats = currentSettings?.displayCurrency?.isSats;
+
   const tipValue = tipAmount.customTip
-    ? currentSettings?.displayCurrency?.isSats
+    ? isSats
       ? tipAmount.customTip
       : ((Number(tipAmount.customTip) || 0) / 100).toFixed(2)
     : (
-        (currentSettings?.displayCurrency?.isSats ? satAmount : fiatAmount) *
+        (isSats ? satAmount : fiatAmount) *
         ((tipAmount.selectedTip || 0) / 100)
-      ).toFixed(currentSettings?.displayCurrency?.isSats ? 0 : 2);
+      ).toFixed(isSats ? 0 : 2);
 
-  const tipAmountFiat = currentSettings?.displayCurrency?.isSats
+  const tipAmountFiat = isSats
     ? (tipValue / dollarSatValue).toFixed(2)
     : Number(tipValue).toFixed(2);
 
-  const tipAmountSats = currentSettings?.displayCurrency?.isSats
+  const tipAmountSats = isSats
     ? Math.round(tipValue)
     : Math.round(dollarSatValue * tipValue);
 
@@ -61,17 +63,13 @@ export default function AddTipPage() {
         {/* Total Section */}
         {tipAmount.showCustomTip && (
           <div className="Tip-AmountDisplay">
-            <div className="total-label">
-              {tipAmount.showCustomTip ? "Tip Amount" : "Total amount"}
-            </div>
+            <div className="total-label">Tip Amount</div>
             <div className="total-amount-large">
               {formatBalanceAmount(
                 displayCorrectDenomination({
-                  amount: tipAmount.showCustomTip
-                    ? tipAmount.customTip / 100 || 0
-                    : currentSettings?.displayCurrency?.isSats
-                    ? (Number(satAmount) + Number(tipAmountSats)).toFixed(0)
-                    : (Number(fiatAmount) + Number(tipAmountFiat)).toFixed(2),
+                  amount: isSats
+                    ? tipAmount.customTip || 0
+                    : tipAmount.customTip / 100 || 0,
                   fiatCurrency:
                     currentUserSession.account.storeCurrency || "USD",
                   showSats: currentSettings.displayCurrency.isSats,
@@ -84,7 +82,6 @@ export default function AddTipPage() {
 
         {tipAmount.showCustomTip ? (
           <div className="custom-tip-section">
-            {/* <BalanceView balance={tipAmount.customTip} /> */}
             <CustomKeyboard
               showPlus={false}
               customFunction={(input) => {

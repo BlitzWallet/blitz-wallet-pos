@@ -1,7 +1,8 @@
 .customItemsContainer {
   width: 100%;
-  height: calc(min(calc(100dvw / 3), 70px) * 4);
-  margin-top: 10px;
+  max-height: calc(100dvh - 442px);
+  min-height: 300px;
+  margin: 10px 0;
   overflow-y: scroll;
   cursor: pointer;
 }
@@ -9,10 +10,12 @@
 .customItemsContainer .noItemsText {
   text-align: center;
   width: 90%;
+  max-width: 400px;
   margin: 0 auto;
 }
 .customItemsContainer .itemContainer {
-  width: 80%;
+  width: 90%;
+  max-width: 400px;
   background-color: var(--background);
   display: flex;
   justify-content: space-between;

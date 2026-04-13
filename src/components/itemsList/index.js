@@ -14,8 +14,8 @@ export default function ItemsList({
     return (
       <div className="customItemsContainer">
         <p className="noItemsText">
-          Nothing to show yet! Your employer can add items through the Blitz
-          Wallet POS settings.
+          Nothing to show yet! Your employer can add items in Blitz Wallet POS
+          settings page.
         </p>
       </div>
     );
