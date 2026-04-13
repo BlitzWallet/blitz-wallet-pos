@@ -11,6 +11,7 @@ import chainTron from "../../assets/chain-tron.svg";
 import usdcIcon from "../../assets/usdc.svg";
 import usdtIcon from "../../assets/usdt.svg";
 import { X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const NETWORK_TOKENS = {
   ethereum: ["USDC", "USDT"],
@@ -52,6 +53,7 @@ const NETWORKS = Object.keys(NETWORK_TOKENS);
 export default function NetworkSelectSheet({ onSelect, onClose }) {
   const [isClosing, setIsClosing] = useState(false);
   const [activeNetwork, setActiveNetwork] = useState(NETWORKS[0]);
+  const { t } = useTranslation();
 
   const handleClose = () => setIsClosing(true);
 
