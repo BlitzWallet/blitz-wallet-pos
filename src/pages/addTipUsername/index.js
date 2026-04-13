@@ -48,7 +48,11 @@ function AddTipsUsername() {
         >
           Continue
         </button>
-        <button className="ob-skip" onClick={() => navigate(`/${user}`)}>
+        <button
+          style={{ paddingBottom: 0 }}
+          className="ob-skip"
+          onClick={() => navigate(`/${user}`)}
+        >
           Skip
         </button>
       </div>

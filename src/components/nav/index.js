@@ -35,7 +35,7 @@ export default function PosNavbar({
             <button
               className="nav-pill-btn"
               onClick={() => setShowSwapHistory(true)}
-              aria-label="Swap history"
+              aria-label="Stablecoin history"
             >
               <History size={20} color="#0375f6" />
             </button>

@@ -73,7 +73,7 @@ export default function SwapHistoryOverlay({ isOpen, onClose }) {
       <div className="SwapHistory-Panel">
         <div className="SwapHistory-Header">
           <div>
-            <p className="SwapHistory-Title">Swap History</p>
+            <p className="SwapHistory-Title">Stablecoin History</p>
           </div>
           <button className="ns-close-btn" onClick={onClose} aria-label="Close">
             <X size={18} color="#0375f6" />
@@ -81,7 +81,9 @@ export default function SwapHistoryOverlay({ isOpen, onClose }) {
         </div>
         <div className="SwapHistory-List">
           {history.length === 0 ? (
-            <p className="SwapHistory-Empty">No swaps recorded yet.</p>
+            <p className="SwapHistory-Empty">
+              No stablecoin payments recorded yet.
+            </p>
           ) : (
             history.map((entry, i) => (
               <div
