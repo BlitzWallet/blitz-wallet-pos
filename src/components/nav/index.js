@@ -1,3 +1,4 @@
+import { useGlobalContext } from "../../contexts/posContext";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import "./style.css";
 import { ArrowLeft, History, Pi, UserRound } from "lucide-react";
@@ -10,6 +11,7 @@ export default function PosNavbar({
   setShowSwapHistory,
   PillToggle,
 }) {
+  const { serverName } = useGlobalContext();
   const User = getCurrentUser();
   const { t } = useTranslation();
 
@@ -45,6 +47,7 @@ export default function PosNavbar({
               onClick={() => openNamePopupFunction?.()}
               aria-label={t("common.settings")}
             >
+              {serverName && <div className="active-server-dot" />}
               <UserRound size={20} color="#0375f6" />
             </button>
           </>

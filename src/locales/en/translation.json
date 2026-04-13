@@ -71,7 +71,7 @@
   },
   "serverName": {
     "yourUsername": "Your Blitz Username",
-    "setUsername": "Set Your Username",
+    "setUsername": "Edit Your Username",
     "description": "This is your payment handle for receiving tips.",
     "enterDescription": "Enter your Blitz username or Lightning address to receive tips.",
     "placeholder": "Name..."

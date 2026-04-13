@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import {
   getLocalStorageItem,
+  removeLocalStorageItem,
   saveToLocalStorage,
 } from "../functions/localStorage";
 import {
@@ -22,6 +23,10 @@ export const GlobalPOSContext = ({ children }) => {
     account: null,
     bitcoinPrice: null,
   });
+  const removeServerName = () => {
+    removeLocalStorageItem(SERVER_LOCAL_STORAGE);
+    setServerName(null);
+  };
 
   const [didConfirmSavedUsername, setDidConfirmSavedUsername] = useState(false);
 
@@ -56,6 +61,7 @@ export const GlobalPOSContext = ({ children }) => {
         setCurrentUserSession,
         serverName,
         setServerName,
+        removeServerName,
         currentSettings,
         toggleSettings,
         dollarSatValue,

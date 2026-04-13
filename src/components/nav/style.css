@@ -47,9 +47,20 @@
   padding: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
+  /* gap: 6px; */
   cursor: pointer;
   background: transparent;
   transition: background 0.15s ease;
   flex-shrink: 0;
+  position: relative;
+}
+
+.POS-navbar .active-server-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #0375f6;
+  border-radius: 50%;
+  position: absolute;
+  right: 0px;
+  bottom: 8px;
 }

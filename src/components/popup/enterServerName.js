@@ -7,8 +7,12 @@ import CustomTextInput from "../textInput";
 import { useTranslation } from "react-i18next";
 
 export default function EnterServerName({ setPopupType }) {
-  const { serverName, setServerName, setDidConfirmSavedUsername } =
-    useGlobalContext();
+  const {
+    serverName,
+    setServerName,
+    setDidConfirmSavedUsername,
+    removeServerName,
+  } = useGlobalContext();
   const [name, setName] = useState(serverName);
   const [isClosing, setIsClosing] = useState(false);
   const { t } = useTranslation();
@@ -50,11 +54,7 @@ export default function EnterServerName({ setPopupType }) {
         onAnimationEnd={handleAnimationEnd}
       >
         <div className="sheet-handle" />
-        <p className="sheet-title">
-          {serverName
-            ? t("serverName.yourUsername")
-            : t("serverName.setUsername")}
-        </p>
+        <p className="sheet-title">{t("serverName.setUsername")}</p>
         <p className="sheet-description">
           {serverName
             ? t("serverName.description")
@@ -67,12 +67,25 @@ export default function EnterServerName({ setPopupType }) {
           placeholder={t("serverName.placeholder")}
           customStyles={{ width: "100%" }}
         />
-        <button
-          className="action-button primary sheet-cta-button"
-          onClick={handleNameInput}
-        >
-          {serverName && !name ? t("common.keep") : t("common.save")}
-        </button>
+        <div className="buttons-container">
+          <button
+            className="action-button primary sheet-cta-button"
+            onClick={handleNameInput}
+          >
+            {serverName && !name ? t("common.keep") : t("common.save")}
+          </button>
+          {serverName && (
+            <button
+              className="action-button sheet-cta-button"
+              onClick={() => {
+                removeServerName();
+                setName("");
+              }}
+            >
+              {t("common.delete")}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
