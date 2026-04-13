@@ -4,9 +4,11 @@ import Lottie from "lottie-react";
 import checkAnimation from "../../assets/checkmark.json";
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ConfirmPaymentScreen({ clearSettings }) {
   const user = getCurrentUser();
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const [showButton, setShowButton] = useState(false);
@@ -30,7 +32,7 @@ export default function ConfirmPaymentScreen({ clearSettings }) {
             onClick={clearSettings}
             className="action-button ConfirmScreen-BTN"
           >
-            Continue
+            {t("common.continue")}
           </button>
         ) : (
           <p />

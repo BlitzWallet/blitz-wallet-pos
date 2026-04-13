@@ -20,6 +20,7 @@ import { addSwapToHistory } from "../../functions/swapHistory.js";
 import { useErrorDisplay } from "../../contexts/errorDisplay.js";
 import EnterServerName from "../../components/popup/enterServerName.js";
 import NetworkSelectSheet from "../../components/popup/NetworkSelectSheet.js";
+import { useTranslation } from "react-i18next";
 
 // ─── Module-level constants (no recreations on render) ───────────────────────
 
@@ -36,12 +37,15 @@ const NETWORK_LABELS = {
 // ─── PillToggle — memoised; only re-renders when value/onChange change ────────
 
 const PillToggle = memo(function PillToggle({ value, onChange }) {
+  const { t } = useTranslation();
   const isUsd = value === "stablecoin";
   return (
     <button
       className={`pill-toggle${isUsd ? " pill-toggle--usd" : ""}`}
       onClick={() => onChange(isUsd ? "btc" : "stablecoin")}
-      aria-label={`Switch to ${isUsd ? "BTC" : "USD"} payments`}
+      aria-label={t(`payment.switchPaymentMode`, {
+        mode: isUsd ? "BTC" : "USD",
+      })}
     >
       <span className="pill-toggle__indicator" />
       <img src={bitcoinIcon} alt="BTC" className="pill-toggle__icon" />
@@ -59,6 +63,7 @@ export default function PaymentPage() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { showError } = useErrorDisplay();
   const { showCopyToast } = useCopyToast();
+  const { t } = useTranslation();
 
   const { satAmount, tipAmountSats } = location.state || {};
   const convertedSatAmount = satAmount + tipAmountSats; // stable — from location.state
@@ -331,7 +336,7 @@ export default function PaymentPage() {
         // Start polling only after we have a valid address + paylinkId
         runLookupForStablecoinPayment();
       } catch (err) {
-        showError(err.message || "Something went wrong. Please try again.");
+        showError(err.message || t("payment.error"));
         // Reset mode back to BTC so the UI isn't stuck on a blank stablecoin screen
         setPaymentMode("btc");
         paymentModeRef.current = "btc";
@@ -362,9 +367,7 @@ export default function PaymentPage() {
       });
 
       if (!invoice) {
-        showError(
-          "There was a problem creating your invoice. Please try again.",
-        );
+        showError(t("payment.invoiceError"));
         return;
       }
 
@@ -383,9 +386,7 @@ export default function PaymentPage() {
     (newMode) => {
       if (newMode === "stablecoin") {
         if (Number(dollarAmount) < 1) {
-          showError(
-            "This amount is below the minimum allowed. For smaller transactions, only Bitcoin is supported.",
-          );
+          showError(t("payment.minimumError"));
           return;
         }
         // Stop BTC polling before switching mode
@@ -443,14 +444,12 @@ export default function PaymentPage() {
     return (
       <div className="stale-state-container">
         <div className="stale-state-content">
-          <p className="stale-state-text">
-            Your session has timed out. Please log back in.
-          </p>
+          <p className="stale-state-text">{t("payment.sessionTimeout")}</p>
           <button
             onClick={() => navigate("../")}
             className="action-button stale-state-button"
           >
-            Go Home
+            {t("payment.goHome")}
           </button>
         </div>
       </div>
@@ -535,7 +534,7 @@ export default function PaymentPage() {
                   />
                 </button>
                 <p className="PaymentPage-Instruction">
-                  Scan to pay using a Bitcoin Lightning wallet
+                  {t("payment.scanLightning")}
                 </p>
               </div>
             </div>
@@ -562,7 +561,9 @@ export default function PaymentPage() {
                   />
                 </button>
                 <p className="PaymentPage-Instruction">
-                  {`Scan to pay using your ${selectedToken} wallet`}
+                  {t("payment.scanStablecoin", {
+                    token: selectedToken,
+                  })}
                 </p>
               </div>
             </div>
@@ -571,7 +572,7 @@ export default function PaymentPage() {
               className="action-button primary change-network-link"
               onClick={() => setShowNetworkModal(true)}
             >
-              Change network
+              {t("payment.changeNetwork")}
             </button>
           </div>
         ) : null}

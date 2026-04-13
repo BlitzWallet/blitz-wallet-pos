@@ -17,6 +17,7 @@ import ItemsList from "../../components/itemsList/index.js";
 import { createSparkWallet } from "../../functions/spark.js";
 import { useErrorDisplay } from "../../contexts/errorDisplay";
 import SwapHistoryOverlay from "../../components/swapHistoryOverlay/index.js";
+import { useTranslation } from "react-i18next";
 
 function POSPage() {
   const User = getCurrentUser();
@@ -28,6 +29,7 @@ function POSPage() {
     dollarSatValue,
     toggleSettings,
   } = useGlobalContext();
+  const { t } = useTranslation();
   const { showError } = useErrorDisplay();
   const didLoadPOS = useRef(false);
   const [chargeAmount, setChargeAmount] = useState("");
@@ -82,13 +84,13 @@ function POSPage() {
         data = await setupSession(User.toLowerCase());
       } catch (err) {
         console.log("init page get single contact error", err);
-        showError("Unable to authenticate request", { customFunction: logout });
+        showError(t("setup.authError"), { customFunction: logout });
         return;
       }
       console.log("did retrive point-of-sale data", !!data);
 
       if (!data) {
-        showError("Unable to find point-of-sale", { customFunction: logout });
+        showError(t("setup.notFound"), { customFunction: logout });
         return;
       }
 
@@ -160,7 +162,7 @@ function POSPage() {
           <div className="POS-AmountDisplay">
             <div className="POS-chargeItems">
               {addedItems.length === 0
-                ? "No charged items"
+                ? t("pos.noChargedItems")
                 : addedItems
                     .map((value) => {
                       return formatBalanceAmount(
@@ -223,7 +225,7 @@ function POSPage() {
                 activeInput === "keypad" ? "active" : ""
               }`}
             >
-              Keypad
+              {t("pos.keypadTab")}
             </button>
             <button
               onClick={() => setActiveInput("library")}
@@ -231,7 +233,7 @@ function POSPage() {
                 activeInput === "library" ? "active" : ""
               }`}
             >
-              Library
+              {t("pos.libraryTab")}
             </button>
           </div>
 
@@ -257,22 +259,24 @@ function POSPage() {
               disabled={!canReceivePayment}
               className="action-button primary"
             >
-              {`Charge ${formatBalanceAmount(
-                displayCorrectDenomination({
-                  amount: currentSettings?.displayCurrency?.isSats
-                    ? convertedSatAmount || "0"
-                    : dollarValue.toFixed(2) || "0.00",
-                  fiatCurrency:
-                    currentUserSession.account.storeCurrency || "USD",
-                  showSats: currentSettings.displayCurrency.isSats,
-                  isWord: currentSettings.displayCurrency.isWord,
-                }),
-              )}`}
+              {t("pos.charge", {
+                amount: formatBalanceAmount(
+                  displayCorrectDenomination({
+                    amount: currentSettings?.displayCurrency?.isSats
+                      ? convertedSatAmount || "0"
+                      : dollarValue.toFixed(2) || "0.00",
+                    fiatCurrency:
+                      currentUserSession.account.storeCurrency || "USD",
+                    showSats: currentSettings.displayCurrency.isSats,
+                    isWord: currentSettings.displayCurrency.isWord,
+                  }),
+                ),
+              })}
             </button>
             <div className="POS-denominationDisclaimer">
-              {`Conversion based on ${
-                currentUserSession?.account?.storeCurrency || "USD"
-              }`}
+              {t("pos.conversionNote", {
+                currency: currentUserSession?.account?.storeCurrency || "USD",
+              })}
             </div>
           </div>
         </main>

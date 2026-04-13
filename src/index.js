@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./i18n";
 import "./index.css";
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
@@ -15,7 +16,7 @@ import ConfirmPaymentScreen from "./pages/confirmScreen";
 import { ACCOUNT_LOCAL_STORAGE } from "./constants";
 import AddTipPage from "./pages/tip";
 import { GlobalSettingsDisplay } from "./contexts/settingsDisplay";
-import SettingsPage from "./pages/settings";
+// import SettingsPage from "./pages/settings";
 import AddTipsUsername from "./pages/addTipUsername";
 import { GlobalErrorDisplay } from "./contexts/errorDisplay";
 import ErrorPopup from "./components/errorScreen";
@@ -35,7 +36,7 @@ root.render(
             <GlobalCopyToast>
               <BrowserRouter>
                 {/* <NavigateScreen /> */}
-                <SettingsPage />
+                {/* <SettingsPage /> */}
                 <ErrorPopup />
                 <CopyToastPopup />
                 <Routes>

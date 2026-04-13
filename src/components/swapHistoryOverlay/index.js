@@ -12,6 +12,7 @@ import usdc from "../../assets/usdc.svg";
 import { getSwapHistory } from "../../functions/swapHistory";
 import { X } from "lucide-react";
 import { useCopyToast } from "../../contexts/copyToast";
+import { useTranslation } from "react-i18next";
 
 const CHAIN_LOGOS = {
   arbitrum: chainArbitrum,
@@ -59,6 +60,7 @@ function formatAmount(amountIn) {
 }
 
 export default function SwapHistoryOverlay({ isOpen, onClose }) {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   const { showCopyToast } = useCopyToast();
@@ -73,7 +75,7 @@ export default function SwapHistoryOverlay({ isOpen, onClose }) {
       <div className="SwapHistory-Panel">
         <div className="SwapHistory-Header">
           <div>
-            <p className="SwapHistory-Title">Stablecoin History</p>
+            <p className="SwapHistory-Title">{t("swapHistory.title")}</p>
           </div>
           <button className="ns-close-btn" onClick={onClose} aria-label="Close">
             <X size={18} color="#0375f6" />
@@ -81,9 +83,7 @@ export default function SwapHistoryOverlay({ isOpen, onClose }) {
         </div>
         <div className="SwapHistory-List">
           {history.length === 0 ? (
-            <p className="SwapHistory-Empty">
-              No stablecoin payments recorded yet.
-            </p>
+            <p className="SwapHistory-Empty">{t("swapHistory.empty")}</p>
           ) : (
             history.map((entry, i) => (
               <div

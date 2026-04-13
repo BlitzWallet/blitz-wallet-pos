@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination";
 import { formatBalanceAmount } from "../../functions/formatNumber";
 import "./style.css";
+import { useTranslation } from "react-i18next";
 
 export default function ItemsList({
   listElements,
@@ -10,13 +11,11 @@ export default function ItemsList({
   dollarSatValue,
   setAddedItems,
 }) {
+  const { t } = useTranslation();
   if (!listElements || !listElements?.length) {
     return (
       <div className="customItemsContainer">
-        <p className="noItemsText">
-          Nothing to show yet! Your employer can add items in Blitz Wallet POS
-          settings page.
-        </p>
+        <p className="noItemsText">{t("itemList.empty")}</p>
       </div>
     );
   }

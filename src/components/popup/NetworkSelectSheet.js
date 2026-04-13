@@ -84,7 +84,7 @@ export default function NetworkSelectSheet({ onSelect, onClose }) {
         onAnimationEnd={handleAnimationEnd}
       >
         <div className="ns-header">
-          <p className="ns-header-title">Choose stablcoin network</p>
+          <p className="ns-header-title">{t("networkSelect.title")}</p>
           <button
             className="ns-close-btn"
             onClick={handleClose}
@@ -131,7 +131,9 @@ export default function NetworkSelectSheet({ onSelect, onClose }) {
                 <div className="ns-token-info">
                   <span className="ns-token-name">{token}</span>
                   <span className="ns-token-subtitle">
-                    on {NETWORK_LABELS[activeNetwork]}
+                    {t("networkSelect.onNetwork", {
+                      network: NETWORK_LABELS[activeNetwork],
+                    })}
                   </span>
                 </div>
               </button>

@@ -7,6 +7,7 @@ import CustomKeyboard from "../../components/keypad";
 import { formatBalanceAmount } from "../../functions/formatNumber";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination";
 import EnterServerName from "../../components/popup/enterServerName";
+import { useTranslation } from "react-i18next";
 
 export default function AddTipPage() {
   const { currentUserSession, currentSettings, dollarSatValue } =
@@ -15,6 +16,7 @@ export default function AddTipPage() {
   const { satAmount, fiatAmount } = location.state;
   const navigate = useNavigate();
 
+  const { t } = useTranslation();
   const [showServerNamePopup, setShowServerNamePopup] = useState(false);
 
   const handleOpenChangeUsername = () => setShowServerNamePopup(true);
@@ -63,7 +65,7 @@ export default function AddTipPage() {
         {/* Total Section */}
         {tipAmount.showCustomTip && (
           <div className="Tip-AmountDisplay">
-            <div className="total-label">Tip Amount</div>
+            <div className="total-label">{t("tip.amountLabel")}</div>
             <div className="total-amount-large">
               {formatBalanceAmount(
                 displayCorrectDenomination({
@@ -109,7 +111,7 @@ export default function AddTipPage() {
                 }
                 className="action-button primary continue-btn"
               >
-                {tipAmount.customTip ? "Save" : "Back"}
+                {tipAmount.customTip ? t("common.save") : t("common.back")}
               </button>
             </div>
           </div>
@@ -117,7 +119,7 @@ export default function AddTipPage() {
           <>
             {/* Tip Selection */}
             <div className="Tip-ContentArea">
-              <h2 className="tip-header-text">Do you want to add a tip?</h2>
+              <h2 className="tip-header-text">{t("tip.question")}</h2>
 
               <div className="tip-grid">
                 {[15, 18, 20, "custom"].map((item) => {
@@ -150,7 +152,7 @@ export default function AddTipPage() {
                     >
                       {typeof item === "string" ? (
                         <>
-                          <span>Custom</span>
+                          <span>{t("tip.custom")}</span>
                           {tipAmount.customTip && (
                             <span className="tip-option-amount">
                               {formatBalanceAmount(
@@ -217,7 +219,7 @@ export default function AddTipPage() {
                   tipAmount.selectedTip === null ? "no-tip-selected" : ""
                 }`}
               >
-                No tip
+                {t("tip.noTip")}
               </button>
             </div>
 
@@ -247,7 +249,7 @@ export default function AddTipPage() {
                 }
                 className="action-button primary continue-btn"
               >
-                Continue
+                {t("common.continue")}
               </button>
             </div>
           </>

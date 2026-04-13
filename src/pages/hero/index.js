@@ -3,9 +3,11 @@ import logo from "../../assets/logo.png";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { createSparkWallet } from "../../functions/spark";
+import { useTranslation } from "react-i18next";
 
 function HeroPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     document.body.style.background = "#00254e";
@@ -28,15 +30,15 @@ function HeroPage() {
           <div className="hero-logo-glow" />
         </div>
         <h1 className="hero-headline">
-          Your Payments
+          {t("hero.headlineLine1")}
           <br />
-          Your Money.
+          {t("hero.headlineLine2")}
         </h1>
         <button
           className="action-button primary hero-cta"
           onClick={() => navigate("/setup")}
         >
-          Get Started
+          {t("hero.cta")}
         </button>
       </div>
     </div>

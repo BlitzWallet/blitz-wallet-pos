@@ -9,6 +9,7 @@ import { ArrowLeft } from "lucide-react";
 import { setupSession } from "../../functions/getUserFromFirebase";
 import { useErrorDisplay } from "../../contexts/errorDisplay";
 import FullLoadingScreen from "../../components/loadingScreen.js";
+import { useTranslation } from "react-i18next";
 
 function SetupPage() {
   const { setUser } = useGlobalContext();
@@ -16,6 +17,7 @@ function SetupPage() {
   const navigate = useNavigate();
   const { showError } = useErrorDisplay();
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   const handleUsername = async () => {
     try {
@@ -28,7 +30,7 @@ function SetupPage() {
       navigate("/createTipsUsername");
     } catch (err) {
       console.log(err);
-      showError("No point-of-sale account exists for this username");
+      showError(t("setup.notFound"));
     } finally {
       setLoading(false);
     }
@@ -46,13 +48,12 @@ function SetupPage() {
 
       <div className="ob-content">
         <h1 className="ob-heading">
-          Enter your
+          {t("setup.titleLine1")}
+
           <br />
-          point of sale name.
+          {t("setup.titleLine2")}
         </h1>
-        <p className="ob-desc">
-          This should match the store name created in the Blitz mobile app.
-        </p>
+        <p className="ob-desc">{t("setup.description")}</p>
 
         <div className="ob-input-wrap">
           <CustomTextInput
@@ -63,7 +64,7 @@ function SetupPage() {
         </div>
 
         <button className="ob-cta" disabled={!posName} onClick={handleUsername}>
-          Continue
+          {t("common.continue")}
         </button>
       </div>
     </div>

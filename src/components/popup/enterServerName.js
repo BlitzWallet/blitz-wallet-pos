@@ -4,12 +4,14 @@ import { saveToLocalStorage } from "../../functions/localStorage";
 import { SERVER_LOCAL_STORAGE } from "../../constants";
 import { useGlobalContext } from "../../contexts/posContext";
 import CustomTextInput from "../textInput";
+import { useTranslation } from "react-i18next";
 
 export default function EnterServerName({ setPopupType }) {
   const { serverName, setServerName, setDidConfirmSavedUsername } =
     useGlobalContext();
   const [name, setName] = useState(serverName);
   const [isClosing, setIsClosing] = useState(false);
+  const { t } = useTranslation();
 
   const closePopup = () =>
     setPopupType((prev) =>
@@ -49,25 +51,27 @@ export default function EnterServerName({ setPopupType }) {
       >
         <div className="sheet-handle" />
         <p className="sheet-title">
-          {serverName ? "Your Blitz Username" : "Set Your Username"}
+          {serverName
+            ? t("serverName.yourUsername")
+            : t("serverName.setUsername")}
         </p>
         <p className="sheet-description">
           {serverName
-            ? "This is your payment handle for receiving tips."
-            : "Enter your Blitz username or Lightning address to receive tips."}
+            ? t("serverName.description")
+            : t("serverName.enterDescription")}
         </p>
         <CustomTextInput
           maxLength={50}
           getTextInput={setName}
           inputText={name || ""}
-          placeholder="Name..."
+          placeholder={t("serverName.placeholder")}
           customStyles={{ width: "100%" }}
         />
         <button
           className="action-button primary sheet-cta-button"
           onClick={handleNameInput}
         >
-          {serverName && !name ? "Keep" : "Save"}
+          {serverName && !name ? t("common.keep") : t("common.save")}
         </button>
       </div>
     </div>

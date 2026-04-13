@@ -1,0 +1,90 @@
+{
+  "common": {
+    "continue": "Continue",
+    "save": "Save",
+    "back": "Back",
+    "delete": "Delete",
+    "skip": "Skip",
+    "keep": "Keep",
+    "close": "Close",
+    "copied": "Copied to clipboard",
+    "goBack": "Go back",
+    "settings": "Profile settings",
+    "history": "Stablecoin history"
+  },
+  "hero": {
+    "headlineLine1": "Your Payments",
+    "headlineLine2": "Your Money.",
+    "cta": "Get Started"
+  },
+  "setup": {
+    "titleLine1": "Enter your",
+    "titleLine2": "point of sale name.",
+    "description": "This should match the store name created in the Blitz mobile app.",
+    "placeholder": "Eg. Joes_Snacks",
+    "error": "No point-of-sale account exists for this username",
+    "authError": "Unable to authenticate request",
+    "notFound": "Unable to find point-of-sale"
+  },
+  "addTipUsername": {
+    "titleLine1": "Where should",
+    "titleLine2": "tips go?",
+    "description": "Add a Blitz username or Lightning address to receive tips",
+    "placeholder": "Eg. blitz or name@domain.com"
+  },
+  "tip": {
+    "question": "Do you want to add a tip?",
+    "amountLabel": "Tip Amount",
+    "custom": "Custom",
+    "noTip": "No tip"
+  },
+  "pos": {
+    "noChargedItems": "No charged items",
+    "charge": "Charge {{amount}}",
+    "keypadTab": "Keypad",
+    "libraryTab": "Library",
+    "conversionNote": "Conversion based on {{currency}}"
+  },
+  "settings": {
+    "balanceDenomination": "Balance denomination",
+    "currentDenomination": "Current denomination",
+    "displayFormatSat": "How to display SAT",
+    "displayFormatFiat": "How to display fiat",
+    "example": "Example"
+  },
+  "payment": {
+    "error": "Something went wrong. Please try again.",
+    "invoiceError": "There was a problem creating your invoice. Please try again.",
+    "minimumError": "This amount is below the minimum allowed. For smaller transactions, only Bitcoin is supported.",
+    "sessionTimeout": "Your session has timed out. Please log back in.",
+    "goHome": "Go Home",
+    "scanLightning": "Scan to pay using a Bitcoin Lightning wallet",
+    "scanStablecoin": "Scan to pay using your {{token}} wallet",
+    "changeNetwork": "Change network",
+    "switchPaymentMode": "Switch to {{mode}} payments"
+  },
+  "bitcoinPrice": {
+    "title": "Set Bitcoin Price",
+    "description": "Enter the current BTC/USD price to calculate amounts.",
+    "placeholder": "Bitcoin price (no decimals)",
+    "save": "Save Price"
+  },
+  "serverName": {
+    "yourUsername": "Your Blitz Username",
+    "setUsername": "Set Your Username",
+    "description": "This is your payment handle for receiving tips.",
+    "enterDescription": "Enter your Blitz username or Lightning address to receive tips.",
+    "placeholder": "Name..."
+  },
+  "networkSelect": {
+    "title": "Choose stablecoin network",
+    "onNetwork": "on {{network}}"
+  },
+  "swapHistory": {
+    "title": "Stablecoin History",
+    "empty": "No stablecoin payments recorded yet."
+  },
+  "itemsList": {
+    "empty": "Nothing to show yet! Your employer can add items in Blitz Wallet POS settings page."
+  }
+}

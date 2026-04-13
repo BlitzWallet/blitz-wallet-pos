@@ -2,9 +2,11 @@ import "./style.css";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import checkAnimation from "../../assets/checkmark.json";
+import { useTranslation } from "react-i18next";
 
 export default function ConfirmPaymentScreen({ clearSettings }) {
   const [showButton, setShowButton] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -22,7 +24,7 @@ export default function ConfirmPaymentScreen({ clearSettings }) {
         />
         {showButton ? (
           <button onClick={clearSettings} className="ConfirmScreen-BTN">
-            Continue
+            {t("common.continue")}
           </button>
         ) : (
           <p />

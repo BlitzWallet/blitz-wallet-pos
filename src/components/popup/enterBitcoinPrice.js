@@ -2,11 +2,13 @@ import { useState } from "react";
 import "./enterBitcoinPrice.css";
 import { useGlobalContext } from "../../contexts/posContext";
 import CustomTextInput from "../textInput";
+import { useTranslation } from "react-i18next";
 
 export default function EnterBitcoinPrice({ setPopupType }) {
   const { setCurrentUserSession } = useGlobalContext();
   const [enteredBitcoinPrice, setEnteredBitcoinPrice] = useState(0);
   const [isClosing, setIsClosing] = useState(false);
+  const { t } = useTranslation();
 
   const closePopup = () =>
     setPopupType((prev) =>
@@ -37,22 +39,20 @@ export default function EnterBitcoinPrice({ setPopupType }) {
         onAnimationEnd={handleAnimationEnd}
       >
         <div className="sheet-handle" />
-        <p className="sheet-title">Set Bitcoin Price</p>
-        <p className="sheet-description">
-          Enter the current BTC/USD price to calculate amounts.
-        </p>
+        <p className="sheet-title">{t("bitcoinPrice.title")}</p>
+        <p className="sheet-description">{t("bitcoinPrice.description")}</p>
         <CustomTextInput
           maxLength={50}
           getTextInput={setEnteredBitcoinPrice}
           inputText={enteredBitcoinPrice}
-          placeholder="Bitcoin price (no decimals)"
+          placeholder={t("bitcoinPrice.placeholder")}
           customStyles={{ width: "100%" }}
         />
         <button
           className="action-button primary sheet-cta-button"
           onClick={handleSave}
         >
-          Save Price
+          {t("bitcoinPrice.save")}
         </button>
       </div>
     </div>

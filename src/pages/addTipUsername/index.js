@@ -6,11 +6,13 @@ import { useGlobalContext } from "../../contexts/posContext";
 import { SERVER_LOCAL_STORAGE } from "../../constants";
 import CustomTextInput from "../../components/textInput";
 import { ArrowLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 function AddTipsUsername() {
   const { setServerName, user } = useGlobalContext();
   const [name, setName] = useState("");
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="ob-page">
@@ -20,19 +22,17 @@ function AddTipsUsername() {
 
       <div className="ob-content">
         <h1 className="ob-heading">
-          Where should
+          {t("addTipUsername.titleLine1")}
           <br />
-          tips go?
+          {t("addTipUsername.titleLine2")}
         </h1>
-        <p className="ob-desc">
-          Add a Blitz username or Lightning address to receive tips
-        </p>
+        <p className="ob-desc">{t("addTipUsername.description")}</p>
 
         <div className="ob-input-wrap">
           <CustomTextInput
             getTextInput={setName}
             inputText={name}
-            placeholder="Eg. blitz or name@domain.com"
+            placeholder={t("addTipUsername.placeholder")}
           />
         </div>
 
@@ -46,14 +46,14 @@ function AddTipsUsername() {
             navigate(`/${user}`);
           }}
         >
-          Continue
+          {t("common.continue")}
         </button>
         <button
           style={{ paddingBottom: 0 }}
           className="ob-skip"
           onClick={() => navigate(`/${user}`)}
         >
-          Skip
+          {t("common.skip")}
         </button>
       </div>
     </div>

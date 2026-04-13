@@ -1,7 +1,7 @@
 import getCurrentUser from "../../hooks/getCurrnetUser";
 import "./style.css";
-import { useGlobalContext } from "../../contexts/posContext";
 import { ArrowLeft, History, Pi, UserRound } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function PosNavbar({
   backFunction,
@@ -10,8 +10,8 @@ export default function PosNavbar({
   setShowSwapHistory,
   PillToggle,
 }) {
-  const { serverName } = useGlobalContext();
   const User = getCurrentUser();
+  const { t } = useTranslation();
 
   return (
     <div className="POS-navbar">
@@ -19,7 +19,7 @@ export default function PosNavbar({
         <button
           className="nav-pill-btn"
           onClick={backFunction}
-          aria-label="Go back"
+          aria-label={t("common.goBack")}
         >
           <ArrowLeft size={20} color="#0375f6" />
         </button>
@@ -35,7 +35,7 @@ export default function PosNavbar({
             <button
               className="nav-pill-btn"
               onClick={() => setShowSwapHistory(true)}
-              aria-label="Stablecoin history"
+              aria-label={t("common.history")}
             >
               <History size={20} color="#0375f6" />
             </button>
@@ -43,7 +43,7 @@ export default function PosNavbar({
             <button
               className="nav-pill-btn"
               onClick={() => openNamePopupFunction?.()}
-              aria-label="Profile settings"
+              aria-label={t("common.settings")}
             >
               <UserRound size={20} color="#0375f6" />
             </button>
