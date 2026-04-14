@@ -36,6 +36,7 @@
   position: relative;
   z-index: 1;
   animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  container-type: inline-size;
 }
 
 @keyframes heroFadeUp {
@@ -79,12 +80,13 @@
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-style: italic;
-  font-size: min(11cqw, 56px);
+  font-size: clamp(28px, 10cqw, 56px);
   line-height: 1.2;
   color: #ffffff;
   margin: 44px 0 30px;
   letter-spacing: -1.5px;
   animation: heroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  text-wrap: balance;
 }
 
 .hero-cta {
