@@ -55,7 +55,7 @@
   "payment": {
     "error": "Une erreur est survenue. Veuillez réessayer.",
     "invoiceError": "Un problème est survenu lors de la création de la facture. Veuillez réessayer.",
-    "minimumError": "Ce montant est inférieur au minimum autorisé. Pour les petites transactions, seul Bitcoin est pris en charge.",
+    "minimumError": "Le montant minimum pour les paiements en stablecoin est de 1,00 USD. Pour des montants inférieurs, seul Bitcoin est pris en charge.",
     "sessionTimeout": "Votre session a expiré. Veuillez vous reconnecter.",
     "goHome": "Accueil",
     "scanLightning": "Scannez pour payer avec un portefeuille Lightning Bitcoin",

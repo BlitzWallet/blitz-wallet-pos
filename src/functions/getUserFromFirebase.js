@@ -14,5 +14,6 @@ export async function setupSession(wantedName) {
   return {
     posData: data?.data?.posData,
     bitcoinPrice: data?.data?.bitcoinData,
+    usdPriceResponse: data?.data?.usdPriceResponse,
   };
 }

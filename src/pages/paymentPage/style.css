@@ -26,7 +26,7 @@
 }
 
 .balance-text {
-  font-size: 70px;
+  font-size: 60px;
   font-weight: 500;
   margin: 0;
   line-height: 1;
@@ -336,5 +336,20 @@
   .change-network-link {
     width: 100%;
     max-width: unset;
+  }
+}
+
+@media (max-width: 900px) {
+  .payment-content-row {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+  }
+  .payment-info-col {
+    align-items: center;
+  }
+  .balance-text {
+    text-align: center;
   }
 }

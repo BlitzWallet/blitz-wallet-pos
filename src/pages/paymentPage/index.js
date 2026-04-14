@@ -385,7 +385,11 @@ export default function PaymentPage() {
   const handleModeChange = useCallback(
     (newMode) => {
       if (newMode === "stablecoin") {
-        if (Number(dollarAmount) < 1) {
+        const usdAmount = currentUserSession?.usdPriceResponse
+          ? (convertedSatAmount * currentUserSession.usdPriceResponse) /
+            100000000
+          : Number(dollarAmount);
+        if (usdAmount < 1) {
           showError(t("payment.minimumError"));
           return;
         }
@@ -409,6 +413,7 @@ export default function PaymentPage() {
     },
     [
       clearIntervals,
+      currentUserSession,
       dollarAmount,
       resetStablecoinState,
       runLookupForPayment,

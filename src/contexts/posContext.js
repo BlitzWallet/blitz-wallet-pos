@@ -22,6 +22,7 @@ export const GlobalPOSContext = ({ children }) => {
   const [currentUserSession, setCurrentUserSession] = useState({
     account: null,
     bitcoinPrice: null,
+    usdPriceResponse: null,
   });
   const removeServerName = () => {
     removeLocalStorageItem(SERVER_LOCAL_STORAGE);

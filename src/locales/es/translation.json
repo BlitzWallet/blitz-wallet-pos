@@ -55,7 +55,7 @@
   "payment": {
     "error": "Algo salió mal. Inténtalo de nuevo.",
     "invoiceError": "Hubo un problema al crear la factura. Inténtalo de nuevo.",
-    "minimumError": "Este monto está por debajo del mínimo permitido. Para transacciones más pequeñas, solo se admite Bitcoin.",
+    "minimumError": "El monto mínimo para pagos con stablecoins es $1.00 USD. Para montos menores, solo se admite Bitcoin.",
     "sessionTimeout": "Tu sesión ha expirado. Inicia sesión nuevamente.",
     "goHome": "Ir al inicio",
     "scanLightning": "Escanea para pagar con una billetera Lightning de Bitcoin",

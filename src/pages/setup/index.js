@@ -12,7 +12,7 @@ import FullLoadingScreen from "../../components/loadingScreen.js";
 import { useTranslation } from "react-i18next";
 
 function SetupPage() {
-  const { setUser } = useGlobalContext();
+  const { setUser, setCurrentUserSession } = useGlobalContext();
   const [posName, setPosName] = useState("");
   const navigate = useNavigate();
   const { showError } = useErrorDisplay();
@@ -27,6 +27,11 @@ function SetupPage() {
       console.log(userData);
       saveToLocalStorage(posName, ACCOUNT_LOCAL_STORAGE);
       setUser(posName);
+      setCurrentUserSession({
+        account: userData.posData,
+        bitcoinPrice: userData.bitcoinPrice,
+        usdPriceResponse: userData.usdPriceResponse,
+      });
       navigate("/createTipsUsername");
     } catch (err) {
       console.log(err);

@@ -108,6 +108,7 @@ function POSPage() {
       setCurrentUserSession({
         account: data.posData,
         bitcoinPrice: data.bitcoinPrice,
+        usdPriceResponse: data.usdPriceResponse,
       });
       didLoadPOS.current = true;
     }

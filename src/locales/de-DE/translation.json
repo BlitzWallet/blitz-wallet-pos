@@ -55,7 +55,7 @@
   "payment": {
     "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "invoiceError": "Beim Erstellen der Rechnung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
-    "minimumError": "Dieser Betrag liegt unter dem Mindestwert. Für kleinere Transaktionen wird nur Bitcoin unterstützt.",
+    "minimumError": "Der Mindestbetrag für Stablecoin-Zahlungen beträgt 1,00 USD. Für kleinere Beträge wird nur Bitcoin unterstützt.",
     "sessionTimeout": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
     "goHome": "Zur Startseite",
     "scanLightning": "Scannen Sie, um mit einer Bitcoin-Lightning-Wallet zu bezahlen",
