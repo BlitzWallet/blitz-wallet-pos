@@ -10,17 +10,17 @@
     "copied": "Copiado para a área de transferência",
     "goBack": "Voltar",
     "settings": "Configurações de perfil",
-    "history": "Histórico de stablecoins"
+    "history": "Histórico de dólares digitais"
   },
   "hero": {
-    "headlineLine1": "Seus pagamentos",
+    "headlineLine1": "Suas vendas",
     "headlineLine2": "Seu dinheiro.",
     "cta": "Começar"
   },
   "setup": {
     "titleLine1": "Digite o nome",
     "titleLine2": "do seu ponto de venda.",
-    "description": "Deve corresponder ao nome da loja criado no app móvel Blitz.",
+    "description": "Deve corresponder ao nome da loja criado no app Blitz.",
     "placeholder": "Ex. Joes_Snacks",
     "error": "Não existe uma conta de ponto de venda para este usuário",
     "authError": "Não foi possível autenticar a solicitação",
@@ -30,7 +30,7 @@
     "titleLine1": "Para onde devem ir",
     "titleLine2": "as gorjetas?",
     "description": "Adicione um nome de usuário Blitz ou endereço Lightning para receber gorjetas",
-    "placeholder": "Ex. blitz ou name@domain.com"
+    "placeholder": "Ex. blitz ou nome@dominio.com"
   },
   "tip": {
     "question": "Deseja adicionar uma gorjeta?",
@@ -42,14 +42,14 @@
     "noChargedItems": "Nenhum item cobrado",
     "charge": "Cobrar {{amount}}",
     "keypadTab": "Teclado",
-    "libraryTab": "Biblioteca",
+    "libraryTab": "Produtos",
     "conversionNote": "Conversão baseada em {{currency}}"
   },
   "settings": {
     "balanceDenomination": "Denominação do saldo",
     "currentDenomination": "Denominação atual",
     "displayFormatSat": "Como exibir SAT",
-    "displayFormatFiat": "Como exibir moeda fiduciária",
+    "displayFormatFiat": "Como exibir moeda estatal",
     "example": "Exemplo"
   },
   "payment": {
@@ -58,8 +58,8 @@
     "minimumError": "Este valor está abaixo do mínimo permitido. Para transações menores, apenas Bitcoin é suportado.",
     "sessionTimeout": "Sua sessão expirou. Faça login novamente.",
     "goHome": "Ir para a página inicial",
-    "scanLightning": "Escaneie para pagar usando uma carteira Lightning de Bitcoin",
-    "scanStablecoin": "Escaneie para pagar usando sua carteira {{token}}",
+    "scanLightning": "Leia para pagar usando uma carteira Lightning de Bitcoin",
+    "scanStablecoin": "Leia para pagar usando sua carteira {{token}}",
     "changeNetwork": "Alterar rede",
     "switchPaymentMode": "Mudar para pagamentos {{mode}}"
   },
@@ -77,14 +77,14 @@
     "placeholder": "Nome..."
   },
   "networkSelect": {
-    "title": "Escolher rede de stablecoin",
+    "title": "Escolher rede do dólar digital",
     "onNetwork": "na {{network}}"
   },
   "swapHistory": {
-    "title": "Histórico de stablecoins",
-    "empty": "Nenhum pagamento com stablecoin registrado ainda."
+    "title": "Histórico de dólares digitais",
+    "empty": "Nenhum pagamento com dólar digital registrado ainda."
   },
   "itemsList": {
-    "empty": "Nada para mostrar ainda! Seu empregador pode adicionar itens na página de configurações POS do Blitz Wallet."
+    "empty": "Nada para mostrar ainda! Seu empregador pode adicionar itens na página de configurações PDV da Blitz Wallet."
   }
 }
