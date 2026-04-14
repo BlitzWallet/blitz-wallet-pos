@@ -39,7 +39,7 @@
     "noTip": "Sem gorjeta"
   },
   "pos": {
-    "noChargedItems": "Nenhum item cobrado",
+    "noChargedItems": "Nenhum item adicionado",
     "charge": "Cobrar {{amount}}",
     "keypadTab": "Teclado",
     "libraryTab": "Produtos",
