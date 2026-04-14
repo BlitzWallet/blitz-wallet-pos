@@ -20,7 +20,7 @@
   "setup": {
     "titleLine1": "Geben Sie Ihren",
     "titleLine2": "Point-of-Sale-Namen ein.",
-    "description": "Dies sollte dem im Blitz Mobile App erstellten Shop-Namen entsprechen.",
+    "description": "Dies sollte dem Shop-Namen entsprechen, der in der mobilen Blitz-App erstellt wurde.",
     "placeholder": "z. B. Joes_Snacks",
     "error": "Kein Kassensystem-Konto für diesen Benutzernamen vorhanden",
     "authError": "Authentifizierung fehlgeschlagen",
@@ -39,9 +39,9 @@
     "noTip": "Kein Trinkgeld"
   },
   "pos": {
-    "noChargedItems": "Keine berechneten Artikel",
-    "charge": "{{amount}} berechnen",
-    "keypadTab": "Tastatur",
+    "noChargedItems": "Keine abgerechneten Artikel",
+    "charge": "{{amount}} abrechnen",
+    "keypadTab": "Ziffernblock",
     "libraryTab": "Bibliothek",
     "conversionNote": "Umrechnung basierend auf {{currency}}"
   },
@@ -85,6 +85,6 @@
     "empty": "Noch keine Stablecoin-Zahlungen aufgezeichnet."
   },
   "itemsList": {
-    "empty": "Noch nichts vorhanden! Ihr Arbeitgeber kann Artikel in den Blitz Wallet POS-Einstellungen hinzufügen."
+    "empty": "Noch nichts vorhanden! Ihr Arbeitgeber kann Artikel in den Blitz-Wallet-POS-Einstellungen hinzufügen."
   }
 }
