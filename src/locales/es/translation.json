@@ -1,0 +1,90 @@
+{
+  "common": {
+    "continue": "Continuar",
+    "save": "Guardar",
+    "back": "Atrás",
+    "delete": "Eliminar",
+    "skip": "Omitir",
+    "keep": "Mantener",
+    "close": "Cerrar",
+    "copied": "Copiado al portapapeles",
+    "goBack": "Volver",
+    "settings": "Configuración de perfil",
+    "history": "Historial de stablecoins"
+  },
+  "hero": {
+    "headlineLine1": "Tus pagos",
+    "headlineLine2": "Tu dinero.",
+    "cta": "Comenzar"
+  },
+  "setup": {
+    "titleLine1": "Ingresa el nombre",
+    "titleLine2": "de tu punto de venta.",
+    "description": "Debe coincidir con el nombre de la tienda creado en la app móvil de Blitz.",
+    "placeholder": "Ej. Joes_Snacks",
+    "error": "No existe una cuenta de punto de venta para este usuario",
+    "authError": "No se pudo autenticar la solicitud",
+    "notFound": "No se pudo encontrar el punto de venta"
+  },
+  "addTipUsername": {
+    "titleLine1": "¿A dónde deben ir",
+    "titleLine2": "las propinas?",
+    "description": "Agrega un usuario de Blitz o dirección Lightning para recibir propinas",
+    "placeholder": "Ej. blitz o name@domain.com"
+  },
+  "tip": {
+    "question": "¿Quieres agregar una propina?",
+    "amountLabel": "Monto de propina",
+    "custom": "Personalizado",
+    "noTip": "Sin propina"
+  },
+  "pos": {
+    "noChargedItems": "No hay artículos cobrados",
+    "charge": "Cobrar {{amount}}",
+    "keypadTab": "Teclado",
+    "libraryTab": "Biblioteca",
+    "conversionNote": "Conversión basada en {{currency}}"
+  },
+  "settings": {
+    "balanceDenomination": "Denominación del saldo",
+    "currentDenomination": "Denominación actual",
+    "displayFormatSat": "Cómo mostrar SAT",
+    "displayFormatFiat": "Cómo mostrar fiat",
+    "example": "Ejemplo"
+  },
+  "payment": {
+    "error": "Algo salió mal. Inténtalo de nuevo.",
+    "invoiceError": "Hubo un problema al crear la factura. Inténtalo de nuevo.",
+    "minimumError": "Este monto está por debajo del mínimo permitido. Para transacciones más pequeñas, solo se admite Bitcoin.",
+    "sessionTimeout": "Tu sesión ha expirado. Inicia sesión nuevamente.",
+    "goHome": "Ir al inicio",
+    "scanLightning": "Escanea para pagar con una billetera Lightning de Bitcoin",
+    "scanStablecoin": "Escanea para pagar con tu billetera {{token}}",
+    "changeNetwork": "Cambiar red",
+    "switchPaymentMode": "Cambiar a pagos {{mode}}"
+  },
+  "bitcoinPrice": {
+    "title": "Establecer precio de Bitcoin",
+    "description": "Ingresa el precio actual BTC/USD para calcular montos.",
+    "placeholder": "Precio de Bitcoin (sin decimales)",
+    "save": "Guardar precio"
+  },
+  "serverName": {
+    "yourUsername": "Tu usuario de Blitz",
+    "setUsername": "Editar tu usuario",
+    "description": "Este es tu identificador de pago para recibir propinas.",
+    "enterDescription": "Ingresa tu usuario de Blitz o dirección Lightning para recibir propinas.",
+    "placeholder": "Nombre..."
+  },
+  "networkSelect": {
+    "title": "Elegir red de stablecoin",
+    "onNetwork": "en {{network}}"
+  },
+  "swapHistory": {
+    "title": "Historial de stablecoins",
+    "empty": "Aún no hay pagos con stablecoins registrados."
+  },
+  "itemsList": {
+    "empty": "¡Nada que mostrar aún! Tu empleador puede agregar artículos en la página de configuración POS de Blitz Wallet."
+  }
+}

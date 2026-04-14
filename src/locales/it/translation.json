@@ -1,0 +1,90 @@
+{
+  "common": {
+    "continue": "Continua",
+    "save": "Salva",
+    "back": "Indietro",
+    "delete": "Elimina",
+    "skip": "Salta",
+    "keep": "Mantieni",
+    "close": "Chiudi",
+    "copied": "Copiato negli appunti",
+    "goBack": "Torna indietro",
+    "settings": "Impostazioni profilo",
+    "history": "Storico stablecoin"
+  },
+  "hero": {
+    "headlineLine1": "I tuoi pagamenti",
+    "headlineLine2": "I tuoi soldi.",
+    "cta": "Inizia"
+  },
+  "setup": {
+    "titleLine1": "Inserisci il nome",
+    "titleLine2": "del tuo punto vendita.",
+    "description": "Deve corrispondere al nome del negozio creato nell'app mobile Blitz.",
+    "placeholder": "Es. Joes_Snacks",
+    "error": "Non esiste un account punto vendita per questo username",
+    "authError": "Impossibile autenticare la richiesta",
+    "notFound": "Punto vendita non trovato"
+  },
+  "addTipUsername": {
+    "titleLine1": "Dove devono andare",
+    "titleLine2": "le mance?",
+    "description": "Aggiungi un username Blitz o un indirizzo Lightning per ricevere mance",
+    "placeholder": "Es. blitz o name@domain.com"
+  },
+  "tip": {
+    "question": "Vuoi aggiungere una mancia?",
+    "amountLabel": "Importo mancia",
+    "custom": "Personalizzato",
+    "noTip": "Nessuna mancia"
+  },
+  "pos": {
+    "noChargedItems": "Nessun articolo addebitato",
+    "charge": "Addebita {{amount}}",
+    "keypadTab": "Tastierino",
+    "libraryTab": "Libreria",
+    "conversionNote": "Conversione basata su {{currency}}"
+  },
+  "settings": {
+    "balanceDenomination": "Denominazione saldo",
+    "currentDenomination": "Denominazione attuale",
+    "displayFormatSat": "Come visualizzare SAT",
+    "displayFormatFiat": "Come visualizzare fiat",
+    "example": "Esempio"
+  },
+  "payment": {
+    "error": "Qualcosa è andato storto. Riprova.",
+    "invoiceError": "Si è verificato un problema durante la creazione della fattura. Riprova.",
+    "minimumError": "Questo importo è inferiore al minimo consentito. Per transazioni più piccole è supportato solo Bitcoin.",
+    "sessionTimeout": "La sessione è scaduta. Accedi di nuovo.",
+    "goHome": "Vai alla home",
+    "scanLightning": "Scansiona per pagare con un wallet Lightning Bitcoin",
+    "scanStablecoin": "Scansiona per pagare con il tuo wallet {{token}}",
+    "changeNetwork": "Cambia rete",
+    "switchPaymentMode": "Passa ai pagamenti {{mode}}"
+  },
+  "bitcoinPrice": {
+    "title": "Imposta prezzo Bitcoin",
+    "description": "Inserisci il prezzo attuale BTC/USD per calcolare gli importi.",
+    "placeholder": "Prezzo Bitcoin (senza decimali)",
+    "save": "Salva prezzo"
+  },
+  "serverName": {
+    "yourUsername": "Il tuo username Blitz",
+    "setUsername": "Modifica username",
+    "description": "Questo è il tuo identificatore per ricevere mance.",
+    "enterDescription": "Inserisci il tuo username Blitz o indirizzo Lightning per ricevere mance.",
+    "placeholder": "Nome..."
+  },
+  "networkSelect": {
+    "title": "Scegli rete stablecoin",
+    "onNetwork": "su {{network}}"
+  },
+  "swapHistory": {
+    "title": "Storico stablecoin",
+    "empty": "Nessun pagamento in stablecoin registrato."
+  },
+  "itemsList": {
+    "empty": "Niente da mostrare! Il tuo datore di lavoro può aggiungere articoli nelle impostazioni POS di Blitz Wallet."
+  }
+}

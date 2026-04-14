@@ -1,0 +1,90 @@
+{
+  "common": {
+    "continue": "Continuer",
+    "save": "Enregistrer",
+    "back": "Retour",
+    "delete": "Supprimer",
+    "skip": "Ignorer",
+    "keep": "Conserver",
+    "close": "Fermer",
+    "copied": "Copié dans le presse-papiers",
+    "goBack": "Revenir",
+    "settings": "Paramètres du profil",
+    "history": "Historique des stablecoins"
+  },
+  "hero": {
+    "headlineLine1": "Vos paiements",
+    "headlineLine2": "Votre argent.",
+    "cta": "Commencer"
+  },
+  "setup": {
+    "titleLine1": "Entrez le nom",
+    "titleLine2": "de votre point de vente.",
+    "description": "Cela doit correspondre au nom du magasin créé dans l’application mobile Blitz.",
+    "placeholder": "Ex. Joes_Snacks",
+    "error": "Aucun compte point de vente n’existe pour ce nom d’utilisateur",
+    "authError": "Impossible d’authentifier la requête",
+    "notFound": "Point de vente introuvable"
+  },
+  "addTipUsername": {
+    "titleLine1": "Où doivent aller",
+    "titleLine2": "les pourboires ?",
+    "description": "Ajoutez un nom d’utilisateur Blitz ou une adresse Lightning pour recevoir des pourboires",
+    "placeholder": "Ex. blitz ou name@domain.com"
+  },
+  "tip": {
+    "question": "Souhaitez-vous ajouter un pourboire ?",
+    "amountLabel": "Montant du pourboire",
+    "custom": "Personnalisé",
+    "noTip": "Pas de pourboire"
+  },
+  "pos": {
+    "noChargedItems": "Aucun article facturé",
+    "charge": "Facturer {{amount}}",
+    "keypadTab": "Clavier",
+    "libraryTab": "Bibliothèque",
+    "conversionNote": "Conversion basée sur {{currency}}"
+  },
+  "settings": {
+    "balanceDenomination": "Dénomination du solde",
+    "currentDenomination": "Dénomination actuelle",
+    "displayFormatSat": "Affichage des SAT",
+    "displayFormatFiat": "Affichage du fiat",
+    "example": "Exemple"
+  },
+  "payment": {
+    "error": "Une erreur est survenue. Veuillez réessayer.",
+    "invoiceError": "Un problème est survenu lors de la création de la facture. Veuillez réessayer.",
+    "minimumError": "Ce montant est inférieur au minimum autorisé. Pour les petites transactions, seul Bitcoin est pris en charge.",
+    "sessionTimeout": "Votre session a expiré. Veuillez vous reconnecter.",
+    "goHome": "Accueil",
+    "scanLightning": "Scannez pour payer avec un portefeuille Lightning Bitcoin",
+    "scanStablecoin": "Scannez pour payer avec votre portefeuille {{token}}",
+    "changeNetwork": "Changer de réseau",
+    "switchPaymentMode": "Passer aux paiements {{mode}}"
+  },
+  "bitcoinPrice": {
+    "title": "Définir le prix du Bitcoin",
+    "description": "Entrez le prix BTC/USD actuel pour calculer les montants.",
+    "placeholder": "Prix du Bitcoin (sans décimales)",
+    "save": "Enregistrer le prix"
+  },
+  "serverName": {
+    "yourUsername": "Votre nom d’utilisateur Blitz",
+    "setUsername": "Modifier votre nom d’utilisateur",
+    "description": "Ceci est votre identifiant de paiement pour recevoir des pourboires.",
+    "enterDescription": "Entrez votre nom d’utilisateur Blitz ou une adresse Lightning pour recevoir des pourboires.",
+    "placeholder": "Nom..."
+  },
+  "networkSelect": {
+    "title": "Choisir le réseau de stablecoin",
+    "onNetwork": "sur {{network}}"
+  },
+  "swapHistory": {
+    "title": "Historique des stablecoins",
+    "empty": "Aucun paiement en stablecoin enregistré pour le moment."
+  },
+  "itemsList": {
+    "empty": "Rien à afficher pour le moment ! Votre employeur peut ajouter des articles dans les paramètres POS de Blitz Wallet."
+  }
+}

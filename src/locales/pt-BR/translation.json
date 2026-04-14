@@ -1,0 +1,90 @@
+{
+  "common": {
+    "continue": "Continuar",
+    "save": "Salvar",
+    "back": "Voltar",
+    "delete": "Excluir",
+    "skip": "Pular",
+    "keep": "Manter",
+    "close": "Fechar",
+    "copied": "Copiado para a área de transferência",
+    "goBack": "Voltar",
+    "settings": "Configurações de perfil",
+    "history": "Histórico de stablecoins"
+  },
+  "hero": {
+    "headlineLine1": "Seus pagamentos",
+    "headlineLine2": "Seu dinheiro.",
+    "cta": "Começar"
+  },
+  "setup": {
+    "titleLine1": "Digite o nome",
+    "titleLine2": "do seu ponto de venda.",
+    "description": "Deve corresponder ao nome da loja criado no app móvel Blitz.",
+    "placeholder": "Ex. Joes_Snacks",
+    "error": "Não existe uma conta de ponto de venda para este usuário",
+    "authError": "Não foi possível autenticar a solicitação",
+    "notFound": "Não foi possível encontrar o ponto de venda"
+  },
+  "addTipUsername": {
+    "titleLine1": "Para onde devem ir",
+    "titleLine2": "as gorjetas?",
+    "description": "Adicione um nome de usuário Blitz ou endereço Lightning para receber gorjetas",
+    "placeholder": "Ex. blitz ou name@domain.com"
+  },
+  "tip": {
+    "question": "Deseja adicionar uma gorjeta?",
+    "amountLabel": "Valor da gorjeta",
+    "custom": "Personalizado",
+    "noTip": "Sem gorjeta"
+  },
+  "pos": {
+    "noChargedItems": "Nenhum item cobrado",
+    "charge": "Cobrar {{amount}}",
+    "keypadTab": "Teclado",
+    "libraryTab": "Biblioteca",
+    "conversionNote": "Conversão baseada em {{currency}}"
+  },
+  "settings": {
+    "balanceDenomination": "Denominação do saldo",
+    "currentDenomination": "Denominação atual",
+    "displayFormatSat": "Como exibir SAT",
+    "displayFormatFiat": "Como exibir moeda fiduciária",
+    "example": "Exemplo"
+  },
+  "payment": {
+    "error": "Algo deu errado. Tente novamente.",
+    "invoiceError": "Houve um problema ao criar sua fatura. Tente novamente.",
+    "minimumError": "Este valor está abaixo do mínimo permitido. Para transações menores, apenas Bitcoin é suportado.",
+    "sessionTimeout": "Sua sessão expirou. Faça login novamente.",
+    "goHome": "Ir para a página inicial",
+    "scanLightning": "Escaneie para pagar usando uma carteira Lightning de Bitcoin",
+    "scanStablecoin": "Escaneie para pagar usando sua carteira {{token}}",
+    "changeNetwork": "Alterar rede",
+    "switchPaymentMode": "Mudar para pagamentos {{mode}}"
+  },
+  "bitcoinPrice": {
+    "title": "Definir preço do Bitcoin",
+    "description": "Insira o preço atual BTC/USD para calcular os valores.",
+    "placeholder": "Preço do Bitcoin (sem decimais)",
+    "save": "Salvar preço"
+  },
+  "serverName": {
+    "yourUsername": "Seu nome de usuário Blitz",
+    "setUsername": "Editar seu nome de usuário",
+    "description": "Este é o seu identificador de pagamento para receber gorjetas.",
+    "enterDescription": "Insira seu nome de usuário Blitz ou endereço Lightning para receber gorjetas.",
+    "placeholder": "Nome..."
+  },
+  "networkSelect": {
+    "title": "Escolher rede de stablecoin",
+    "onNetwork": "na {{network}}"
+  },
+  "swapHistory": {
+    "title": "Histórico de stablecoins",
+    "empty": "Nenhum pagamento com stablecoin registrado ainda."
+  },
+  "itemsList": {
+    "empty": "Nada para mostrar ainda! Seu empregador pode adicionar itens na página de configurações POS do Blitz Wallet."
+  }
+}
