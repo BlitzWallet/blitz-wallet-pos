@@ -14,13 +14,13 @@
   },
   "hero": {
     "headlineLine1": "Suas vendas",
-    "headlineLine2": "Seu dinheiro.",
+    "headlineLine2": "Seu dinheiro",
     "cta": "Começar"
   },
   "setup": {
     "titleLine1": "Digite o nome",
     "titleLine2": "do seu ponto de venda.",
-    "description": "Deve corresponder ao nome da loja criado no app Blitz.",
+    "description": "Deve corresponder ao nome da loja criada no app Blitz.",
     "placeholder": "Ex. Joes_Snacks",
     "error": "Não existe uma conta de ponto de venda para este usuário",
     "authError": "Não foi possível autenticar a solicitação",
