@@ -19,18 +19,18 @@
   },
   "setup": {
     "titleLine1": "Geben Sie Ihren",
-    "titleLine2": "Point-of-Sale-Namen ein.",
-    "description": "Dies sollte dem Shop-Namen entsprechen, der in der mobilen Blitz-App erstellt wurde.",
+    "titleLine2": "Zahlungsterminal (POS)-Namen ein.",
+    "description": "Dies sollte dem Markennamen entsprechen, der in der mobilen Blitz-App erstellt wurde.",
     "placeholder": "z. B. Joes_Snacks",
-    "error": "Kein Kassensystem-Konto für diesen Benutzernamen vorhanden",
+    "error": "Für diesen Benutzernamen ist kein Zahlungsterminal-(POS)-Konto vorhanden",
     "authError": "Authentifizierung fehlgeschlagen",
-    "notFound": "Point-of-Sale nicht gefunden"
+    "notFound": "Zahlungsterminal (POS) nicht gefunden"
   },
   "addTipUsername": {
     "titleLine1": "Wohin sollen",
     "titleLine2": "Trinkgelder gehen?",
     "description": "Fügen Sie einen Blitz-Benutzernamen oder eine Lightning-Adresse hinzu, um Trinkgelder zu erhalten",
-    "placeholder": "z. B. blitz oder name@domain.com"
+    "placeholder": "z. B. Blitz oder name@domain.com"
   },
   "tip": {
     "question": "Möchten Sie ein Trinkgeld hinzufügen?",
@@ -42,7 +42,7 @@
     "noChargedItems": "Keine abgerechneten Artikel",
     "charge": "{{amount}} abrechnen",
     "keypadTab": "Ziffernblock",
-    "libraryTab": "Bibliothek",
+    "libraryTab": "Produkte",
     "conversionNote": "Umrechnung basierend auf {{currency}}"
   },
   "settings": {
@@ -85,6 +85,6 @@
     "empty": "Noch keine Stablecoin-Zahlungen aufgezeichnet."
   },
   "itemsList": {
-    "empty": "Noch nichts vorhanden! Ihr Arbeitgeber kann Artikel in den Blitz-Wallet-POS-Einstellungen hinzufügen."
+    "empty": "Noch nichts vorhanden! Ihr Arbeitgeber kann Artikel in den Zahlungsterminal-(POS)-Einstellungen hinzufügen."
   }
 }
