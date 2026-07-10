@@ -3,7 +3,7 @@
 
 [[redirects]]
   from = "/getUser"
-  to = "https://getcontact-6krimtymjq-uc.a.run.app"
+  to = "https://proxy.blitz-wallet.com/getUser"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
@@ -11,7 +11,7 @@
 
 [[redirects]]
   from = "/addTxActivity"
-  to = "https://posadddata-6krimtymjq-uc.a.run.app"
+  to = "https://proxy.blitz-wallet.com/addTxActivity"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
@@ -19,7 +19,7 @@
 
   [[redirects]]
     from = "/createPOSInvoice"
-    to = "https://createPOSInvoice-6krimtymjq-uc.a.run.app"
+    to = "https://proxy.blitz-wallet.com/createPOSInvoice"
     status = 200
     force = true
     headers = {X-From = "Netlify"}
@@ -27,7 +27,7 @@
 
   [[redirects]]
     from = "/getPOSPaylinkData"
-    to = "https://getPOSStableData-6krimtymjq-uc.a.run.app"
+    to = "https://proxy.blitz-wallet.com/getPOSPaylinkData"
     status = 200
     force = true
     headers = {X-From = "Netlify"}
