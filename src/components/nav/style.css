@@ -9,6 +9,7 @@
   background: white;
   border-radius: 50px;
   margin: 14px auto 16px;
+  gap: 5px;
 }
 
 .nav-left {

@@ -15,7 +15,7 @@ export default function ItemsList({
   if (!listElements || !listElements?.length) {
     return (
       <div className="customItemsContainer">
-        <p className="noItemsText">{t("itemList.empty")}</p>
+        <p className="noItemsText">{t("itemsList.empty")}</p>
       </div>
     );
   }
