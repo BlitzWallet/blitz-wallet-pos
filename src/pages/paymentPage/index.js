@@ -295,14 +295,10 @@ export default function PaymentPage() {
     async (network, token) => {
       setStablecoinLoading(true);
       try {
-        const newPaylinkId = crypto.randomUUID();
-        paylinkId.current = newPaylinkId;
-
         const result = await fetchFunction(
           "/createPOSInvoice",
           {
-            paylinkId: newPaylinkId,
-            sparkPubKey: currentUserSession.account.sparkPubKey,
+            storeName: user,
             network,
             currency: token,
             fiatAmount: dollarAmount,
@@ -314,6 +310,9 @@ export default function PaymentPage() {
         if (!result || result.status !== "SUCCESS") {
           throw new Error(result?.message || "Failed to create invoice");
         }
+
+        // Server mints the paylink id; use it to poll for settlement.
+        paylinkId.current = result.paylinkId;
 
         addSwapToHistory({
           quoteId: result.quoteId,
@@ -349,6 +348,8 @@ export default function PaymentPage() {
       dollarAmount,
       runLookupForStablecoinPayment,
       showError,
+      t,
+      user,
     ],
   );
 
