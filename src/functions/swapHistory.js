@@ -8,8 +8,8 @@ const SWAP_HISTORY_KEY = "blitz_pos_swap_history";
 const MAX_ENTRIES = 50;
 
 // NOTE: quoteId is the Flashnet identifier returned by /createPOSInvoice.
-// It is NOT the same as paylinkId, which is generated client-side and sent to
-// the backend — paylinkId is never stored here.
+// It is NOT the same as paylinkId, which is minted server-side and also
+// returned by /createPOSInvoice — paylinkId is never stored here.
 
 const getSwapHistory = () => {
   const raw = getLocalStorageItem(SWAP_HISTORY_KEY);

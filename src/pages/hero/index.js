@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import logo from "../../assets/logo.png";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { createSparkWallet } from "../../functions/spark";
 import { useTranslation } from "react-i18next";
 
 function HeroPage() {
@@ -12,10 +11,6 @@ function HeroPage() {
   useEffect(() => {
     document.body.style.background = "#00254e";
 
-    async function init() {
-      await createSparkWallet();
-    }
-    init();
     return () => {
       document.body.style.backgroundColor = "";
     };

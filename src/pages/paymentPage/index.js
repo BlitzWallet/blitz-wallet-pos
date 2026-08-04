@@ -8,10 +8,6 @@ import { useGlobalContext } from "../../contexts/posContext";
 import FullLoadingScreen from "../../components/loadingScreen.js";
 import "./style.css";
 import fetchFunction from "../../functions/fetchFunction.js";
-import lookForPaidPayment, {
-  createSparkWallet,
-  receiveSparkLightningPayment,
-} from "../../functions/spark.js";
 import { formatBalanceAmount } from "../../functions/formatNumber.js";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination.js";
 import dollarIcon from "../../assets/dollarIcon.png";
@@ -92,7 +88,10 @@ export default function PaymentPage() {
   const bitcoinPollRef = useRef(null);
   const stablecoinPollRef = useRef(null);
   const didRunSparkInvoiceGeneration = useRef(false);
+  // Stablecoin paylink id (reset on network change). BTC keeps its own so a
+  // stablecoin→BTC toggle doesn't lose the Lightning paylink to poll against.
   const paylinkId = useRef(null);
+  const btcPaylinkId = useRef(null);
 
   // Mirror mutable state into refs so interval callbacks always see current values
   const paymentModeRef = useRef(paymentMode);
@@ -125,21 +124,20 @@ export default function PaymentPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ── Stable claimObject — inputs are stable for the page lifetime ──────
-  const claimObject = useMemo(
+  // ── Server-trusted order metadata sent to /createPOSInvoice for BOTH rails ──
+  // The server persists this on the paylink; /addTxActivity later records + pushes
+  // from it, so the client never asserts payment or supplies the order amount.
+  // Built at call time so a server name set mid-session (navbar popup) is captured.
+  const buildOrderMeta = useCallback(
     () => ({
       storeName: user,
+      orderAmountSats: satAmount,
+      tipAmountSats,
+      serverName,
       skipSaving: !serverName,
-      tx: {
-        tipAmountSats,
-        orderAmountSats: satAmount,
-        serverName,
-        time: new Date().getTime(),
-      },
-      bitcoinPrice: currentUserSession?.bitcoinPrice || 0,
+      fiatCode: currentUserSession?.account?.storeCurrency || "USD",
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [], // intentionally stable — these values don't change during the page lifetime
+    [user, satAmount, tipAmountSats, serverName, currentUserSession],
   );
 
   // ── clearIntervals — stops ALL polling; safe to call multiple times ───
@@ -192,8 +190,11 @@ export default function PaymentPage() {
   }
 
   // ── BTC poller ────────────────────────────────────────────────────────
-  // No dep on sparkAddress state — reads the ref inside the callback instead.
+  // Polls the server-issued Lightning paylink; settlement is verified server-side
+  // against the Spark preimage. The client no longer detects payment locally.
   const runLookupForPayment = useCallback(() => {
+    if (!btcPaylinkId.current) return;
+
     // Always clear any existing BTC poller first
     if (bitcoinPollRef.current) {
       clearInterval(bitcoinPollRef.current);
@@ -208,15 +209,28 @@ export default function PaymentPage() {
         return;
       }
 
-      const wasPaid = await lookForPaidPayment(convertedSatAmount);
-      if (wasPaid) {
-        clearInterval(bitcoinPollRef.current);
-        bitcoinPollRef.current = null;
-        await fetchFunction("/addTxActivity", claimObject, "post");
-        navigate(`/${user}/confirmed`);
+      try {
+        const result = await fetchFunction(
+          "/getPOSPaylinkData",
+          { paylinkId: btcPaylinkId.current, checkInvoice: true },
+          "post",
+        );
+
+        if (result?.data?.isPaid) {
+          clearInterval(bitcoinPollRef.current);
+          bitcoinPollRef.current = null;
+          await fetchFunction(
+            "/addTxActivity",
+            { paylinkId: btcPaylinkId.current },
+            "post",
+          );
+          navigate(`/${user}/confirmed`);
+        }
+      } catch (_) {
+        // Silently ignore transient poll errors; keep polling.
       }
     }, 5_000);
-  }, [claimObject, convertedSatAmount, navigate, user]);
+  }, [navigate, user]);
 
   // ── Stablecoin poller ─────────────────────────────────────────────────
   const runLookupForStablecoinPayment = useCallback(() => {
@@ -258,37 +272,20 @@ export default function PaymentPage() {
           clearInterval(stablecoinPollRef.current);
           stablecoinPollRef.current = null;
 
-          // Read token/network from refs — avoids stale closure over state
-          const stablecoinClaimObject = {
-            storeName: user,
-            skipSaving: !serverName,
-            tx: {
-              tipAmountSats,
-              orderAmountSats: satAmount,
-              serverName,
-              time: new Date().getTime(),
-              paymentType: "stablecoin",
-              stablecoinToken: selectedTokenRef.current,
-              stablecoinNetwork: selectedNetworkRef.current,
-            },
-            bitcoinPrice: currentUserSession?.bitcoinPrice || 0,
-          };
-
-          await fetchFunction("/addTxActivity", stablecoinClaimObject, "post");
+          // Record + push are gated server-side on the paid paylink; the client
+          // only supplies the id (order data lives on the paylink doc).
+          await fetchFunction(
+            "/addTxActivity",
+            { paylinkId: paylinkId.current },
+            "post",
+          );
           navigate(`/${user}/confirmed`);
         }
       } catch (_) {
         // Silently ignore transient poll errors; keep polling.
       }
     }, 10_000);
-  }, [
-    currentUserSession,
-    navigate,
-    satAmount,
-    serverName,
-    tipAmountSats,
-    user,
-  ]);
+  }, [navigate, user]);
 
   // ── Invoice generation ────────────────────────────────────────────────
   const generateStablecoinInvoice = useCallback(
@@ -298,11 +295,10 @@ export default function PaymentPage() {
         const result = await fetchFunction(
           "/createPOSInvoice",
           {
-            storeName: user,
+            ...buildOrderMeta(),
             network,
             currency: token,
             fiatAmount: dollarAmount,
-            fiatCode: currentUserSession.account.storeCurrency || "USD",
           },
           "post",
         );
@@ -344,39 +340,47 @@ export default function PaymentPage() {
       }
     },
     [
-      currentUserSession,
+      buildOrderMeta,
       dollarAmount,
       runLookupForStablecoinPayment,
       showError,
       t,
-      user,
     ],
   );
 
   // ── Spark invoice generation (runs once on mount) ─────────────────────
+  // Server mints the Lightning invoice tied to a paylinkId; settlement is
+  // verified server-side. The client only renders + polls.
   useEffect(() => {
     if (didRunSparkInvoiceGeneration.current) return;
     if (!currentUserSession.account?.sparkPubKey) return;
     didRunSparkInvoiceGeneration.current = true;
 
     async function getSparkInvoice() {
-      await createSparkWallet();
+      try {
+        const result = await fetchFunction(
+          "/createPOSInvoice",
+          {
+            ...buildOrderMeta(),
+            paymentType: "btc",
+            amountSats: convertedSatAmount,
+          },
+          "post",
+        );
 
-      const invoice = await receiveSparkLightningPayment({
-        amountSats: convertedSatAmount,
-        receiverIdentityPubkey: currentUserSession.account.sparkPubKey,
-      });
+        if (!result || result.status !== "SUCCESS" || !result.encodedInvoice) {
+          showError(t("payment.invoiceError"));
+          return;
+        }
 
-      if (!invoice) {
-        showError(t("payment.invoiceError"));
-        return;
+        btcPaylinkId.current = result.paylinkId;
+        // Update ref immediately before state flush
+        sparkAddressRef.current = result.encodedInvoice;
+        setSparkAddress(result.encodedInvoice);
+        runLookupForPayment();
+      } catch (err) {
+        showError(err.message || t("payment.invoiceError"));
       }
-
-      const encodedInvoice = invoice.invoice.encodedInvoice;
-      // Update ref immediately before state flush
-      sparkAddressRef.current = encodedInvoice;
-      setSparkAddress(encodedInvoice);
-      runLookupForPayment();
     }
 
     getSparkInvoice();

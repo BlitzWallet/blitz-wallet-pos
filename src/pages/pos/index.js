@@ -14,7 +14,6 @@ import CustomKeyboard from "../../components/keypad/index.js";
 import displayCorrectDenomination from "../../functions/displayCorrectDenomination.js";
 import { formatBalanceAmount } from "../../functions/formatNumber.js";
 import ItemsList from "../../components/itemsList/index.js";
-import { createSparkWallet } from "../../functions/spark.js";
 import { useErrorDisplay } from "../../contexts/errorDisplay";
 import SwapHistoryOverlay from "../../components/swapHistoryOverlay/index.js";
 import { useTranslation } from "react-i18next";
@@ -60,13 +59,6 @@ function POSPage() {
 
   const canReceivePayment =
     totalAmount != 0 && convertedSatAmount >= minimumPaymentAmount;
-
-  useEffect(() => {
-    async function getSparkInvoice() {
-      await createSparkWallet();
-    }
-    getSparkInvoice();
-  }, []);
 
   useEffect(() => {
     if (stopClearOnFirstLoad.current) {
